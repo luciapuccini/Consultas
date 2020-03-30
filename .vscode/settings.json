@@ -1,0 +1,21 @@
+{
+  //   /*---ESLINT & PRETTIER SETTINGS----*/
+    "editor.formatOnSave": true,
+  //   "files.exclude": {
+  //     "**/.classpath": true,
+  //     "**/.project": true,
+  //     "**/.settings": true,
+  //     "**/.factorypath": true
+  //   },
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  //   "[javascript]": {
+  //     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  //   },
+  //   "files.associations": {
+  //     "*.jsx": "javascriptreact"
+  //   },
+  //   "javascript.updateImportsOnFileMove.enabled": "always",
+  //   "typescript.updateImportsOnFileMove.enabled": "always",
+  //   "prettier.htmlWhitespaceSensitivity": "ignore"
+
+}
