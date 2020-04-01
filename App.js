@@ -3,12 +3,20 @@ import { AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Home, SplashScreen, SignInScreen } from './src/screens';
+import { Details } from './src/Details';
 
 const AuthContext = React.createContext();
 export const AppProvider = AuthContext.Provider;
 export const AppConsumer = AuthContext.Consumer;
 
-const Stack = createStackNavigator();
+const { Navigator, Screen } = createStackNavigator();
+
+//Home alumno
+// buscar prof o materia
+// lista consultas
+
+// home docente
+// consultas creadas fav +
 
 export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(
@@ -81,6 +89,7 @@ export default function App({ navigation }) {
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
+      username: '',
     }),
     [],
   );
@@ -88,30 +97,33 @@ export default function App({ navigation }) {
   return (
     <AppProvider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Navigator>
           {state.isLoading ? (
             // We haven't finished checking for the token yet
-            <Stack.Screen
+            <Screen
               name="Splash"
               component={SplashScreen}
               options={{ headerShown: false }}
             />
           ) : state.userToken == null ? (
             // No token found, user isn't signed in
-            <Stack.Screen
+            <Screen
               name="SignIn"
               component={SignInScreen}
               options={{
-                title: 'Sign in',
+                headerShown: false,
                 // When logging out, a pop animation feels intuitive
                 animationTypeForReplace: state.isSignout ? 'pop' : 'push',
               }}
             />
           ) : (
             // User is signed in
-            <Stack.Screen name="Home" component={Home} />
+            <>
+              <Screen name="Home" component={Home} />
+            </>
           )}
-        </Stack.Navigator>
+          <Screen name="Detail" component={Details} />
+        </Navigator>
       </NavigationContainer>
     </AppProvider>
   );
