@@ -2,8 +2,8 @@ import * as React from 'react';
 import { AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Home, SplashScreen, SignInScreen } from './src/screens';
-import { Details } from './src/Details';
+import { SplashScreen, SignInScreen } from './src/screens';
+import { RootStack } from './src/Routes';
 
 const AuthContext = React.createContext();
 export const AppProvider = AuthContext.Provider;
@@ -97,15 +97,8 @@ export default function App({ navigation }) {
   return (
     <AppProvider value={authContext}>
       <NavigationContainer>
-        <Navigator>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Screen
-              name="Splash"
-              component={SplashScreen}
-              options={{ headerShown: false }}
-            />
-          ) : state.userToken == null ? (
+        <Navigator initialRouteName="SingIn">
+          {state.userToken == null ? (
             // No token found, user isn't signed in
             <Screen
               name="SignIn"
@@ -117,12 +110,14 @@ export default function App({ navigation }) {
               }}
             />
           ) : (
-            // User is signed in
-            <>
-              <Screen name="Home" component={Home} />
-            </>
+            // User Routes --> docente stack o alumno stack
+
+            <Screen
+              name="Routes"
+              component={RootStack}
+              options={{ headerShown: false }}
+            />
           )}
-          <Screen name="Detail" component={Details} />
         </Navigator>
       </NavigationContainer>
     </AppProvider>
