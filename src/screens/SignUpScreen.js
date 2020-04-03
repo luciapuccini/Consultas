@@ -1,32 +1,42 @@
-import * as React from 'react';
+import React from 'react';
 import {
-  TextInput,
   View,
   Text,
-  TouchableOpacity,
-  Image,
+  TextInput,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
-import { AppConsumer } from '../../App';
 import { Styles } from '../style/styles';
+import { AppConsumer } from '../../App';
 
-export const SignInScreen = ({ navigation }) => {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const { splashLogoStyle, inputView, inputText, loginText, loginBtn } = styles;
-  const Logo = require('../assets/logo.png');
+export const SignUpScreen = () => {
   const Background = require('../assets/background.jpg');
+  const { inputText, inputView, loginBtn, loginText } = styles;
   const { loginFlowContainer } = Styles;
+  //TODO: FORM
+
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [legajo, setLegajo] = React.useState('');
+  const [phone, setPhone] = React.useState('');
 
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
-      <Image style={splashLogoStyle} source={Logo} />
-      <View style={styles.inputView}>
+      <View style={inputView}>
         <TextInput
           style={inputText}
           placeholder="Username..."
           placeholderTextColor="#003f5c"
-          onChangeText={setUsername}
+          onChangeText={setLegajo}
+        />
+      </View>
+      <View style={inputView}>
+        <TextInput
+          secureTextEntry
+          style={inputText}
+          placeholder="Phone..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setPhone}
         />
       </View>
       <View style={inputView}>
@@ -38,30 +48,29 @@ export const SignInScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
       </View>
+      <View style={inputView}>
+        <TextInput
+          secureTextEntry
+          style={inputText}
+          placeholder="Confirm Password..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setConfirmPassword}
+        />
+      </View>
       <AppConsumer>
         {context => (
           <TouchableOpacity
             style={loginBtn}
-            onPress={() => context.signIn({ username, password })}>
-            <Text style={loginText}>LogIn</Text>
+            onPress={() => context.signIn({ legajo, password })}>
+            <Text style={loginText}>Sign Up</Text>
           </TouchableOpacity>
         )}
       </AppConsumer>
-
-      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-        <Text style={loginText}>Sign Up</Text>
-      </TouchableOpacity>
     </ImageBackground>
   );
 };
 
 const styles = {
-  logo: {
-    fontWeight: 'bold',
-    fontSize: 50,
-    color: '#fb5b5a',
-    marginBottom: 40,
-  },
   inputView: {
     width: '80%',
     backgroundColor: '#465881',
@@ -92,17 +101,5 @@ const styles = {
   loginText: {
     fontSize: 20,
     color: 'white',
-  },
-  splashLogoStyle: {
-    height: 150,
-    width: 150,
-    resizeMode: 'contain',
-    marginBottom: 50,
-  },
-  switchBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    width: '130%',
   },
 };

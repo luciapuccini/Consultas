@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SplashScreen, SignInScreen } from './src/screens';
+import { SignInScreen } from './src/screens';
 import { RootStack } from './src/Routes';
+import { SignUpScreen } from './src/screens/SignUpScreen';
 
 const AuthContext = React.createContext();
 export const AppProvider = AuthContext.Provider;
@@ -55,7 +56,7 @@ export default function App({ navigation }) {
       let userToken;
 
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        userToken = await AsyncStorage.getItem('token');
       } catch (e) {
         // Restoring token failed
       }
@@ -89,7 +90,6 @@ export default function App({ navigation }) {
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
-      username: '',
     }),
     [],
   );
@@ -111,13 +111,17 @@ export default function App({ navigation }) {
             />
           ) : (
             // User Routes --> docente stack o alumno stack
-
             <Screen
               name="Routes"
               component={RootStack}
               options={{ headerShown: false }}
             />
           )}
+          <Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{ headerShown: false, animationTypeForReplace: 'push' }}
+          />
         </Navigator>
       </NavigationContainer>
     </AppProvider>
