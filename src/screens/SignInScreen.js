@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useState } from 'react';
 import {
   TextInput,
   View,
@@ -8,38 +8,18 @@ import {
   ImageBackground,
 } from 'react-native';
 import { Styles } from '../style/styles';
-import AsyncStorage from '@react-native-community/async-storage';
-import { AppConsumer } from '../../App';
-// import { AuthContext } from '../context/AuthContext';
+import { Context } from '../context/AuthContext';
 
 //TODO: formik
 export const SignInScreen = ({ navigation }) => {
-  // const { signin } = React.useContext(AuthContext);
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const { signin } = useContext(Context);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const { splashLogoStyle, inputView, inputText, loginText, loginBtn } = styles;
   const Logo = require('../assets/logo.png');
   const Background = require('../assets/background.jpg');
   const { loginFlowContainer } = Styles;
-
-  const storeData = async (token) => {
-    try {
-      await AsyncStorage.setItem('TOKEN', token);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const signIn = async ({ username, password }) => {
-    //TODO: sign up func
-    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05')
-      .then((res) => res.json())
-      .then((data) => {
-        storeData(data.token);
-        // navigation.navigate();
-      });
-  };
 
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
@@ -61,21 +41,12 @@ export const SignInScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
       </View>
-      <AppConsumer>
-        {(context) => (
-          <TouchableOpacity
-            style={loginBtn}
-            onPress={() => context.signIn({ username, password })}>
-            <Text style={loginText}>Sign In</Text>
-          </TouchableOpacity>
-        )}
-      </AppConsumer>
 
-      {/* <TouchableOpacity
+      <TouchableOpacity
         style={loginBtn}
         onPress={() => signin({ username, password })}>
         <Text style={loginText}>Sign In</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={loginText}>Sign Up</Text>

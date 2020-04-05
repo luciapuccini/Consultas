@@ -6,14 +6,14 @@ const authReducer = (state, action) => {
     case 'RESTORE_TOKEN':
       return {
         ...state,
-        userToken: action.token,
+        userToken: action.payload,
         isLoading: false,
       };
     case 'SIGN_IN':
       return {
         ...state,
         isSignout: false,
-        userToken: action.token,
+        userToken: action.payload,
       };
     case 'SIGN_OUT':
       return {
@@ -21,6 +21,8 @@ const authReducer = (state, action) => {
         isSignout: true,
         userToken: null,
       };
+    default:
+      return state;
   }
 };
 
@@ -33,22 +35,27 @@ const restore = (dispatch) => async ({ email, password }) => {
         async () => await AsyncStorage.setItem('TOKEN', data.token);
         token = data.token;
       });
-    dispatch({ type: 'RESTORE_TOKEN', token });
+    dispatch({ type: 'RESTORE_TOKEN', payload: token });
   } catch (err) {
     console.log(err);
   }
 };
 
-const signin = (dispatch) => async ({ email, password }) => {
+const signin = (dispatch) => async ({ username, password }) => {
+  const user = { legajo: username, password };
   try {
     let token;
-    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05')
+    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    })
       .then((res) => res.json())
       .then((data) => {
         async () => await AsyncStorage.setItem('TOKEN', data.token);
         token = data.token;
       });
-    dispatch({ type: 'SIGN_IN', token });
+    dispatch({ type: 'SIGN_IN', payload: token });
   } catch (error) {
     console.log(error);
   }
@@ -69,7 +76,7 @@ const signup = (dispatch) => async ({ email, password }) => {
   }
 };
 
-export const { Context, Provider } = createDataContext(
+export const { Provider, Context } = createDataContext(
   authReducer,
   { signin, signout, signup, restore },
   {
