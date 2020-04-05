@@ -7,9 +7,6 @@ import { AppConsumer } from '../../App';
 const isProfessor = true;
 export const Home = ({ navigation }) => {
   return (
-    <SafeAreaView
-      style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-      {isProfessor ? <Professor /> : <Student />}
-    </SafeAreaView>
+    <SafeAreaView>{isProfessor ? <Professor /> : <Student />}</SafeAreaView>
   );
 };

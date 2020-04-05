@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { AsyncStorage } from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SignInScreen } from './src/screens';
-import { RootStack } from './src/Routes';
-import { SignUpScreen } from './src/screens/SignUpScreen';
+import { RootStack, AuthStack } from './src/Routes';
 
 const AuthContext = React.createContext();
 export const AppProvider = AuthContext.Provider;
 export const AppConsumer = AuthContext.Consumer;
+// import { Context } from './src/context/AuthContext';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -19,7 +18,9 @@ const { Navigator, Screen } = createStackNavigator();
 // home docente
 // consultas creadas fav +
 
-export default function App({ navigation }) {
+const App = ({ navigation }) => {
+  // const { state, signin, restore } = React.useContext(Context);
+
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -56,16 +57,11 @@ export default function App({ navigation }) {
       let userToken;
 
       try {
-        userToken = await AsyncStorage.getItem('token');
+        userToken = await AsyncStorage.getItem('userToken');
       } catch (e) {
         // Restoring token failed
       }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      // restore();
     };
 
     bootstrapAsync();
@@ -73,16 +69,22 @@ export default function App({ navigation }) {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async data => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
+      signIn: async () => {
+        let token;
+        await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05')
+          .then((res) => res.json())
+          .then((data) => {
+            async () => await AsyncStorage.setItem('TOKEN', data.token);
+            token = data.token;
+          });
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: 'SIGN_IN', token });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      signUp: async data => {
+      signOut: () => {
+        AsyncStorage.removeItem('TOKEN');
+        dispatch({ type: 'SIGN_OUT' });
+      },
+      signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `AsyncStorage`
@@ -99,31 +101,24 @@ export default function App({ navigation }) {
       <NavigationContainer>
         <Navigator initialRouteName="SingIn">
           {state.userToken == null ? (
-            // No token found, user isn't signed in
             <Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{
-                headerShown: false,
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-              }}
+              name="Auth"
+              component={AuthStack}
+              options={{ headerShown: false }}
             />
           ) : (
-            // User Routes --> docente stack o alumno stack
+            // No token found, user isn't signed in
+            // User Routes
             <Screen
               name="Routes"
               component={RootStack}
               options={{ headerShown: false }}
             />
           )}
-          <Screen
-            name="SignUp"
-            component={SignUpScreen}
-            options={{ headerShown: false, animationTypeForReplace: 'push' }}
-          />
         </Navigator>
       </NavigationContainer>
     </AppProvider>
   );
-}
+};
+
+export default App;

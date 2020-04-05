@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { Home } from './screens';
+import { Home, SignInScreen, SignUpScreen } from './screens';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Details } from './Details';
 import { Settings } from './Settings';
@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 export const RootStack = ({ navigation }) => {
   const { Navigator, Screen } = createStackNavigator();
   return (
-    <Navigator>
+    <Navigator initialRouteName="Home">
       <Screen
         name="Home"
         component={Home}
@@ -20,6 +20,30 @@ export const RootStack = ({ navigation }) => {
       />
       <Screen name="Details" component={Details} />
       <Screen name="Settings" component={Settings} />
+    </Navigator>
+  );
+};
+
+export const AuthStack = ({ navigation }) => {
+  const { Navigator, Screen } = createStackNavigator();
+
+  return (
+    <Navigator initialRouteName="SignIn">
+      <Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          headerShown: false,
+          animationTypeForReplace: 'push',
+        }}
+      />
     </Navigator>
   );
 };

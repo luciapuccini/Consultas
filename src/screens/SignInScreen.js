@@ -7,16 +7,39 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import { AppConsumer } from '../../App';
 import { Styles } from '../style/styles';
+import AsyncStorage from '@react-native-community/async-storage';
+import { AppConsumer } from '../../App';
+// import { AuthContext } from '../context/AuthContext';
 
+//TODO: formik
 export const SignInScreen = ({ navigation }) => {
+  // const { signin } = React.useContext(AuthContext);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+
   const { splashLogoStyle, inputView, inputText, loginText, loginBtn } = styles;
   const Logo = require('../assets/logo.png');
   const Background = require('../assets/background.jpg');
   const { loginFlowContainer } = Styles;
+
+  const storeData = async (token) => {
+    try {
+      await AsyncStorage.setItem('TOKEN', token);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const signIn = async ({ username, password }) => {
+    //TODO: sign up func
+    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05')
+      .then((res) => res.json())
+      .then((data) => {
+        storeData(data.token);
+        // navigation.navigate();
+      });
+  };
 
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
@@ -39,14 +62,20 @@ export const SignInScreen = ({ navigation }) => {
         />
       </View>
       <AppConsumer>
-        {context => (
+        {(context) => (
           <TouchableOpacity
             style={loginBtn}
             onPress={() => context.signIn({ username, password })}>
-            <Text style={loginText}>LogIn</Text>
+            <Text style={loginText}>Sign In</Text>
           </TouchableOpacity>
         )}
       </AppConsumer>
+
+      {/* <TouchableOpacity
+        style={loginBtn}
+        onPress={() => signin({ username, password })}>
+        <Text style={loginText}>Sign In</Text>
+      </TouchableOpacity> */}
 
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={loginText}>Sign Up</Text>
