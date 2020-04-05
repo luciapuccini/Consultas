@@ -7,65 +7,86 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Styles } from '../style/styles';
-import { AppConsumer } from '../../App';
+import { Context } from '../context/AuthContext';
+const { loginFlowContainer } = Styles;
 
-export const SignUpScreen = () => {
+export const SignUpScreen = ({ navigation }) => {
   const Background = require('../assets/background.jpg');
   const { inputText, inputView, loginBtn, loginText } = styles;
-  const { loginFlowContainer } = Styles;
   //TODO: FORM
-
+  const { signup } = React.useContext(Context);
   const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [legajo, setLegajo] = React.useState('');
+  const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
 
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
-      <View style={inputView}>
+      <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
+        Create an Account
+      </Text>
+
+      <View style={[inputView]}>
         <TextInput
+          secureTextEntry
           style={inputText}
-          placeholder="Username..."
+          placeholder="Legajo..."
           placeholderTextColor="#003f5c"
           onChangeText={setLegajo}
+          keyboardType="numeric"
         />
       </View>
-      <View style={inputView}>
+
+      <View style={[inputView]}>
         <TextInput
           secureTextEntry
           style={inputText}
-          placeholder="Phone..."
+          placeholder="Nombre Completo..."
           placeholderTextColor="#003f5c"
-          onChangeText={setPhone}
+          onChangeText={setName}
         />
       </View>
+      <View style={[inputView]}>
+        <TextInput
+          secureTextEntry
+          style={inputText}
+          placeholder="Mail..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setEmail}
+          keyboardType="numeric"
+        />
+      </View>
+
       <View style={inputView}>
         <TextInput
           secureTextEntry
           style={inputText}
-          placeholder="Password..."
+          placeholder="Contraseña..."
           placeholderTextColor="#003f5c"
           onChangeText={setPassword}
         />
       </View>
+
       <View style={inputView}>
         <TextInput
           secureTextEntry
           style={inputText}
-          placeholder="Confirm Password..."
+          placeholder="Telefono..."
           placeholderTextColor="#003f5c"
-          onChangeText={setConfirmPassword}
+          onChangeText={setPhone}
         />
       </View>
-      <AppConsumer>
-        {context => (
-          <TouchableOpacity
-            style={loginBtn}
-            onPress={() => context.signIn({ legajo, password })}>
-            <Text style={loginText}>Sign Up</Text>
-          </TouchableOpacity>
-        )}
-      </AppConsumer>
+
+      <TouchableOpacity
+        style={loginBtn}
+        onPress={() => signup({ legajo, name, email, password, phone })}>
+        <Text style={loginText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+        <Text style={loginText}>Already a User?</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -101,5 +122,19 @@ const styles = {
   loginText: {
     fontSize: 20,
     color: 'white',
+  },
+  rowBox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  labelStyle: {
+    color: 'white',
+    fontSize: 20,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '50%',
   },
 };

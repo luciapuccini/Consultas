@@ -27,16 +27,18 @@ export const SignInScreen = ({ navigation }) => {
       <View style={styles.inputView}>
         <TextInput
           style={inputText}
-          placeholder="Username..."
+          placeholder="Legajo..."
           placeholderTextColor="#003f5c"
           onChangeText={setUsername}
+          autoCapitalize="none"
+          keyboardType="numeric"
         />
       </View>
       <View style={inputView}>
         <TextInput
           secureTextEntry
           style={inputText}
-          placeholder="Password..."
+          placeholder="Contraseña..."
           placeholderTextColor="#003f5c"
           onChangeText={setPassword}
         />
