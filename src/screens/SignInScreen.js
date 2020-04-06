@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //TODO: formik
 export const SignInScreen = ({ navigation }) => {
-  const { signin } = useContext(Context);
+  const { signin, state } = useContext(Context);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +21,6 @@ export const SignInScreen = ({ navigation }) => {
   const Logo = require('../assets/logo.png');
   const Background = require('../assets/background.jpg');
   const { loginFlowContainer } = Styles;
-
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
       <Image style={splashLogoStyle} source={Logo} />

@@ -26,23 +26,54 @@ const authReducer = (state, action) => {
   }
 };
 
-const restore = (dispatch) => async ({ email, password }) => {
+const restore = (dispatch) => async () => {
+  const token = await AsyncStorage.getItem('TOKEN');
+  if (token !== null && token !== undefined) {
+    dispatch({ type: 'SIGN_IN', payload: token });
+  } else {
+  }
+};
+const storeData = async (value) => {
+  try {
+    await AsyncStorage.setItem('TOKEN', value);
+  } catch (e) {
+    // saving error
+  }
+};
+const signin = (dispatch) => async ({ username, password }) => {
+  const user = { legajo: username, password };
+
   try {
     let token;
-    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05')
+    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    })
       .then((res) => res.json())
       .then((data) => {
-        async () => await AsyncStorage.setItem('TOKEN', data.token);
         token = data.token;
+        storeData(token);
       });
-    dispatch({ type: 'RESTORE_TOKEN', payload: token });
-  } catch (err) {
-    console.log(err);
+    dispatch({ type: 'SIGN_IN', payload: token });
+  } catch (error) {
+    console.log(error);
   }
 };
 
-const signin = (dispatch) => async ({ username, password }) => {
-  const user = { legajo: username, password };
+const signout = (dispatch) => async () => {
+  await AsyncStorage.removeItem('TOKEN');
+  dispatch({ type: 'SIGN_OUT' });
+};
+
+const signup = (dispatch) => async ({
+  legajo,
+  name,
+  email,
+  password,
+  phone,
+}) => {
+  const user = { legajo, name, email, password, phone };
   try {
     let token;
     await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05', {
@@ -56,21 +87,6 @@ const signin = (dispatch) => async ({ username, password }) => {
         token = data.token;
       });
     dispatch({ type: 'SIGN_IN', payload: token });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const signout = (dispatch) => async () => {
-  await AsyncStorage.removeItem('TOKEN');
-  dispatch({ type: 'SIGN_OUT' });
-};
-
-const signup = (dispatch) => async ({ email, password }) => {
-  try {
-    // const response = await fetch()
-    // await AsyncStorage.setItem('token', data.token);
-    // dispatch({ type: 'SIGN_IN', data.token });
   } catch (err) {
     console.log(err);
   }
