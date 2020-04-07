@@ -54,7 +54,6 @@ export const SignUpScreen = ({ navigation }) => {
           placeholder="Mail..."
           placeholderTextColor="#003f5c"
           onChangeText={setEmail}
-          keyboardType="numeric"
         />
       </View>
 

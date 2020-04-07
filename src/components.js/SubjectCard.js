@@ -17,7 +17,7 @@ export const SubjectCard = ({ name, image }) => {
       <Card>
         <CardItem bordered>
           <Left>
-            <Thumbnail source={image} />
+            {/* <Thumbnail source={image} /> */}
             <Body>
               <Text>{name}</Text>
               <Text note>Sistemas</Text>
@@ -27,20 +27,17 @@ export const SubjectCard = ({ name, image }) => {
         <CardItem cardBody>
           <ImageBackground
             source={image}
-            style={{ height: 200, width: null, flex: 1 }}>
-            <View>{/* <Text>Prefesor: ADRIAN MECA</Text> */}</View>
-          </ImageBackground>
+            style={{ height: 200, width: null, flex: 1 }}></ImageBackground>
         </CardItem>
         <CardItem>
           <Left>
             <Button transparent>
-              <Icon active name="md-folder" />
-              <Text>Editar</Text>
+              <Icon active name="ios-alert" />
             </Button>
           </Left>
 
           <Right>
-            <Text>11h ago</Text>
+            <Text>Ver consultas ></Text>
           </Right>
         </CardItem>
       </Card>

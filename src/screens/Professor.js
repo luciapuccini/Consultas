@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
-import {
-  Container,
-  Header,
-  Content,
-  Card,
-  CardItem,
-  Thumbnail,
-  Text,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-} from 'native-base';
-import { SafeAreaView, ScrollView, Image } from 'react-native';
+
+import { SafeAreaView, ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Item, Input, Icon } from 'native-base';
+
 import { SubjectList } from './SubjectList';
 
 export const Professor = () => {
   const navigation = useNavigation();
   return (
     <ScrollView>
+      <View style={{ marginLeft: 20, marginTop: 20 }}>
+        <Item>
+          <Icon active name="search" />
+          <Input placeholder="Materia" />
+        </Item>
+      </View>
       <SubjectList />
     </ScrollView>
   );
