@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SubjectCard } from '../components.js/SubjectCard';
+import { SubjectCard } from '../components/SubjectCard';
 import { Content } from 'native-base';
 
 const javaImage = require('../assets/java.png');
@@ -14,8 +14,8 @@ export const SubjectList = () => {
   ]);
   return (
     <Content>
-      {subjects.map((sub) => (
-        <SubjectCard name={sub.name} image={sub.img} />
+      {subjects.map((sub, index) => (
+        <SubjectCard key={index} name={sub.name} image={sub.img} />
       ))}
     </Content>
   );
