@@ -9,14 +9,27 @@ import {
 } from 'react-native';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
-import AsyncStorage from '@react-native-community/async-storage';
+import messaging from '@react-native-firebase/messaging';
+
+async function registerAppWithFCM(setDeviceToken) {
+  await messaging().registerDeviceForRemoteMessages();
+  messaging()
+    .getToken()
+    .then((token) => {
+      setDeviceToken(token);
+    });
+}
 
 //TODO: formik
 export const SignInScreen = ({ navigation }) => {
-  const { signin, state } = useContext(Context);
+  const { signin } = useContext(Context);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [deviceToken, setDeviceToken] = useState('');
 
+  React.useEffect(() => {
+    registerAppWithFCM(setDeviceToken);
+  }, []);
   const { splashLogoStyle, inputView, inputText, loginText, loginBtn } = styles;
   const Logo = require('../assets/logo.png');
   const Background = require('../assets/background.jpg');
@@ -46,7 +59,7 @@ export const SignInScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={loginBtn}
-        onPress={() => signin({ username, password })}>
+        onPress={() => signin({ username, password, deviceToken })}>
         <Text style={loginText}>Sign In</Text>
       </TouchableOpacity>
 

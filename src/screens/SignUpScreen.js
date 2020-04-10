@@ -40,7 +40,6 @@ export const SignUpScreen = ({ navigation }) => {
 
       <View style={[inputView]}>
         <TextInput
-          secureTextEntry
           style={inputText}
           placeholder="Nombre Completo..."
           placeholderTextColor="#003f5c"
@@ -49,7 +48,6 @@ export const SignUpScreen = ({ navigation }) => {
       </View>
       <View style={[inputView]}>
         <TextInput
-          secureTextEntry
           style={inputText}
           placeholder="Mail..."
           placeholderTextColor="#003f5c"
@@ -69,7 +67,6 @@ export const SignUpScreen = ({ navigation }) => {
 
       <View style={inputView}>
         <TextInput
-          secureTextEntry
           style={inputText}
           placeholder="Telefono..."
           placeholderTextColor="#003f5c"

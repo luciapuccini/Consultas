@@ -40,19 +40,19 @@ const storeData = async (value) => {
     // saving error
   }
 };
-const signin = (dispatch) => async ({ username, password }) => {
-  const user = { legajo: username, password };
-
+const signin = (dispatch) => async ({ username, password, deviceToken }) => {
+  const user = { legajo: username, password, deviceToken };
+  console.log('USER', user);
   try {
     let token;
-    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05', {
+    await fetch('http://181.164.121.14:25565/users/login', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
       .then((data) => {
-        token = data.token;
+        token = data.jwt;
         storeData(token);
       });
     dispatch({ type: 'SIGN_IN', payload: token });
@@ -73,10 +73,10 @@ const signup = (dispatch) => async ({
   password,
   phone,
 }) => {
-  const user = { legajo, name, email, password, phone };
+  const user = { legajo, name, email, password, mobile: phone };
   try {
     let token;
-    await fetch('http://www.mocky.io/v2/5e89211c3100006800d39c05', {
+    await fetch('http://181.164.121.14:25565/users/addStudent', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),

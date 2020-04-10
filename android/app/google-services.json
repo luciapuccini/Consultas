@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1044991623653",
+    "firebase_url": "https://consultas-8be97.firebaseio.com",
+    "project_id": "consultas-8be97",
+    "storage_bucket": "consultas-8be97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044991623653:android:ad65eb3f971835e8fe2f0c",
+        "android_client_info": {
+          "package_name": "com.consultas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1044991623653-qe1jjc3nl9vhunb2omau5s3g159tei24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMHjKrI8rsPGwv645O2mxBcaAORoHDEKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1044991623653-qe1jjc3nl9vhunb2omau5s3g159tei24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
