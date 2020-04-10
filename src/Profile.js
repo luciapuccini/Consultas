@@ -38,22 +38,22 @@ export const Profile = ({ navigation }) => {
           }}>
           <Thumbnail
             source={javaImage}
-            style={{ height: 80, width: 80, borderRadius: 40 }}
+            style={{ height: 100, width: 100, borderRadius: 50 }}
           />
           <Fab
             active={photo}
             containerStyle={{ marginLeft: 20 }}
             style={{
               backgroundColor: '#5067FF',
-              height: 30,
-              width: 30,
+              height: 40,
+              width: 40,
             }}
             position="bottomLeft"
             onPress={() => setPhoto(!photo)}>
             <Icon
               type="SimpleLineIcons"
               name="camera"
-              style={{ fontSize: 15 }}
+              style={{ fontSize: 25 }}
             />
           </Fab>
         </View>
