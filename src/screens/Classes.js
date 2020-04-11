@@ -1,23 +1,27 @@
 import React from 'react';
-import { TextInput, ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { Item, Icon, Input } from 'native-base';
+
 import { SubjectList } from '../components/SubjectList';
 
-export const Student = () => {
-  const [subjects, setSubjects] = React.useState([]);
+export const Classes = ({ navigation, route }) => {
+  const [classes, setClasses] = React.useState([]);
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
     fetch('http://www.mocky.io/v2/5e9108643300008c00e9cd5a')
       .then((response) => response.json())
       .then((json) => {
-        setSubjects(json);
+        setClasses(json);
       });
+    if (route.params?.subject) {
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
   const results = !searchTerm
-    ? subjects
-    : subjects.filter((subject) =>
+    ? classes
+    : classes.filter((subject) =>
         subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
       );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Home, SignInScreen, SignUpScreen } from './screens';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Details } from './Details';
+import { Classes } from './screens/Classes';
 import { Profile } from './Profile';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'native-base';
@@ -19,7 +19,7 @@ export const RootStack = ({ navigation }) => {
           headerRight: () => <ProfileIcon />,
         }}
       />
-      <Screen name="Details" component={Details} />
+      <Screen name="Classes" component={Classes} />
       <Screen
         name="Profile"
         component={Profile}

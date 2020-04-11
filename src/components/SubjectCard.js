@@ -25,8 +25,7 @@ export const SubjectCard = ({ name, image }) => {
     //TODO:
   };
   const goToSubject = () => {
-    console.log('to subject');
-    navigation.navigate('Details', { subject: name });
+    navigation.navigate('Classes', { subject: name });
   };
   return (
     <View style={{ margin: 10 }}>
@@ -56,8 +55,6 @@ export const SubjectCard = ({ name, image }) => {
             />
           </CardItem>
         </TouchableOpacity>
-
-        {/* <CardItem></CardItem> */}
       </Card>
     </View>
   );
