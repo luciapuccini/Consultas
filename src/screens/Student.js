@@ -5,7 +5,7 @@ import { SubjectList } from './SubjectList';
 
 export const Student = () => {
   return (
-    <ScrollView>
+    <>
       <View style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
         <Item>
           <Icon active name="search" />
@@ -13,6 +13,6 @@ export const Student = () => {
         </Item>
       </View>
       <SubjectList />
-    </ScrollView>
+    </>
   );
 };

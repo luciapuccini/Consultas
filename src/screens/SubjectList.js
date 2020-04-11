@@ -1,22 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SubjectCard } from '../components/SubjectCard';
-import { Content } from 'native-base';
+import { FlatList } from 'react-native';
 
-const javaImage = require('../assets/java.png');
-const algoritmosImage = require('../assets/algoritmos.png');
-const artificialImage = require('../assets/artificial.jpg');
+const subjectPlaceholder = require('../assets/java.png');
+
+const findSubjectImage = (subjectName) => {
+  // const image = require(`../assets/${subjectName}.png`);
+  return subjectPlaceholder;
+};
 
 export const SubjectList = () => {
-  const [subjects, setSubjects] = useState([
-    { name: 'Java', img: javaImage },
-    { name: 'Algoritmos', img: algoritmosImage },
-    { name: 'Artificial', img: artificialImage },
-  ]);
-  return (
-    <Content>
-      {subjects.map((sub, index) => (
-        <SubjectCard key={index} name={sub.name} image={sub.img} />
-      ))}
-    </Content>
-  );
+  const [subjects, setSubjects] = useState([]);
+  useEffect(() => {
+    fetch('http://www.mocky.io/v2/5e9108643300008c00e9cd5a')
+      .then((response) => response.json())
+      .then((json) => {
+        setSubjects(json);
+      });
+  }, []);
+
+  const renderItem = ({ item, index }) => {
+    const img = findSubjectImage(item.name);
+    return <SubjectCard key={item.subjectId} name={item.name} image={img} />;
+  };
+
+  return <FlatList data={subjects} renderItem={renderItem} />;
 };

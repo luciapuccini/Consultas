@@ -1,9 +1,8 @@
 import React from 'react';
-import { Image, View, ImageBackground } from 'react-native';
+import { Image, View, TouchableOpacity } from 'react-native';
 import {
   Card,
   CardItem,
-  Thumbnail,
   Text,
   Button,
   Icon,
@@ -39,14 +38,7 @@ export const SubjectCard = ({ name, image }) => {
               <Text note>Sistemas</Text>
             </Body>
           </Left>
-        </CardItem>
-        <CardItem cardBody>
-          <ImageBackground
-            source={image}
-            style={{ height: 200, width: null, flex: 1 }}></ImageBackground>
-        </CardItem>
-        <CardItem>
-          <Left>
+          <Right>
             <Button transparent onPress={onNotificationChange}>
               <Icon
                 active
@@ -54,18 +46,18 @@ export const SubjectCard = ({ name, image }) => {
                 style={{ fontSize: 30, color: '#c02942' }}
               />
             </Button>
-          </Left>
-
-          <Right>
-            <Button transparent onPress={goToSubject}>
-              <Icon
-                active
-                name="ios-arrow-dropright"
-                style={{ fontSize: 30, color: '#a9a9a9' }}
-              />
-            </Button>
           </Right>
         </CardItem>
+        <TouchableOpacity onPress={goToSubject}>
+          <CardItem cardBody>
+            <Image
+              source={image}
+              style={{ height: 200, width: null, flex: 1 }}
+            />
+          </CardItem>
+        </TouchableOpacity>
+
+        {/* <CardItem></CardItem> */}
       </Card>
     </View>
   );
