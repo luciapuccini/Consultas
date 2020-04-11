@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Item, Icon, Input } from 'native-base';
 
-import { SubjectList } from '../components/SubjectList';
+import { ClassList } from '../components/ClassList';
 
 export const Classes = ({ navigation, route }) => {
   const [classes, setClasses] = React.useState([]);
@@ -30,10 +30,10 @@ export const Classes = ({ navigation, route }) => {
       <View style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
         <Item>
           <Icon active name="search" />
-          <Input placeholder="Materia" onChangeText={setSearchTerm} />
+          <Input placeholder="Clases" onChangeText={setSearchTerm} />
         </Item>
+        <ClassList />
       </View>
-      <SubjectList subjects={results} />
     </>
   );
 };
