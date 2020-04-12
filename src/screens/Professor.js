@@ -1,7 +1,11 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
-// import { SubjectList } from './SubjectList';
-
+import { View } from 'react-native';
+import { Text } from '@ui-kitten/components';
+//TODO: fetch consultas de ese profe
 export const Professor = () => {
-  return <ScrollView>{/* <SubjectList /> */}</ScrollView>;
+  return (
+    <View>
+      <Text category="h3">I am your professor</Text>
+    </View>
+  );
 };
