@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { SafeAreaView } from 'react-native';
 import { Professor } from './Professor';
 import { Student } from './Student';
+import { Layout } from '@ui-kitten/components';
 
 export const Home = ({ navigation }) => {
   const [userRole, setUserRole] = React.useState('role_student');
@@ -20,8 +20,8 @@ export const Home = ({ navigation }) => {
       });
   }, []);
   return (
-    <SafeAreaView>
+    <Layout level="1">
       {userRole === 'role_professor' ? <Professor /> : <Student />}
-    </SafeAreaView>
+    </Layout>
   );
 };

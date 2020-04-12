@@ -1,8 +1,6 @@
 import React from 'react';
-import { TextInput, ScrollView, View } from 'react-native';
-import { Item, Icon, Input } from 'native-base';
 import { SubjectList } from '../components/SubjectList';
-
+import { SearchBox } from '../components/SearchBox';
 export const Student = () => {
   const [subjects, setSubjects] = React.useState([]);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -23,12 +21,7 @@ export const Student = () => {
 
   return (
     <>
-      <View style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
-        <Item>
-          <Icon active name="search" />
-          <Input placeholder="Materia" onChangeText={setSearchTerm} />
-        </Item>
-      </View>
+      <SearchBox setSearchTerm={setSearchTerm} />
       <SubjectList subjects={results} />
     </>
   );
