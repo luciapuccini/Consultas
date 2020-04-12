@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Classes } from './screens/Classes';
 import { Profile } from './Profile';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Icon } from 'native-base';
+import { Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import { Context } from './context/AuthContext';
 import { ClassDetail } from './screens/ClassDetail';
@@ -63,7 +63,7 @@ const ProfileIcon = () => {
   const { profileIconStyle } = Styles;
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-      <Icon active name="ios-person" style={profileIconStyle} />
+      <Icon name="person" style={{ height: 20, width: 20 }} />
     </TouchableOpacity>
   );
 };
@@ -72,7 +72,7 @@ const LogOutIcon = () => {
   const { profileIconStyle } = Styles;
   return (
     <TouchableOpacity onPress={() => signout()}>
-      <Icon active name="ios-power" style={profileIconStyle} />
+      <Icon name="settings" style={{ height: 20, width: 20 }} />
     </TouchableOpacity>
   );
 };

@@ -1,24 +1,15 @@
 import React from 'react';
 import { Image, View, TouchableOpacity } from 'react-native';
-import {
-  Card,
-  CardItem,
-  Text,
-  Button,
-  Icon,
-  Left,
-  Body,
-  Right,
-} from 'native-base';
+
+import { Card, Text, Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+// import { Icon } from 'native-base';
 
 export const SubjectCard = ({ name, image }) => {
   const [notification, setNotification] = React.useState(false);
   const navigation = useNavigation();
 
-  const notificationIcon = notification
-    ? 'ios-notifications'
-    : 'ios-notifications-outline';
+  const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
 
   const onNotificationChange = () => {
     setNotification(!notification);
@@ -27,35 +18,48 @@ export const SubjectCard = ({ name, image }) => {
   const goToSubject = () => {
     navigation.navigate('Classes', { subject: name });
   };
-  return (
-    <View style={{ margin: 10 }}>
-      <Card>
-        <CardItem bordered>
-          <Left>
-            <Body>
-              <Text>{name}</Text>
-              <Text note>Sistemas</Text>
-            </Body>
-          </Left>
-          <Right>
-            <Button transparent onPress={onNotificationChange}>
-              <Icon
-                active
-                name={notificationIcon}
-                style={{ fontSize: 30, color: '#c02942' }}
-              />
-            </Button>
-          </Right>
-        </CardItem>
-        <TouchableOpacity onPress={goToSubject}>
-          <CardItem cardBody>
-            <Image
-              source={image}
-              style={{ height: 200, width: null, flex: 1 }}
-            />
-          </CardItem>
+
+  const Header = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          marginVertical: 5,
+        }}>
+        <Text category="h6">{name}</Text>
+        <TouchableOpacity onPress={onNotificationChange}>
+          <Icon
+            style={{ width: 22, height: 22 }}
+            name={notificationIcon}
+            fill="#8F9BB3"
+          />
         </TouchableOpacity>
-      </Card>
-    </View>
+      </View>
+    );
+  };
+
+  return (
+    <Card
+      header={Header}
+      style={{
+        marginHorizontal: 30,
+        marginVertical: 14,
+        flex: 1,
+        backgroundColor: '#E3F2FD',
+      }}>
+      <TouchableOpacity onPress={goToSubject}>
+        <Image
+          source={image}
+          style={{
+            height: 200,
+            width: null,
+            flex: 1,
+            marginVertical: -16,
+            marginHorizontal: -24,
+          }}
+        />
+      </TouchableOpacity>
+    </Card>
   );
 };

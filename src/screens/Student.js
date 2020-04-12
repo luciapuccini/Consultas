@@ -21,7 +21,7 @@ export const Student = () => {
 
   return (
     <>
-      <SearchBox setSearchTerm={setSearchTerm} />
+      <SearchBox setSearchTerm={setSearchTerm} placeholder="Materia" />
       <SubjectList subjects={results} />
     </>
   );

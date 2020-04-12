@@ -3,6 +3,7 @@ import { FlatList } from 'react-native';
 import { Text, View } from 'native-base';
 import { ClassCard } from './ClassCard';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Spinner } from '@ui-kitten/components';
 
 export const ClassList = () => {
   const [classes, setClasses] = useState([]);
@@ -20,19 +21,27 @@ export const ClassList = () => {
   return (
     <ScrollView>
       <Text>Semana 1</Text>
-      <FlatList
-        data={classes}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        keyExtractor={(item, index) => item.name}
-      />
+      {!classes ? (
+        <Spinner />
+      ) : (
+        <FlatList
+          data={classes}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          keyExtractor={(item, index) => item.name}
+        />
+      )}
       <Text>Semana 2</Text>
-      <FlatList
-        data={classes}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        keyExtractor={(item, index) => item.name}
-      />
+      {!classes ? (
+        <Spinner />
+      ) : (
+        <FlatList
+          data={classes}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          keyExtractor={(item, index) => item.name}
+        />
+      )}
     </ScrollView>
   );
 };

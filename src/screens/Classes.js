@@ -4,6 +4,7 @@ import { Item, Icon, Input } from 'native-base';
 
 import { ClassList } from '../components/ClassList';
 import { Layout } from '@ui-kitten/components';
+import { SearchBox } from '../components/SearchBox';
 
 export const Classes = ({ navigation, route }) => {
   const [classes, setClasses] = React.useState([]);
@@ -27,14 +28,9 @@ export const Classes = ({ navigation, route }) => {
       );
 
   return (
-    <>
-      <View style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
-        <Item>
-          <Icon active name="search" />
-          <Input placeholder="Clases" onChangeText={setSearchTerm} />
-        </Item>
-        <ClassList />
-      </View>
-    </>
+    <Layout>
+      <SearchBox setSearchTerm={setSearchTerm} placeholder="Clase" />
+      <ClassList />
+    </Layout>
   );
 };

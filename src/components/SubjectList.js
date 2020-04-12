@@ -20,6 +20,7 @@ export const SubjectList = ({ subjects }) => {
       data={subjects}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.name}
+      contentContainerStyle={{ paddingBottom: 100 }}
     />
   );
 };
