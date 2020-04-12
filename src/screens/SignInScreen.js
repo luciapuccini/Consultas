@@ -54,6 +54,7 @@ export const SignInScreen = ({ navigation }) => {
           placeholder="Contraseña..."
           placeholderTextColor="#003f5c"
           onChangeText={setPassword}
+          autoCapitalize="none"
         />
       </View>
 

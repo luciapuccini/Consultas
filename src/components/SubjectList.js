@@ -15,5 +15,11 @@ export const SubjectList = ({ subjects }) => {
     return <SubjectCard name={item.name} image={img} />;
   };
 
-  return <FlatList data={subjects} renderItem={renderItem} />;
+  return (
+    <FlatList
+      data={subjects}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => item.name}
+    />
+  );
 };

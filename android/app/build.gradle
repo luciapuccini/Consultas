@@ -155,6 +155,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('consultas.keystore')
+            storePassword 'consultas'
+            keyAlias 'consultas'
+            keyPassword 'consultas'
+        }
     }
     buildTypes {
         debug {

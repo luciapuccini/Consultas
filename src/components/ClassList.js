@@ -1,29 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
+import { Text, View } from 'native-base';
 import { ClassCard } from './ClassCard';
-
-const classes = [
-  {
-    classId: '1',
-    name: 'Consulta Algoritmos',
-    professor: 'Adrian Meca',
-    fechaInicio: '2020-02-04T22:44:30.652Z',
-    duracion: '60',
-    turnos: false,
-  },
-  {
-    classId: '2',
-    name: 'Consulta Diseño',
-    professor: 'Adrian Meca',
-    fechaInicio: '2020-02-14T22:44:30.652Z',
-    duracion: '60',
-    turnos: true,
-  },
-];
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const ClassList = () => {
+  const [classes, setClasses] = useState([]);
+  useEffect(() => {
+    fetch('http://www.mocky.io/v2/5e92c1003000004f001566b0')
+      .then((res) => res.json())
+      .then((data) => {
+        setClasses(data);
+      });
+  }, []);
+
   const renderItem = ({ item, index }) => {
     return <ClassCard data={item} />;
   };
-  return <FlatList data={classes} renderItem={renderItem} />;
+  return (
+    <ScrollView>
+      <Text>Semana 1</Text>
+      <FlatList
+        data={classes}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        keyExtractor={(item, index) => item.name}
+      />
+      <Text>Semana 2</Text>
+      <FlatList
+        data={classes}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        keyExtractor={(item, index) => item.name}
+      />
+    </ScrollView>
+  );
 };

@@ -45,7 +45,8 @@ const signin = (dispatch) => async ({ username, password, deviceToken }) => {
   console.log('USER', user);
   try {
     let token;
-    await fetch('http://181.164.121.14:25565/users/login', {
+    //http://181.164.121.14:25565/users/login
+    await fetch('http://www.mocky.io/v2/5e90d8663300008a00e9ccbc', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),

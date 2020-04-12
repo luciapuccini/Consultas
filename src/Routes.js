@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Context } from './context/AuthContext';
+import { ClassDetail } from './screens/ClassDetail';
 
 export const RootStack = ({ navigation }) => {
   const { Navigator, Screen } = createStackNavigator();
@@ -20,6 +21,8 @@ export const RootStack = ({ navigation }) => {
         }}
       />
       <Screen name="Classes" component={Classes} />
+      <Screen name="Class Detail" component={ClassDetail} />
+
       <Screen
         name="Profile"
         component={Profile}

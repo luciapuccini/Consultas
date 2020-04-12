@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Item, Icon, Input } from 'native-base';
 
 import { ClassList } from '../components/ClassList';
+import { Layout } from '@ui-kitten/components';
 
 export const Classes = ({ navigation, route }) => {
   const [classes, setClasses] = React.useState([]);
