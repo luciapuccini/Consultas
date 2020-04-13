@@ -23,7 +23,7 @@ async function registerAppWithFCM(setDeviceToken) {
 //TODO: formik
 export const SignInScreen = ({ navigation }) => {
   const { signin } = useContext(Context);
-  const [username, setUsername] = useState('');
+  const [legajo, setLegajo] = useState(0);
   const [password, setPassword] = useState('');
   const [deviceToken, setDeviceToken] = useState('');
 
@@ -42,7 +42,7 @@ export const SignInScreen = ({ navigation }) => {
           style={inputText}
           placeholder="Legajo..."
           placeholderTextColor="#003f5c"
-          onChangeText={setUsername}
+          onChangeText={setLegajo}
           autoCapitalize="none"
           keyboardType="numeric"
         />
@@ -60,7 +60,7 @@ export const SignInScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={loginBtn}
-        onPress={() => signin({ username, password, deviceToken })}>
+        onPress={() => signin({ legajo, password, deviceToken })}>
         <Text style={loginText}>Sign In</Text>
       </TouchableOpacity>
 

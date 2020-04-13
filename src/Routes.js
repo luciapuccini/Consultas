@@ -2,7 +2,7 @@ import React from 'react';
 import { Home, SignInScreen, SignUpScreen } from './screens';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Classes } from './screens/Classes';
-import { Profile } from './Profile';
+import { Profile } from './screens/Profile';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
@@ -63,7 +63,7 @@ const ProfileIcon = () => {
   const { profileIconStyle } = Styles;
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-      <Icon name="person" style={{ height: 20, width: 20 }} />
+      <Icon name="person" style={profileIconStyle} fill="#8F9BB3" />
     </TouchableOpacity>
   );
 };
@@ -72,11 +72,11 @@ const LogOutIcon = () => {
   const { profileIconStyle } = Styles;
   return (
     <TouchableOpacity onPress={() => signout()}>
-      <Icon name="settings" style={{ height: 20, width: 20 }} />
+      <Icon name="power" style={profileIconStyle} fill="#8F9BB3" />
     </TouchableOpacity>
   );
 };
 
 const Styles = {
-  profileIconStyle: { fontSize: 30, marginRight: 20, color: '#a9a9a9' },
+  profileIconStyle: { height: 30, width: 30, marginRight: 20 },
 };

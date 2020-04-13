@@ -23,12 +23,7 @@ const turnos = [
 export const ClassDetail = ({ route }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const clase = route.params.class;
-  const statusColor =
-    clase.status == 'Confirmada'
-      ? '#FFCA28'
-      : clase.status == 'En consulta'
-      ? '#00C853'
-      : '#F44336';
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
       <Layout style={{ margin: 20 }}>
@@ -48,19 +43,6 @@ export const ClassDetail = ({ route }) => {
           since the 1500s
         </Text>
         <Divider style={{ marginVertical: 10 }} />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}>
-          <Text>{clase.status} </Text>
-          <Icon
-            name="radio-button-off-outline"
-            style={{ width: 15, height: 15, marginTop: 2 }}
-            fill={statusColor}
-          />
-        </View>
       </Card>
       <Menu
         selectedIndex={selectedIndex}

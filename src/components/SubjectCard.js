@@ -27,14 +27,18 @@ export const SubjectCard = ({ name, image }) => {
           justifyContent: 'space-around',
           marginVertical: 5,
         }}>
-        <Text category="h6">{name}</Text>
-        <TouchableOpacity onPress={onNotificationChange}>
-          <Icon
-            style={{ width: 22, height: 22 }}
-            name={notificationIcon}
-            fill="#8F9BB3"
-          />
-        </TouchableOpacity>
+        <View style={{ width: '80%' }}>
+          <Text category="h6">{name}</Text>
+        </View>
+        <View>
+          <TouchableOpacity onPress={onNotificationChange}>
+            <Icon
+              style={{ width: 22, height: 22 }}
+              name={notificationIcon}
+              fill="#8F9BB3"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };

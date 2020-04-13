@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Spinner } from '@ui-kitten/components';
 
 export const ClassList = () => {
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState(null);
   useEffect(() => {
     fetch('http://www.mocky.io/v2/5e92c1003000004f001566b0')
       .then((res) => res.json())
@@ -22,7 +22,9 @@ export const ClassList = () => {
     <ScrollView>
       <Text>Semana 1</Text>
       {!classes ? (
-        <Spinner />
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Spinner />
+        </View>
       ) : (
         <FlatList
           data={classes}
@@ -33,7 +35,9 @@ export const ClassList = () => {
       )}
       <Text>Semana 2</Text>
       {!classes ? (
-        <Spinner />
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Spinner />
+        </View>
       ) : (
         <FlatList
           data={classes}

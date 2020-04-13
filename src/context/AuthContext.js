@@ -40,12 +40,12 @@ const storeData = async (value) => {
     // saving error
   }
 };
-const signin = (dispatch) => async ({ username, password, deviceToken }) => {
-  const user = { legajo: username, password, deviceToken };
-  console.log('USER', user);
+const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
+  const user = { legajo, password, deviceToken };
   try {
     let token;
     //http://181.164.121.14:25565/users/login
+    //http://www.mocky.io/v2/5e90d8663300008a00e9ccbc
     await fetch('http://www.mocky.io/v2/5e90d8663300008a00e9ccbc', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -77,7 +77,10 @@ const signup = (dispatch) => async ({
   const user = { legajo, name, email, password, mobile: phone };
   try {
     let token;
-    await fetch('http://181.164.121.14:25565/users/addStudent', {
+    //http://181.164.121.14:25565/users/addStudent
+    //http://www.mocky.io/v2/5e93a8953000009100156b76
+    //WARNING how to login after ---> missing jwt
+    await fetch('http://www.mocky.io/v2/5e93a8953000009100156b76', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Item, Icon, Input } from 'native-base';
 
 import { ClassList } from '../components/ClassList';
-import { Layout } from '@ui-kitten/components';
+import { Layout, Spinner } from '@ui-kitten/components';
 import { SearchBox } from '../components/SearchBox';
 
 export const Classes = ({ navigation, route }) => {
@@ -30,7 +30,7 @@ export const Classes = ({ navigation, route }) => {
   return (
     <Layout>
       <SearchBox setSearchTerm={setSearchTerm} placeholder="Clase" />
-      <ClassList />
+      {!results ? <Spinner /> : <ClassList />}
     </Layout>
   );
 };

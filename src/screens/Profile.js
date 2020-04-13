@@ -1,11 +1,15 @@
 import React from 'react';
-import { SafeAreaView, View, ImageBackground } from 'react-native';
-import { Styles } from './style/styles';
-import { Fab, Thumbnail, Icon, Content, Text, H1 } from 'native-base';
-import Input from './components/Input';
-import InputBox from './components/InputBox';
+import {
+  SafeAreaView,
+  View,
+  ImageBackground,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Styles } from '../style/styles';
+import { Fab, Thumbnail, Content, Text, H1 } from 'native-base';
+import { Input, Icon } from '@ui-kitten/components';
 
-const javaImage = require('./assets/java.png');
+const javaImage = require('../assets/java.png');
 const exampleUser = {
   legajo: '42281',
   email: 'asdasd@asdasd.asd',
@@ -21,6 +25,11 @@ export const Profile = ({ navigation }) => {
   const [photo, setPhoto] = React.useState(false);
 
   const { inputText, inputView } = styles;
+  const renderIcon = (props) => (
+    <TouchableWithoutFeedback>
+      <Icon {...props} name="brush" />
+    </TouchableWithoutFeedback>
+  );
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
@@ -50,11 +59,7 @@ export const Profile = ({ navigation }) => {
             }}
             position="bottomLeft"
             onPress={() => setPhoto(!photo)}>
-            <Icon
-              type="SimpleLineIcons"
-              name="camera"
-              style={{ fontSize: 25 }}
-            />
+            <Icon name="camera" />
           </Fab>
         </View>
       </ImageBackground>
@@ -63,30 +68,30 @@ export const Profile = ({ navigation }) => {
         <View style={{ flex: 1, alignItems: 'center', marginVertical: 10 }}>
           <H1>{name}'s Profile</H1>
         </View>
+
         <Input
-          label="Legajo"
           placeholder={name}
           onChangeText={setName}
           value={exampleUser.legajo}
-          isDisabled={true}
+          disabled={true}
         />
         <Input
-          label="Name"
           placeholder={name}
           onChangeText={setName}
           value={name}
+          accessoryRight={renderIcon}
         />
         <Input
-          label="Email"
           placeholder={name}
           onChangeText={setName}
           value={name}
+          accessoryRight={renderIcon}
         />
         <Input
-          label="Mobile"
           placeholder={name}
           onChangeText={setName}
           value={name}
+          accessoryRight={renderIcon}
         />
       </Content>
     </SafeAreaView>

@@ -1,49 +1,42 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import {
-  Card,
-  CardItem,
-  Text,
-  Left,
-  Body,
-  Right,
-  Thumbnail,
-} from 'native-base';
-import { Button, Icon } from '@ui-kitten/components';
+import { Left, Right, Thumbnail } from 'native-base';
+import { Card, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 
 const profe = require('../assets/rick.jpg');
 
 export const ClassCard = ({ data }) => {
   const navigation = useNavigation();
-
+  const statusColor = data.status == 'Confirmada' ? '#FFCA28' : '#00C853';
   return (
-    <Card>
-      <CardItem bordered>
-        <Left>
+    <Card style={{ marginVertical: 14, marginHorizontal: 20 }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Class Detail', { class: data })}>
+        <View style={{ flexDirection: 'row' }}>
           <Thumbnail source={profe} />
-          <View style={{ flexDirection: 'column' }}>
-            <Text>Fecha -- hora</Text>
-            <Text note>Docente: Pickle riiiick</Text>
+
+          <View>
+            <View style={{ flexDirection: 'column', padding: 10 }}>
+              <Text> 10/10/2020 10:00 hs</Text>
+              <Text appearance="hint"> Pickle riiiick</Text>
+            </View>
           </View>
-        </Left>
-        <Right>
-          <TouchableOpacity
-            style={{ height: 40 }}
-            onPress={() =>
-              navigation.navigate('Class Detail', { class: data })
-            }>
-            <Icon
-              name="arrowhead-right-outline"
-              style={{
-                height: 40,
-                tintColor: '#2D383A',
-                width: 20,
-              }}
-            />
-          </TouchableOpacity>
-        </Right>
-      </CardItem>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}>
+          <Text style={{ color: statusColor }}>{data.status} </Text>
+          <Icon
+            name="checkmark-circle-outline"
+            style={{ width: 15, height: 15, marginTop: 2 }}
+            fill={statusColor}
+          />
+        </View>
+      </TouchableOpacity>
     </Card>
   );
 };
