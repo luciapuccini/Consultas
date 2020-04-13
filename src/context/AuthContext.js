@@ -33,9 +33,11 @@ const restore = (dispatch) => async () => {
   } else {
   }
 };
-const storeData = async (value) => {
+const storeData = async (jwt, userId) => {
+  const setToken = ['TOKEN', jwt];
+  const setUser = ['USER_ID', userId];
   try {
-    await AsyncStorage.setItem('TOKEN', value);
+    await AsyncStorage.multiSet([setToken, setUser]);
   } catch (e) {
     // saving error
   }
@@ -46,15 +48,16 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     let token;
     //http://181.164.121.14:25565/users/login
     //http://www.mocky.io/v2/5e90d8663300008a00e9ccbc
-    await fetch('http://www.mocky.io/v2/5e90d8663300008a00e9ccbc', {
+    await fetch('http://181.164.121.14:25565/users/login', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
       .then((data) => {
-        token = data.jwt;
-        storeData(token);
+        const { userId, jwt } = data;
+        storeData(jwt, userId);
+        token = jwt;
       });
     dispatch({ type: 'SIGN_IN', payload: token });
   } catch (error) {
@@ -63,6 +66,14 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
 };
 
 const signout = (dispatch) => async () => {
+  const id = await AsyncStorage.getItem('USER_ID');
+  try {
+    fetch(`http://181.164.121.14:25565/users/logout/${id}`)
+      .then((res) => res.json())
+      .then((data) => console.log(data.message));
+  } catch (error) {
+    console.log('Upss');
+  }
   await AsyncStorage.removeItem('TOKEN');
   dispatch({ type: 'SIGN_OUT' });
 };

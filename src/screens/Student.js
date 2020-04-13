@@ -6,7 +6,8 @@ export const Student = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    fetch('http://www.mocky.io/v2/5e9108643300008c00e9cd5a')
+    //http://www.mocky.io/v2/5e9108643300008c00e9cd5a
+    fetch('http://181.164.121.14:25565/subjects/findAll')
       .then((response) => response.json())
       .then((json) => {
         setSubjects(json);
