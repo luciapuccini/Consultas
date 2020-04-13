@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Left, Right, Thumbnail } from 'native-base';
+import { Thumbnail } from 'native-base';
 import { Card, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,7 +12,11 @@ export const ClassCard = ({ data }) => {
   return (
     <Card style={{ marginVertical: 14, marginHorizontal: 20 }}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Class Detail', { class: data })}>
+        onPress={() =>
+          data.status == 'Confirmada'
+            ? navigation.navigate('Class Detail', { class: data })
+            : null
+        }>
         <View style={{ flexDirection: 'row' }}>
           <Thumbnail source={profe} />
 

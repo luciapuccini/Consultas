@@ -1,13 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Item, Icon, Input } from 'native-base';
 
 import { ClassList } from '../components/ClassList';
 import { Layout, Spinner } from '@ui-kitten/components';
 import { SearchBox } from '../components/SearchBox';
 
 export const Classes = ({ navigation, route }) => {
-  const [classes, setClasses] = React.useState([]);
+  const [classes, setClasses] = React.useState(null);
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {

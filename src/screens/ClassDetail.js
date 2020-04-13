@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import {
   Layout,
   Text,
@@ -7,7 +6,7 @@ import {
   MenuItem,
   IndexPath,
   Card,
-  Icon,
+  Button,
   Divider,
 } from '@ui-kitten/components';
 
@@ -18,7 +17,21 @@ const turnos = [
   { id: 4, hora: '10:40', isTaken: false },
   { id: 5, hora: '10:50', isTaken: true },
   { id: 6, hora: '11:00', isTaken: true },
+  { id: 4, hora: '10:40', isTaken: false },
+  { id: 5, hora: '10:50', isTaken: true },
+  { id: 6, hora: '11:00', isTaken: true },
 ];
+
+const renderInscipcionBtn = () => (
+  <Button
+    appearance="outline"
+    style={{
+      alignSelf: 'flex-end',
+    }}
+    onPress={() => console.log('inscipto')}>
+    Inscribirme
+  </Button>
+);
 
 export const ClassDetail = ({ route }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
@@ -44,13 +57,32 @@ export const ClassDetail = ({ route }) => {
         </Text>
         <Divider style={{ marginVertical: 10 }} />
       </Card>
-      <Menu
-        selectedIndex={selectedIndex}
-        onSelect={(index) => setSelectedIndex(index)}>
-        {turnos.map((turno) => (
-          <MenuItem title={turno.hora} disabled={turno.isTaken} />
-        ))}
-      </Menu>
+      {!clase.hasSingleTurno ? (
+        <Menu
+          selectedIndex={selectedIndex}
+          onSelect={(index) => setSelectedIndex(index)}>
+          {turnos.map((turno) => (
+            <MenuItem
+              title={turno.hora}
+              disabled={turno.isTaken}
+              accessoryRight={renderInscipcionBtn}
+            />
+          ))}
+        </Menu>
+      ) : null}
+      {clase.hasSingleTurno ? (
+        <Button
+          appearance="outline"
+          style={{
+            width: '50%',
+            alignSelf: 'flex-end',
+            marginTop: 20,
+            marginRight: 10,
+          }}
+          onPress={() => console.log('inscipto')}>
+          Inscribirme
+        </Button>
+      ) : null}
     </Layout>
   );
 };
