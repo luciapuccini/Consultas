@@ -55,6 +55,7 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log('Este es el user', data);
         const { userId, jwt } = data;
         storeData(jwt, userId);
         token = jwt;

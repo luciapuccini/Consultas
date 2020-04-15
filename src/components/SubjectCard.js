@@ -1,20 +1,58 @@
 import React from 'react';
 import { Image, View, TouchableOpacity } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Text, Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 // import { Icon } from 'native-base';
 
-export const SubjectCard = ({ name, image }) => {
-  const [notification, setNotification] = React.useState(false);
+const subjectPlaceholder = require('../assets/java.png');
+const findSubjectImage = (subjectName) => {
+  // const image = require(`../assets/${subjectName}.png`);
+  return subjectPlaceholder;
+};
+
+export const SubjectCard = ({ subject }) => {
+  const [notification, setNotification] = React.useState(true);
   const navigation = useNavigation();
+  const notificationIcon = notification ? 'bell-off-outline' : 'bell-outline';
+  const { subjectId, name, image } = subject;
 
-  const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
-
-  const onNotificationChange = () => {
+  const onNotificationChange = async () => {
+    const id = await AsyncStorage.getItem('USER_ID');
     setNotification(!notification);
-    //TODO:
+
+    const body = {
+      id: subjectId,
+      studentId: id,
+    };
+
+    if (notification === true) {
+      try {
+        fetch('http://181.164.121.14:25565/subjects/followSubject', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        })
+          .then((res) => res.json())
+          .then((data) => console.log(data.message));
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        fetch('http://181.164.121.14:25565/subjects/unfollowSubject', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        })
+          .then((res) => res.json())
+          .then((data) => console.log(data.message));
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
+
   const goToSubject = () => {
     navigation.navigate('Classes', { subject: name });
   };
@@ -54,7 +92,7 @@ export const SubjectCard = ({ name, image }) => {
       }}>
       <TouchableOpacity onPress={goToSubject}>
         <Image
-          source={image}
+          source={findSubjectImage(image)}
           style={{
             height: 200,
             width: null,

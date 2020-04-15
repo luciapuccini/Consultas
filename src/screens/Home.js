@@ -15,7 +15,6 @@ export const Home = ({ navigation }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUserRole(data.role);
       });
   }, []);
