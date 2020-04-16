@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import {
   Layout,
   Text,
@@ -22,31 +23,27 @@ const turnos = [
   { id: 6, hora: '11:00', isTaken: true },
 ];
 
-const renderInscipcionBtn = () => (
-  <Button
-    appearance="outline"
-    style={{
-      alignSelf: 'flex-end',
-    }}
-    onPress={() => console.log('inscipto')}>
-    Inscribirme
-  </Button>
-);
-
 export const ClassDetail = ({ route }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  // const [turno, setTurno] = React.useState(null);
   const clase = route.params.class;
+  const onSubmit = () => {
+    console.log('SUBMIT');
+  };
+  const showSelected = () => {
+    return turnos[selectedIndex - 1].hora;
+  };
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      <Layout style={{ margin: 20 }}>
+      <Layout style={{ margin: 10 }}>
         <Text category="h6">Fecha: ....</Text>
         <Text category="h6">Hora: ....</Text>
       </Layout>
 
       <Card
         header={() => (
-          <Text style={{ margin: 10, alignSelf: 'flex-start' }} category="h6">
+          <Text style={styles.notesCard} category="h6">
             Notas
           </Text>
         )}>
@@ -55,34 +52,41 @@ export const ClassDetail = ({ route }) => {
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s
         </Text>
-        <Divider style={{ marginVertical: 10 }} />
       </Card>
+      <Layout style={styles.selectionRow}>
+        <Text style={{ alignSelf: 'center' }} category="h6">
+          Seleccione Turno: {showSelected()}
+        </Text>
+        <Button
+          appearance="outline"
+          style={styles.inscriptionBtn}
+          onPress={onSubmit}>
+          Inscribirme
+        </Button>
+      </Layout>
+
       {!clase.hasSingleTurno ? (
         <Menu
           selectedIndex={selectedIndex}
           onSelect={(index) => setSelectedIndex(index)}>
           {turnos.map((turno) => (
-            <MenuItem
-              title={turno.hora}
-              disabled={turno.isTaken}
-              accessoryRight={renderInscipcionBtn}
-            />
+            <MenuItem title={turno.hora} disabled={turno.isTaken} />
           ))}
         </Menu>
       ) : null}
-      {clase.hasSingleTurno ? (
-        <Button
-          appearance="outline"
-          style={{
-            width: '50%',
-            alignSelf: 'flex-end',
-            marginTop: 20,
-            marginRight: 10,
-          }}
-          onPress={() => console.log('inscipto')}>
-          Inscribirme
-        </Button>
-      ) : null}
     </Layout>
   );
+};
+
+const styles = {
+  inscriptionBtn: {
+    height: 20,
+    alignSelf: 'flex-end',
+  },
+  selectionRow: {
+    flexDirection: 'row',
+    margin: 10,
+    justifyContent: 'space-between',
+  },
+  notesCard: { margin: 10, alignSelf: 'flex-start' },
 };

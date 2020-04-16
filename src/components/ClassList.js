@@ -20,7 +20,6 @@ export const ClassList = () => {
   };
   return (
     <ScrollView>
-      <Text>Semana 1</Text>
       {!classes ? (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Spinner />
@@ -29,20 +28,7 @@ export const ClassList = () => {
         <FlatList
           data={classes}
           renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          keyExtractor={(item, index) => item.name}
-        />
-      )}
-      <Text>Semana 2</Text>
-      {!classes ? (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Spinner />
-        </View>
-      ) : (
-        <FlatList
-          data={classes}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={{ marginBottom: 100 }}
           keyExtractor={(item, index) => item.name}
         />
       )}
