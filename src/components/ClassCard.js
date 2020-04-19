@@ -3,40 +3,42 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Thumbnail } from 'native-base';
 import { Card, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
+import 'moment/locale/es';
 
 const profe = require('../assets/rick.jpg');
-
-export const ClassCard = ({ data }) => {
+const handleDate = (date) => {
+  return moment(date).locale('es').format('lll');
+};
+export const ClassCard = ({ clase }) => {
   const navigation = useNavigation();
-  const statusColor = data.status == 'Confirmada' ? '#FFCA28' : '#00C853';
+  const isLive = clase.status === 'En Consulta';
+  const statusColor = !isLive ? '#FFCA28' : '#00C853';
+
   return (
-    <Card style={{ marginVertical: 14, marginHorizontal: 20 }}>
+    <Card style={styles.space}>
       <TouchableOpacity
         onPress={() =>
-          data.status == 'Confirmada'
-            ? navigation.navigate('Class Detail', { class: data })
-            : null
+          //TODO: en culquier caso navego, disable en vivo + whats
+          navigation.navigate('Class Detail', { clase })
         }>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.row}>
           <Thumbnail source={profe} />
 
           <View>
-            <View style={{ flexDirection: 'column', padding: 10 }}>
-              <Text> 10/10/2020 10:00 hs</Text>
-              <Text appearance="hint"> Pickle riiiick</Text>
+            <View style={styles.cardStyle}>
+              <Text>{handleDate(clase.fecha)}</Text>
+              <Text appearance="hint" style={{ fontSize: 14 }}>
+                {clase.professor.name}
+              </Text>
             </View>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}>
-          <Text style={{ color: statusColor }}>{data.status} </Text>
+        <View style={styles.textRowStyle}>
+          <Text style={{ color: statusColor }}>{clase.status} </Text>
           <Icon
             name="checkmark-circle-outline"
-            style={{ width: 15, height: 15, marginTop: 2 }}
+            style={styles.checkStyle}
             fill={statusColor}
           />
         </View>
@@ -46,21 +48,16 @@ export const ClassCard = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
-  topContainer: {
+  row: { flexDirection: 'row' },
+  space: { marginVertical: 14, marginHorizontal: 20 },
+  cardStyle: {
+    flexDirection: 'column',
+    padding: 10,
+  },
+  textRowStyle: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
-  card: {
-    flex: 1,
-    margin: 2,
-  },
-  footerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  footerControl: {
-    marginHorizontal: 2,
-  },
+  checkStyle: { width: 15, height: 15, marginTop: 2 },
 });

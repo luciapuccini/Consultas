@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import {
   Layout,
   Text,
@@ -8,27 +7,19 @@ import {
   IndexPath,
   Card,
   Button,
-  Divider,
+  Modal,
+  Icon,
 } from '@ui-kitten/components';
-
-const turnos = [
-  { id: 1, hora: '10:10', isTaken: false },
-  { id: 2, hora: '10:20', isTaken: true },
-  { id: 3, hora: '10:30', isTaken: false },
-  { id: 4, hora: '10:40', isTaken: false },
-  { id: 5, hora: '10:50', isTaken: true },
-  { id: 6, hora: '11:00', isTaken: true },
-  { id: 4, hora: '10:40', isTaken: false },
-  { id: 5, hora: '10:50', isTaken: true },
-  { id: 6, hora: '11:00', isTaken: true },
-];
+import { TouchableOpacity } from 'react-native';
 
 export const ClassDetail = ({ route }) => {
+  const { clase } = route.params;
+  const { turnos } = clase;
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  // const [turno, setTurno] = React.useState(null);
-  const clase = route.params.class;
+  const [showConfirm, setShowConfirm] = React.useState(false);
+
   const onSubmit = () => {
-    console.log('SUBMIT');
+    setShowConfirm(true);
   };
   const showSelected = () => {
     return turnos[selectedIndex - 1].hora;
@@ -54,9 +45,11 @@ export const ClassDetail = ({ route }) => {
         </Text>
       </Card>
       <Layout style={styles.selectionRow}>
-        <Text style={{ alignSelf: 'center' }} category="h6">
-          Seleccione Turno: {showSelected()}
-        </Text>
+        {!clase.hasSingleTurno ? (
+          <Text style={{ alignSelf: 'center' }} category="h6">
+            Seleccione Turno: {showSelected()}
+          </Text>
+        ) : null}
         <Button
           appearance="outline"
           style={styles.inscriptionBtn}
@@ -74,6 +67,22 @@ export const ClassDetail = ({ route }) => {
           ))}
         </Menu>
       ) : null}
+      <Modal
+        visible={showConfirm}
+        backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+        onBackdropPress={() => setShowConfirm(false)}>
+        <Card disabled={true}>
+          <TouchableOpacity onPress={() => setShowConfirm(false)}>
+            <Icon
+              style={{ height: 20, width: 20 }}
+              name="close"
+              fill="#8F9BB3"
+            />
+          </TouchableOpacity>
+
+          <Text>Inscipto a: {turnos[selectedIndex - 1].hora}😻</Text>
+        </Card>
+      </Modal>
     </Layout>
   );
 };
