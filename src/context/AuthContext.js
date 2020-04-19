@@ -48,14 +48,13 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     let token;
     //http://181.164.121.14:25565/users/login
     //http://www.mocky.io/v2/5e90d8663300008a00e9ccbc
-    await fetch('http://181.164.121.14:25565/users/login', {
+    await fetch('http://www.mocky.io/v2/5e90d8663300008a00e9ccbc', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('Este es el user', data);
         const { userId, jwt } = data;
         storeData(jwt, userId);
         token = jwt;

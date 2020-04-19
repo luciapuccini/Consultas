@@ -12,9 +12,10 @@ const findSubjectImage = (subjectName) => {
 };
 
 export const SubjectCard = ({ subject }) => {
-  const [notification, setNotification] = React.useState(true);
+  const [notification, setNotification] = React.useState(subject.follows);
   const navigation = useNavigation();
-  const notificationIcon = notification ? 'bell-off-outline' : 'bell-outline';
+  const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
+
   const { subjectId, name, image } = subject;
 
   const onNotificationChange = async () => {
@@ -27,8 +28,11 @@ export const SubjectCard = ({ subject }) => {
     };
 
     if (notification === true) {
+      // http://www.mocky.io/v2/5e98fd103500005fa1c486f9
+      // http://181.164.121.14:25565/subjects/followSubject
+      // http://181.164.121.14:25565/subjects/unfollowSubject
       try {
-        fetch('http://181.164.121.14:25565/subjects/followSubject', {
+        fetch('http://www.mocky.io/v2/5e98fd103500005fa1c486f9', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
@@ -40,7 +44,7 @@ export const SubjectCard = ({ subject }) => {
       }
     } else {
       try {
-        fetch('http://181.164.121.14:25565/subjects/unfollowSubject', {
+        fetch('http://www.mocky.io/v2/5e98fd103500005fa1c486f9', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),

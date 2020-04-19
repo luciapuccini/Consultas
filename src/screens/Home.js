@@ -4,11 +4,11 @@ import { Student } from './Student';
 import { Layout } from '@ui-kitten/components';
 
 export const Home = ({ navigation }) => {
-  const [userRole, setUserRole] = React.useState('role_student');
+  const [user, setUser] = React.useState('role_student');
   React.useEffect(() => {
     // http://www.mocky.io/v2/5e9375963000009100156abe
     // http://www.mocky.io/v2/5e97d5a03000008500b6e093
-    fetch('http://www.mocky.io/v2/5e9375963000009100156abe', {
+    fetch('http://www.mocky.io/v2/5e9bc3843300009532bf1813', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -17,12 +17,12 @@ export const Home = ({ navigation }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setUserRole(data.role);
+        setUser(data);
       });
   }, []);
   return (
     <Layout level="1">
-      {userRole === 'role_professor' ? <Professor /> : <Student />}
+      {user.role === 'role_professor' ? <Professor /> : <Student user={user} />}
     </Layout>
   );
 };

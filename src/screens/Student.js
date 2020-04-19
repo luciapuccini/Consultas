@@ -1,17 +1,26 @@
 import React from 'react';
 import { SubjectList } from '../components/SubjectList';
 import { SearchBox } from '../components/SearchBox';
-export const Student = () => {
+import _ from 'underscore';
+
+export const Student = ({ user }) => {
   const [subjects, setSubjects] = React.useState([]);
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    //http://www.mocky.io/v2/5e9108643300008c00e9cd5a
-    fetch('http://181.164.121.14:25565/subjects/findAll')
-      .then((response) => response.json())
-      .then((json) => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch(
+          'http://www.mocky.io/v2/5e9b5df63300005000bf1784',
+        );
+        const json = await response.json();
         setSubjects(json);
-      });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchSubjects();
   }, [searchTerm]);
 
   const results = !searchTerm
@@ -23,7 +32,7 @@ export const Student = () => {
   return (
     <>
       <SearchBox setSearchTerm={setSearchTerm} placeholder="Materia" />
-      <SubjectList subjects={results} />
+      <SubjectList allSubjects={results} followed={user.followedSubjects} />
     </>
   );
 };
