@@ -4,30 +4,69 @@ import {
   View,
   ImageBackground,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import { Fab, Thumbnail, Content, H1 } from 'native-base';
-import { Input, Icon, Text, Divider, Button } from '@ui-kitten/components';
+import {
+  Input,
+  Icon,
+  Text,
+  Divider,
+  Button,
+  Tooltip,
+} from '@ui-kitten/components';
 
-const javaImage = require('../assets/java.png');
-const exampleUser = {
-  legajo: '42281',
-  email: 'asdasd@asdasd.asd',
-  name: 'Augusto',
-  role: 'ROLE_STUDENT',
-  mobile: '123456',
-  subjects: [],
-  books: [],
-};
-
+const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
-  const [name, setName] = React.useState(exampleUser.name);
+  const [hasEdited, setHasEdited] = React.useState(false);
   const [photo, setPhoto] = React.useState(false);
+  const [user, setUser] = React.useState({});
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(
+          'http://www.mocky.io/v2/5e9fd3dc2d00006100cb7d36',
+          //FIXME:'http://181.164.121.14:25565/users/id (????',
+          { headers: { 'Content-Type': 'application/json' } },
+        );
+        const json = await response.json();
+        setUser(json);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const renderBrushIcon = (props) => (
     <TouchableWithoutFeedback>
       <Icon {...props} name="brush" />
     </TouchableWithoutFeedback>
   );
+
+  const save = () => {
+    const handleSave = async () => {
+      try {
+        //FIXME: 'http://181.164.121.14:25565/users/edit (????',
+        console.log('SENDS', user);
+        const response = await fetch(
+          'http://www.mocky.io/v2/5e98fd103500005fa1c486f9',
+          {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user),
+          },
+        );
+        const json = await response.json();
+        console.log(json.message);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleSave();
+    console.log('save');
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -38,7 +77,7 @@ export const Profile = ({ navigation }) => {
             justifyContent: 'center',
           }}>
           <Thumbnail
-            source={javaImage}
+            source={userPlaceholderImage}
             style={{ height: 100, width: 100, borderRadius: 50 }}
           />
 
@@ -65,12 +104,20 @@ export const Profile = ({ navigation }) => {
       </ImageBackground>
 
       <Content>
-        <View style={{ flex: 1, alignItems: 'center', marginVertical: 10 }}>
-          <H1>{name}'s Profile</H1>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            marginVertical: 10,
+            flexDirection: 'row',
+          }}>
+          <H1>{user.name}'s Profile</H1>
+          {hasEdited ? <ConfirmButton save={save} /> : null}
         </View>
         <View style={{ margin: 10 }}>
           <Text category="h6" appearance="hint" style={{ paddingBottom: 5 }}>
-            Legajo: {exampleUser.legajo}
+            Legajo: {user.legajo}
           </Text>
           <Divider style={{ backgroundColor: '#b0bec5' }} />
         </View>
@@ -78,40 +125,52 @@ export const Profile = ({ navigation }) => {
         <Input
           style={styles.inputStyle}
           label="Nombre"
-          placeholder={name}
-          onChangeText={setName}
-          value={name}
+          placeholder={user.name}
+          onChangeText={(value) => setUser({ ...user, name: value })}
+          onKeyPress={() => setHasEdited(true)}
+          value={user.name}
           accessoryRight={renderBrushIcon}
         />
         <Input
           style={styles.inputStyle}
           label="Email"
-          placeholder={name}
-          onChangeText={setName}
-          value={name}
+          placeholder={user.email}
+          onChangeText={(value) => setUser({ ...user, email: value })}
+          onKeyPress={() => setHasEdited(true)}
+          value={user.email}
           accessoryRight={renderBrushIcon}
         />
-        <Input
-          style={styles.inputStyle}
-          label="Telefono"
-          placeholder={name}
-          onChangeText={setName}
-          value={name}
-          accessoryRight={renderBrushIcon}
-        />
+
         <Button
           appearance="outline"
           style={{
             width: '50%',
             alignSelf: 'flex-end',
-            marginTop: 20,
             marginRight: 10,
+            marginTop: 20,
           }}
           onPress={() => navigation.navigate('Classes')}>
           Mis Inscripciones
         </Button>
       </Content>
     </SafeAreaView>
+  );
+};
+
+const ConfirmButton = ({ save }) => {
+  return (
+    <TouchableOpacity
+      onPress={save}
+      style={{ backgroundColor: '#00C853', borderRadius: 20 }}>
+      <Icon
+        name="checkmark-circle-outline"
+        fill="white"
+        style={{
+          height: 40,
+          width: 40,
+        }}
+      />
+    </TouchableOpacity>
   );
 };
 
