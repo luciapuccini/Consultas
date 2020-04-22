@@ -28,6 +28,7 @@ const authReducer = (state, action) => {
 
 const restore = (dispatch) => async () => {
   const token = await AsyncStorage.getItem('TOKEN');
+  //valida que se autologee si existe token en asyncStorage
   if (token !== null && token !== undefined) {
     dispatch({ type: 'SIGN_IN', payload: token });
   } else {
@@ -48,7 +49,7 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     let token;
     //http://181.164.121.14:25565/users/login
     //http://www.mocky.io/v2/5e90d8663300008a00e9ccbc
-    await fetch('http://www.mocky.io/v2/5e90d8663300008a00e9ccbc', {
+    await fetch('http://www.mocky.io/v2/5e9fce9c2d00002900cb7d10', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
