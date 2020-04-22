@@ -59,7 +59,7 @@ export const SubjectCard = ({ subject }) => {
 
   const goToClasses = () => {
     //TODO: handle class de esa sub
-    navigation.navigate('Classes', { subject: name });
+    navigation.navigate('Classes', { subject });
   };
 
   const Header = () => {

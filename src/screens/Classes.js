@@ -3,6 +3,8 @@ import { FlatList } from 'react-native';
 import { ClassCard } from '../components/ClassCard';
 import { Layout, Spinner } from '@ui-kitten/components';
 import { SearchBox } from '../components/SearchBox';
+import { View } from 'native-base';
+import { CustomSpinner } from '../components/CustomSpinner';
 
 const renderItem = ({ item }) => {
   return <ClassCard clase={item} />;
@@ -13,13 +15,23 @@ export const Classes = ({ navigation, route }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    fetch('http://www.mocky.io/v2/5e9c0a2e30000049000a7d4d')
-      .then((response) => response.json())
-      .then((json) => {
-        setClasses(json);
-      });
+    const { subjectId } = route.params.subject;
+    // http://181.164.121.14:25565/subejcts/findClasses/id
+    // http://www.mocky.io/v2/5e9d222930000022cb0a80fd
     if (route.params?.subject) {
-      //FIXME: fetch clases de esa subject
+      try {
+        // fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
+        fetch('http://www.mocky.io/v2/5e9d222930000022cb0a80fd', {
+          headers: { 'Content-Type': 'application/json' },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json);
+            setClasses(json);
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
@@ -31,10 +43,10 @@ export const Classes = ({ navigation, route }) => {
       );
 
   return (
-    <Layout>
+    <Layout level="1" style={{ flex: 1 }}>
       <SearchBox setSearchTerm={setSearchTerm} placeholder="Clase" />
       {!results ? (
-        <Spinner />
+        <CustomSpinner />
       ) : (
         <FlatList
           data={results}

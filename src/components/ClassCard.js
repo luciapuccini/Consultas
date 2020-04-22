@@ -27,7 +27,7 @@ export const ClassCard = ({ clase }) => {
 
           <View>
             <View style={styles.cardStyle}>
-              <Text>{handleDate(clase.fecha)}</Text>
+              <Text>{handleDate(clase.initTime)}</Text>
               <Text appearance="hint" style={{ fontSize: 14 }}>
                 {clase.professor.name}
               </Text>

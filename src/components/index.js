@@ -5,3 +5,5 @@ export * from './SubjectCard';
 export * from './SubjectList';
 export * from './ClassList';
 export * from './ClassCard';
+export * from './CustomSpinner';
+export * from './ErrorMessage';

@@ -6,7 +6,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import { RootStack, AuthStack } from './src/Routes';
 import { Context, Provider } from './src/context/AuthContext';
-
+import _ from 'underscore';
 const { Navigator, Screen } = createStackNavigator();
 
 const App = ({ navigation }) => {
@@ -18,7 +18,7 @@ const App = ({ navigation }) => {
   return (
     <NavigationContainer>
       <Navigator initialRouteName="SingIn">
-        {state.userToken == null ? (
+        {_.isEmpty(state.userToken) ? (
           <Screen
             name="Auth"
             component={AuthStack}

@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { Layout } from '@ui-kitten/components';
+
 import { Professor } from './Professor';
 import { Student } from './Student';
-import { Layout } from '@ui-kitten/components';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState('role_student');
@@ -21,7 +22,7 @@ export const Home = ({ navigation }) => {
       });
   }, []);
   return (
-    <Layout level="1">
+    <Layout level="1" style={{ flex: 1 }}>
       {user.role === 'role_professor' ? <Professor /> : <Student user={user} />}
     </Layout>
   );
