@@ -18,18 +18,15 @@ export const ClassCard = ({ clase }) => {
   return (
     <Card style={styles.space}>
       <TouchableOpacity
-        onPress={() =>
-          //TODO: en culquier caso navego, disable en vivo + whats
-          navigation.navigate('Class Detail', { clase })
-        }>
+        onPress={() => navigation.navigate('Class Detail', { clase })}>
         <View style={styles.row}>
           <Thumbnail source={profe} />
 
           <View>
             <View style={styles.cardStyle}>
-              <Text>{handleDate(clase.initTime)}</Text>
+              <Text category="h6">{clase.professor.name}</Text>
               <Text appearance="hint" style={{ fontSize: 14 }}>
-                {clase.professor.name}
+                {handleDate(clase.initTime)}
               </Text>
             </View>
           </View>

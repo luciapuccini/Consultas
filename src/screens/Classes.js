@@ -21,12 +21,11 @@ export const Classes = ({ navigation, route }) => {
     if (route.params?.subject) {
       try {
         // fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
-        fetch('http://www.mocky.io/v2/5e9d222930000022cb0a80fd', {
+        fetch('http://www.mocky.io/v2/5e9fcd072d00005300cb7d08', {
           headers: { 'Content-Type': 'application/json' },
         })
           .then((response) => response.json())
           .then((json) => {
-            console.log(json);
             setClasses(json);
           });
       } catch (error) {
@@ -38,13 +37,15 @@ export const Classes = ({ navigation, route }) => {
 
   const results = !searchTerm
     ? classes
-    : classes.filter((subject) =>
-        subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
+    : classes.filter((clase) =>
+        clase.professor.name
+          .toLowerCase()
+          .includes(searchTerm.toLocaleLowerCase()),
       );
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      <SearchBox setSearchTerm={setSearchTerm} placeholder="Clase" />
+      <SearchBox setSearchTerm={setSearchTerm} placeholder="Professor" />
       {!results ? (
         <CustomSpinner />
       ) : (
