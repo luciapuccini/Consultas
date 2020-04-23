@@ -10,35 +10,42 @@ import {
   Card,
   Icon,
 } from '@ui-kitten/components';
-import { TouchableOpacity, Linking } from 'react-native';
+import { Image, TouchableOpacity, Linking, Alert, View } from 'react-native';
 import moment from 'moment';
-import { View } from 'native-base';
+import _ from 'underscore';
+import { CustomSpinner } from '../components/CustomSpinner';
 
+const chatImage = require('../assets/chat.png');
 export const ClassDetail = ({ route, navigation }) => {
   const { clase, hasSingleTurno, id } = route.params;
   const isLive = clase.status === 'En Consulta';
 
-  const { turnos } = [];
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const [showConfirm, setShowConfirm] = React.useState(false);
+  const [notes, setNotes] = React.useState('');
+  const [turnos, setTurnos] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const canShowTurnos = !hasSingleTurno && !_.isEmpty(turnos);
 
   React.useEffect(() => {
-    console.log(id, 'id de class');
     try {
-      fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
+      // http://www.mocky.io/v2/5ea1039c320000204394b1e9
+      //`http://181.164.121.14:25565/clases/findClassData/${id}`
+      fetch(`http://www.mocky.io/v2/5ea1039c320000204394b1e9`, {
         headers: { 'Content-Type': 'application/json' },
       })
         .then((response) => response.json())
         .then((json) => {
           console.log(json);
-          // setTurnos(json);
+          setTurnos(json.turnos);
+          setNotes(json.notes);
+          setLoading(false);
         });
     } catch (error) {
       console.log(error);
     }
   }, []);
-  // fetch notas
-  //fetch turnos
 
   const handleConfirm = () => {
     navigation.goBack();
@@ -49,7 +56,7 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const showSelected = () => {
-    // return turnos[selectedIndex - 1].hora;
+    return turnos[selectedIndex - 1].horario;
   };
 
   const getFecha = () => {
@@ -60,76 +67,49 @@ export const ClassDetail = ({ route, navigation }) => {
     return moment(clase.initTime).locale('es').format('HH:MM');
   };
   const openChat = () => {
-    const temp = '+5493364647796';
-    if (temp !== '') {
-      Linking.openURL(`whatsapp://send?text=hola!&phone=${temp}`);
-    }
+    const temp = clase.professor.mobile;
+    Linking.canOpenURL(`whatsapp://send?text=hola!&phone=${temp}`).then(
+      (res) => {
+        if (res) {
+          Linking.openURL(`whatsapp://send?text=hola!&phone=${temp}`);
+        } else {
+          Alert.alert(`Can't open Whatsapp, please Install de App`);
+        }
+      },
+    );
   };
 
   return (
     <>
       <Layout level="1" style={{ flex: 1 }}>
-        <Layout style={{ margin: 10 }}>
-          <Text category="h6">Fecha: {getFecha()}</Text>
-          <Text category="h6">Hora: {getHora()}</Text>
-        </Layout>
-
-        <Card
-          header={() => (
-            <Text style={styles.notesCard} category="h6">
-              Notas
-            </Text>
-          )}>
-          <Text>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s
-          </Text>
-        </Card>
-
-        <Layout style={styles.selectionRow}>
-          {!clase.hasSingleTurno ? (
-            <Text style={{ alignSelf: 'center' }} category="h6">
-              {/* Seleccione Turno: {showSelected()} */}
-            </Text>
-          ) : null}
-          <Button
-            appearance="outline"
-            style={styles.inscriptionBtn}
-            onPress={onSubmit}>
-            Inscribirme
-          </Button>
-        </Layout>
-
-        {!clase.hasSingleTurno ? (
+        {!loading ? (
           <>
-            <Menu
-              selectedIndex={selectedIndex}
-              onSelect={(index) => setSelectedIndex(index)}>
-              {/* {turnos.map((turno) => (
-                <MenuItem title={turno.hora} disabled={turno.isTaken} />
-              ))} */}
-            </Menu>
-            <Modal
-              visible={showConfirm}
-              backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-              onBackdropPress={() => setShowConfirm(false)}>
-              <Card disabled={true}>
-                <TouchableOpacity onPress={() => handleConfirm()}>
-                  <Icon
-                    style={{ height: 20, width: 20 }}
-                    name="close"
-                    fill="#8F9BB3"
-                  />
-                </TouchableOpacity>
+            <Layout style={{ margin: 10 }}>
+              <Text category="h6">Fecha: {getFecha()}</Text>
+              <Text category="h6">Hora: {getHora()}</Text>
+            </Layout>
 
-                <Text>
-                  {/* Inscipto a: {turnos[selectedIndex - 1].hora }😻 */}
-                </Text>
-              </Card>
-            </Modal>
+            <NotesCard notes={notes} />
+
+            <Inscipcion
+              canShowTurnos={canShowTurnos}
+              showSelected={showSelected}
+              onSubmit={onSubmit}
+            />
+
+            <TurnosTable
+              canShowTurnos={canShowTurnos}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+              turnos={turnos}
+              showConfirm={showConfirm}
+              setShowConfirm={setShowConfirm}
+              handleConfirm={handleConfirm}
+            />
           </>
-        ) : null}
+        ) : (
+          <CustomSpinner />
+        )}
       </Layout>
 
       <Modal visible={isLive} backdropStyle={styles.disabled}>
@@ -138,11 +118,7 @@ export const ClassDetail = ({ route, navigation }) => {
         <TouchableOpacity
           style={{ marginLeft: 150 }}
           onPress={() => openChat()}>
-          <Icon
-            style={styles.chatStyle}
-            fill="#fff"
-            name="message-circle-outline"
-          />
+          <Image source={chatImage} style={{ height: 80, width: 80 }} />
         </TouchableOpacity>
       </Modal>
     </>
@@ -173,3 +149,69 @@ const styles = {
     borderRadius: 50,
   },
 };
+
+const NotesCard = ({ notes }) => (
+  <Card
+    header={() => (
+      <Text style={styles.notesCard} category="h6">
+        Notas
+      </Text>
+    )}>
+    <Text>{notes}</Text>
+  </Card>
+);
+
+const Inscipcion = ({ canShowTurnos, showSelected, onSubmit }) => (
+  <Layout style={styles.selectionRow}>
+    {canShowTurnos ? (
+      <Text style={{ alignSelf: 'center' }} category="h6">
+        Seleccione Turno: {showSelected()}
+      </Text>
+    ) : null}
+    <Button
+      appearance="outline"
+      style={styles.inscriptionBtn}
+      onPress={onSubmit}>
+      Inscribirme
+    </Button>
+  </Layout>
+);
+const TurnosTable = ({
+  canShowTurnos,
+  selectedIndex,
+  setSelectedIndex,
+  turnos,
+  showConfirm,
+  setShowConfirm,
+  handleConfirm,
+}) => (
+  <>
+    {canShowTurnos ? (
+      <>
+        <Menu
+          selectedIndex={selectedIndex}
+          onSelect={(index) => setSelectedIndex(index)}>
+          {turnos.map((turno) => (
+            <MenuItem title={turno.horario} disabled={turno.isTaken} />
+          ))}
+        </Menu>
+        <Modal
+          visible={showConfirm}
+          backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          onBackdropPress={() => setShowConfirm(false)}>
+          <Card disabled={true}>
+            <TouchableOpacity onPress={() => handleConfirm()}>
+              <Icon
+                style={{ height: 20, width: 20 }}
+                name="close"
+                fill="#8F9BB3"
+              />
+            </TouchableOpacity>
+
+            <Text>Inscipto a: {turnos[selectedIndex - 1].horario}</Text>
+          </Card>
+        </Modal>
+      </>
+    ) : null}
+  </>
+);
