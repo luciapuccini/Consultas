@@ -1,5 +1,6 @@
 import createDataContext from './createDataContext';
 import AsyncStorage from '@react-native-community/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -79,19 +80,12 @@ const signout = (dispatch) => async () => {
   dispatch({ type: 'SIGN_OUT' });
 };
 
-const signup = (dispatch) => async ({
-  legajo,
-  name,
-  email,
-  password,
-  phone,
-}) => {
-  const user = { legajo, name, email, password, mobile: phone };
+const signup = (dispatch) => async (user) => {
+  console.log('SINGUP', user);
   try {
     let token;
     //http://181.164.121.14:25565/users/addStudent
     //http://www.mocky.io/v2/5e93a8953000009100156b76
-    //WARNING how to login after ---> missing jwt
     await fetch('http://www.mocky.io/v2/5e93a8953000009100156b76', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -99,8 +93,8 @@ const signup = (dispatch) => async ({
     })
       .then((res) => res.json())
       .then((data) => {
-        async () => await AsyncStorage.setItem('TOKEN', data.token);
-        token = data.token;
+        // async () => await AsyncStorage.setItem('TOKEN', data.token);
+        // token = data.token;
       });
     dispatch({ type: 'SIGN_IN', payload: token });
   } catch (err) {

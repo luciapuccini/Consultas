@@ -1,17 +1,8 @@
 import React from 'react';
-import { Layout, Button } from '@ui-kitten/components';
+import { Layout, Button, Text } from '@ui-kitten/components';
 
-export const ErrorMessage = ({ message }) => {
-  return (
-    <Layout level="1" style={styles.errorStyle}>
-      <Button
-        appearance="outline"
-        status="danger"
-        style={{ borderColor: 'white' }}>
-        {message}
-      </Button>
-    </Layout>
-  );
+export const ErrorMessage = ({ message, style }) => {
+  return <Text style={styles.errorTextStyle}>{message}</Text>;
 };
 
 const styles = {

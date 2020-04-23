@@ -7,9 +7,12 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
+import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
+
+import { ErrorMessage } from '../components/ErrorMessage';
 
 async function registerAppWithFCM(setDeviceToken) {
   await messaging().registerDeviceForRemoteMessages();
@@ -20,16 +23,28 @@ async function registerAppWithFCM(setDeviceToken) {
     });
 }
 
-//TODO: formik
 export const SignInScreen = ({ navigation }) => {
   const { signin } = useContext(Context);
   const [legajo, setLegajo] = useState(0);
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [deviceToken, setDeviceToken] = useState('');
 
   React.useEffect(() => {
     registerAppWithFCM(setDeviceToken);
   }, []);
+
+  const handleSingIn = () => {
+    if (!_.isEmpty(legajo) && !_.isEmpty(password)) {
+      signin({ legajo, password, deviceToken });
+    } else {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
+  };
+
   const { splashLogoStyle, inputView, inputText, loginText, loginBtn } = styles;
   const Logo = require('../assets/logo.png');
   const Background = require('../assets/background.jpg');
@@ -57,10 +72,8 @@ export const SignInScreen = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-
-      <TouchableOpacity
-        style={loginBtn}
-        onPress={() => signin({ legajo, password, deviceToken })}>
+      {error ? <ErrorMessage message="Complete the fields" /> : null}
+      <TouchableOpacity style={loginBtn} onPress={handleSingIn}>
         <Text style={loginText}>Sign In</Text>
       </TouchableOpacity>
 

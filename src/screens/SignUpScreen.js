@@ -6,21 +6,39 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
+import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
+import { ErrorMessage } from '../components/ErrorMessage';
 const { loginFlowContainer } = Styles;
 
 export const SignUpScreen = ({ navigation }) => {
   const Background = require('../assets/background.jpg');
   const { inputText, inputView, loginBtn, loginText } = styles;
-  //TODO: FORM
   const { signup } = React.useContext(Context);
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [legajo, setLegajo] = React.useState('');
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
+  const [error, setError] = React.useState('');
 
+  const handleSingUp = () => {
+    const user = { legajo, name, email, password };
+    const hasUser =
+      !_.isEmpty(legajo) &&
+      !_.isEmpty(name) &&
+      !_.isEmpty(email) &&
+      !_.isEmpty(password);
+    if (hasUser) {
+      signup(user);
+    } else {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
+  };
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
       <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
@@ -65,18 +83,9 @@ export const SignUpScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={inputView}>
-        <TextInput
-          style={inputText}
-          placeholder="Telefono..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setPhone}
-        />
-      </View>
+      {error ? <ErrorMessage message="Complete the fields" /> : null}
 
-      <TouchableOpacity
-        style={loginBtn}
-        onPress={() => signup({ legajo, name, email, password, phone })}>
+      <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
         <Text style={loginText}>Sign Up</Text>
       </TouchableOpacity>
 
