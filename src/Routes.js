@@ -2,6 +2,7 @@ import React from 'react';
 import { Home, SignInScreen, SignUpScreen } from './screens';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Classes } from './screens/Classes';
+import { Professor } from './screens/Professor';
 import { Profile } from './screens/Profile';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from '@ui-kitten/components';
@@ -21,6 +22,7 @@ export const RootStack = ({ navigation }) => {
         }}
       />
       <Screen name="Classes" component={Classes} />
+      <Screen name="Professor" component={Professor} />
       <Screen name="Class Detail" component={ClassDetail} />
 
       <Screen

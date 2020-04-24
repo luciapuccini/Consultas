@@ -37,7 +37,7 @@ export const SubjectList = ({ allSubjects, followed }) => {
       data={subjects}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.name}
-      contentContainerStyle={{ paddingBottom: 100 }}
+      contentContainerStyle={{ paddingBottom: 360 }}
     />
   );
 };

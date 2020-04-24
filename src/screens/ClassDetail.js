@@ -9,15 +9,16 @@ import {
   Modal,
   Card,
   Icon,
+  Divider,
 } from '@ui-kitten/components';
 import { Image, TouchableOpacity, Linking, Alert, View } from 'react-native';
 import moment from 'moment';
 import _ from 'underscore';
 import { CustomSpinner } from '../components/CustomSpinner';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const chatImage = require('../assets/chat.png');
 export const ClassDetail = ({ route, navigation }) => {
-  const { clase, hasSingleTurno, id } = route.params;
+  const { clase, hasSingleTurno } = route.params;
   const isLive = clase.status === 'En Consulta';
 
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
@@ -26,20 +27,19 @@ export const ClassDetail = ({ route, navigation }) => {
   const [turnos, setTurnos] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
-  const canShowTurnos = !hasSingleTurno && !_.isEmpty(turnos);
+  const canShowTurnos = !hasSingleTurno && turnos.length > 1;
 
   React.useEffect(() => {
     try {
       // http://www.mocky.io/v2/5ea1039c320000204394b1e9
-      //`http://181.164.121.14:25565/clases/findClassData/${id}`
-      fetch(`http://www.mocky.io/v2/5ea1039c320000204394b1e9`, {
+      // `http://181.164.121.14:25565/clases/findClassData/${id}`
+      fetch(`http://181.164.121.14:25565/clases/findClassData/${clase.id}`, {
         headers: { 'Content-Type': 'application/json' },
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json);
           setTurnos(json.turnos);
-          setNotes(json.notes);
+          setNotes(json.comments);
           setLoading(false);
         });
     } catch (error) {
@@ -52,31 +52,24 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const onSubmit = () => {
+    subscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
     setShowConfirm(true);
   };
 
   const showSelected = () => {
-    return turnos[selectedIndex - 1].horario;
+    return moment(turnos[selectedIndex - 1].turnoPk.startTime)
+      .locale('es')
+      .format('HH:MM');
   };
 
   const getFecha = () => {
     return moment(clase.initTime).locale('es').format('ll');
   };
-
   const getHora = () => {
     return moment(clase.initTime).locale('es').format('HH:MM');
   };
-  const openChat = () => {
-    const temp = clase.professor.mobile;
-    Linking.canOpenURL(`whatsapp://send?text=hola!&phone=${temp}`).then(
-      (res) => {
-        if (res) {
-          Linking.openURL(`whatsapp://send?text=hola!&phone=${temp}`);
-        } else {
-          Alert.alert(`Can't open Whatsapp, please Install de App`);
-        }
-      },
-    );
+  const getCount = () => {
+    return moment(clase.initTime).fromNow();
   };
 
   return (
@@ -84,28 +77,31 @@ export const ClassDetail = ({ route, navigation }) => {
       <Layout level="1" style={{ flex: 1 }}>
         {!loading ? (
           <>
-            <Layout style={{ margin: 10 }}>
-              <Text category="h6">Fecha: {getFecha()}</Text>
-              <Text category="h6">Hora: {getHora()}</Text>
-            </Layout>
-
-            <NotesCard notes={notes} />
-
-            <Inscipcion
-              canShowTurnos={canShowTurnos}
-              showSelected={showSelected}
-              onSubmit={onSubmit}
+            <ResumenClass
+              fecha={getFecha()}
+              hora={getHora()}
+              count={getCount()}
             />
 
-            <TurnosTable
-              canShowTurnos={canShowTurnos}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              turnos={turnos}
-              showConfirm={showConfirm}
-              setShowConfirm={setShowConfirm}
-              handleConfirm={handleConfirm}
-            />
+            {!_.isEmpty(notes) ? <NotesCard notes={notes} /> : null}
+
+            {turnos.length > 1 ? (
+              <TurnosTable
+                canShowTurnos={canShowTurnos}
+                selectedIndex={selectedIndex}
+                setSelectedIndex={setSelectedIndex}
+                turnos={turnos}
+                showConfirm={showConfirm}
+                setShowConfirm={setShowConfirm}
+                handleConfirm={handleConfirm}
+              />
+            ) : (
+              <Inscipcion
+                canShowTurnos={canShowTurnos}
+                showSelected={showSelected}
+                onSubmit={onSubmit}
+              />
+            )}
           </>
         ) : (
           <CustomSpinner />
@@ -114,12 +110,6 @@ export const ClassDetail = ({ route, navigation }) => {
 
       <Modal visible={isLive} backdropStyle={styles.disabled}>
         <View style={{ height: 400 }} />
-
-        <TouchableOpacity
-          style={{ marginLeft: 150 }}
-          onPress={() => openChat()}>
-          <Image source={chatImage} style={{ height: 80, width: 80 }} />
-        </TouchableOpacity>
       </Modal>
     </>
   );
@@ -165,7 +155,7 @@ const Inscipcion = ({ canShowTurnos, showSelected, onSubmit }) => (
   <Layout style={styles.selectionRow}>
     {canShowTurnos ? (
       <Text style={{ alignSelf: 'center' }} category="h6">
-        Seleccione Turno: {showSelected()}
+        Turno Disponible: {showSelected()}
       </Text>
     ) : null}
     <Button
@@ -215,3 +205,40 @@ const TurnosTable = ({
     ) : null}
   </>
 );
+
+const ResumenClass = ({ fecha, hora, count }) => (
+  <>
+    <Layout style={{ margin: 10 }}>
+      <Text category="h6" style={{ padding: 4 }}>
+        Fecha: {fecha}
+      </Text>
+      <Text category="h6" style={{ padding: 4 }}>
+        Hora: {hora}
+      </Text>
+      <Text category="h6" style={{ padding: 4 }}>
+        Empieza {count}
+      </Text>
+    </Layout>
+    <Divider />
+  </>
+);
+
+const subscribeTurno = async (idClass, startTimeTurno) => {
+  const userId = await AsyncStorage.getItem('USER_ID');
+  const turno = { consultaId: idClass, initTime: startTimeTurno, userId };
+  console.log('SUBSCRIBITEE', turno);
+
+  try {
+    fetch(`http://181.164.121.14:25565/clases/subscribe`, {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(turno),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json.message);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};

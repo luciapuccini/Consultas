@@ -20,8 +20,8 @@ export const Classes = ({ navigation, route }) => {
     // http://www.mocky.io/v2/5e9d222930000022cb0a80fd
     if (route.params?.subject) {
       try {
-        // fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
-        fetch('http://www.mocky.io/v2/5e9fcd072d00005300cb7d08', {
+        fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
+          // fetch('http://www.mocky.io/v2/5e9fcd072d00005300cb7d08', {
           headers: { 'Content-Type': 'application/json' },
         })
           .then((response) => response.json())
