@@ -17,6 +17,10 @@ import _ from 'underscore';
 import { CustomSpinner } from '../components/CustomSpinner';
 import AsyncStorage from '@react-native-community/async-storage';
 
+const getHora = (fecha) => {
+  return moment(fecha).locale('es').format('HH:MM');
+};
+
 export const ClassDetail = ({ route, navigation }) => {
   const { clase, hasSingleTurno } = route.params;
   const isLive = clase.status === 'En Consulta';
@@ -25,22 +29,33 @@ export const ClassDetail = ({ route, navigation }) => {
   const [showConfirm, setShowConfirm] = React.useState(false);
   const [notes, setNotes] = React.useState('');
   const [turnos, setTurnos] = React.useState([]);
+  const [inscriptionFlag, setInscriptionFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
 
   const canShowTurnos = !hasSingleTurno && turnos.length > 1;
 
+  const checkInscription = (userInscriptions) => {
+    userInscriptions.forEach((userInsc) => {
+      if (_.isEqual(clase.id, userInsc.classId)) {
+        setInscriptionFlag(true); // esta inscripto
+      }
+    });
+  };
+
   React.useEffect(() => {
     try {
-      // http://www.mocky.io/v2/5ea1039c320000204394b1e9
-      // `http://181.164.121.14:25565/clases/findClassData/${id}`
-      fetch(`http://181.164.121.14:25565/clases/findClassData/${clase.id}`, {
+      //WIP : Comments + Turnos + inscripcioness del alum
+      // fetch(`http://181.164.121.14:25565/clases/findClassData/${clase.id}`, {
+      fetch(`http://www.mocky.io/v2/5ea4cb993000005900ce2dcf`, {
         headers: { 'Content-Type': 'application/json' },
       })
         .then((response) => response.json())
         .then((json) => {
+          console.log(json);
           setTurnos(json.turnos);
           setNotes(json.comments);
           setLoading(false);
+          checkInscription(json.inscripciones);
         });
     } catch (error) {
       console.log(error);
@@ -52,7 +67,11 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const onSubmit = () => {
-    subscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+    if (inscriptionFlag) {
+      //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+    } else {
+      subscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+    }
     setShowConfirm(true);
   };
 
@@ -65,9 +84,7 @@ export const ClassDetail = ({ route, navigation }) => {
   const getFecha = () => {
     return moment(clase.initTime).locale('es').format('ll');
   };
-  const getHora = () => {
-    return moment(clase.initTime).locale('es').format('HH:MM');
-  };
+
   const getCount = () => {
     return moment(clase.initTime).fromNow();
   };
@@ -79,12 +96,16 @@ export const ClassDetail = ({ route, navigation }) => {
           <>
             <ResumenClass
               fecha={getFecha()}
-              hora={getHora()}
+              hora={getHora(clase.initTime)}
               count={getCount()}
+              notes={notes}
             />
-
-            {!_.isEmpty(notes) ? <NotesCard notes={notes} /> : null}
-
+            <Inscripcion
+              canShowTurnos={canShowTurnos}
+              showSelected={showSelected}
+              inscriptionFlag={inscriptionFlag}
+              onSubmit={onSubmit}
+            />
             {turnos.length > 1 ? (
               <TurnosTable
                 canShowTurnos={canShowTurnos}
@@ -95,13 +116,7 @@ export const ClassDetail = ({ route, navigation }) => {
                 setShowConfirm={setShowConfirm}
                 handleConfirm={handleConfirm}
               />
-            ) : (
-              <Inscipcion
-                canShowTurnos={canShowTurnos}
-                showSelected={showSelected}
-                onSubmit={onSubmit}
-              />
-            )}
+            ) : null}
           </>
         ) : (
           <CustomSpinner />
@@ -147,11 +162,16 @@ const NotesCard = ({ notes }) => (
         Notas
       </Text>
     )}>
-    <Text>{notes}</Text>
+    <Text>{notes[0].message}</Text>
   </Card>
 );
 
-const Inscipcion = ({ canShowTurnos, showSelected, onSubmit }) => (
+const Inscripcion = ({
+  canShowTurnos,
+  showSelected,
+  onSubmit,
+  inscriptionFlag,
+}) => (
   <Layout style={styles.selectionRow}>
     {canShowTurnos ? (
       <Text style={{ alignSelf: 'center' }} category="h6">
@@ -160,6 +180,7 @@ const Inscipcion = ({ canShowTurnos, showSelected, onSubmit }) => (
     ) : null}
     <Button
       appearance="outline"
+      status={inscriptionFlag ? 'danger' : 'primary'}
       style={styles.inscriptionBtn}
       onPress={onSubmit}>
       Inscribirme
@@ -182,7 +203,10 @@ const TurnosTable = ({
           selectedIndex={selectedIndex}
           onSelect={(index) => setSelectedIndex(index)}>
           {turnos.map((turno) => (
-            <MenuItem title={turno.horario} disabled={turno.isTaken} />
+            <MenuItem
+              title={getHora(turno.startTime)}
+              disabled={turno.isTaken}
+            />
           ))}
         </Menu>
         <Modal
@@ -198,7 +222,7 @@ const TurnosTable = ({
               />
             </TouchableOpacity>
 
-            <Text>Inscipto a: {turnos[selectedIndex - 1].horario}</Text>
+            <Text>Inscipto a: {turnos[selectedIndex - 1].startTime}</Text>
           </Card>
         </Modal>
       </>
@@ -206,7 +230,7 @@ const TurnosTable = ({
   </>
 );
 
-const ResumenClass = ({ fecha, hora, count }) => (
+const ResumenClass = ({ fecha, hora, count, notes }) => (
   <>
     <Layout style={{ margin: 10 }}>
       <Text category="h6" style={{ padding: 4 }}>
@@ -220,6 +244,7 @@ const ResumenClass = ({ fecha, hora, count }) => (
       </Text>
     </Layout>
     <Divider />
+    {!_.isEmpty(notes) ? <NotesCard notes={notes} /> : null}
   </>
 );
 

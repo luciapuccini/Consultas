@@ -20,8 +20,8 @@ export const Student = ({ user }) => {
     const fetchSubjects = async () => {
       try {
         const response = await fetch(
-          // 'http://www.mocky.io/v2/5e9b5df63300005000bf1784',
-          'http://181.164.121.14:25565/subjects/findAll',
+          'http://www.mocky.io/v2/5e9b5df63300005000bf1784',
+          // 'http://181.164.121.14:25565/subjects/findAll',
           { headers: { 'Content-Type': 'application/json' } },
         );
         const json = await response.json();
@@ -31,6 +31,7 @@ export const Student = ({ user }) => {
         console.log(error);
       }
     };
+    //FIXME: falta endpoint
     const fetchProffesors = () => {
       fetch('http://www.mocky.io/v2/5ea262b63100006b8f1ef091', {
         headers: { 'Content-Type': 'application/json' },
@@ -54,7 +55,6 @@ export const Student = ({ user }) => {
     : professors.filter((profe) =>
         profe.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
       );
-
   return (
     <Layout level="1">
       <SearchBox setSearchTerm={setSearchTerm} placeholder="Busqueda" />

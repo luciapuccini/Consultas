@@ -22,6 +22,7 @@ export const SubjectList = ({ allSubjects, followed }) => {
       });
       setSubjects(replaceArray);
     };
+
     if (allSubjects && followed) {
       checkFollowed();
     }
@@ -31,7 +32,6 @@ export const SubjectList = ({ allSubjects, followed }) => {
     // const img = findSubjectImage(item.name);
     return <SubjectCard subject={item} />;
   };
-
   return (
     <FlatList
       data={subjects}
