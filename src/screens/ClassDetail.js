@@ -16,6 +16,7 @@ import moment from 'moment';
 import _ from 'underscore';
 import { CustomSpinner } from '../components/CustomSpinner';
 import AsyncStorage from '@react-native-community/async-storage';
+import { getToken } from '../utils/authHelper';
 
 const getHora = (fecha) => {
   return moment(fecha).locale('es').format('HH:MM');
@@ -43,23 +44,29 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   React.useEffect(() => {
-    try {
-      //WIP : Comments + Turnos + inscripcioness del alum
-      // fetch(`http://181.164.121.14:25565/clases/findClassData/${clase.id}`, {
-      fetch(`http://www.mocky.io/v2/5ea4cb993000005900ce2dcf`, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-          setTurnos(json.turnos);
-          setNotes(json.comments);
-          setLoading(false);
-          checkInscription(json.inscripciones);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    const fetchClassData = async () => {
+      const token = getToken();
+      console.log('CLASE:', clase);
+      try {
+        //WIP : Comments + Turnos + inscripcioness del alum
+        fetch(`http://181.164.121.14:25565/clases/findClassData/${clase.id}`, {
+          // fetch(`http://www.mocky.io/v2/5ea4cb993000005900ce2dcf`, {
+          headers: { 'Content-Type': 'application/json' },
+          Authorization: `Bearer ${token}`,
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json);
+            setTurnos(json.turnos);
+            setNotes(json.comments);
+            setLoading(false);
+            checkInscription(json.inscripciones);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchClassData();
   }, []);
 
   const handleConfirm = () => {

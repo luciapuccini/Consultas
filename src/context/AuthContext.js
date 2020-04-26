@@ -1,6 +1,7 @@
 import createDataContext from './createDataContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { getToken } from '../utils/authHelper';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -35,12 +36,11 @@ const restore = (dispatch) => async () => {
   } else {
   }
 };
-const storeData = async (jwt, userId) => {
-  const setToken = ['TOKEN', jwt];
-  const setUser = ['USER_ID', userId];
+const storeData = async (jwt) => {
   try {
-    await AsyncStorage.multiSet([setToken, setUser]);
+    await AsyncStorage.setItem('TOKEN', jwt);
   } catch (e) {
+    console.log(e);
     // saving error
   }
 };
@@ -50,15 +50,15 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     let token;
     //http://181.164.121.14:25565/users/login
     //http://www.mocky.io/v2/5e9fce9c2d00002900cb7d10', {
-    await fetch('http://www.mocky.io/v2/5e9fce9c2d00002900cb7d10', {
+    await fetch('http://181.164.121.14:25565/users/login', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
       .then((data) => {
-        const { userId, jwt } = data;
-        storeData(jwt, userId);
+        const { jwt } = data;
+        storeData(jwt);
         token = jwt;
       });
     dispatch({ type: 'SIGN_IN', payload: token });
@@ -68,9 +68,13 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
 };
 
 const signout = (dispatch) => async () => {
-  const id = await AsyncStorage.getItem('USER_ID');
+  const token = await getToken();
   try {
-    fetch(`http://181.164.121.14:25565/users/logout/${id}`)
+    fetch(`http://181.164.121.14:25565/users/logout`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => console.log(data.message));
   } catch (error) {
@@ -86,13 +90,14 @@ const signup = (dispatch) => async (user) => {
     let token;
     //http://181.164.121.14:25565/users/addStudent
     //http://www.mocky.io/v2/5e93a8953000009100156b76
-    await fetch('http://www.mocky.io/v2/5e93a8953000009100156b76', {
+    await fetch('http://181.164.121.14:25565/users/addStudent', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log('ALTA USER:', data);
         // async () => await AsyncStorage.setItem('TOKEN', data.token);
         // token = data.token;
       });

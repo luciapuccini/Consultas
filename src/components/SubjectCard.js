@@ -1,10 +1,9 @@
 import React from 'react';
 import { Image, View, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Text, Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 // import { Icon } from 'native-base';
-
+import { getToken } from '../utils/authHelper';
 const subjectPlaceholder = require('../assets/java.png');
 const findSubjectImage = (subjectName) => {
   // const image = require(`../assets/${subjectName}.png`);
@@ -19,12 +18,12 @@ export const SubjectCard = ({ subject }) => {
   const { subjectId, name, image } = subject;
 
   const onNotificationChange = async () => {
-    const id = await AsyncStorage.getItem('USER_ID');
+    const token = await getToken();
+
     setNotification(!notification);
 
     const body = {
       id: subjectId,
-      studentId: id,
     };
 
     if (notification !== true) {
@@ -34,7 +33,10 @@ export const SubjectCard = ({ subject }) => {
       try {
         fetch('http://181.164.121.14:25565/subjects/followSubject', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify(body),
         })
           .then((res) => res.json())
@@ -46,7 +48,10 @@ export const SubjectCard = ({ subject }) => {
       try {
         fetch('http://181.164.121.14:25565/subjects/unfollowSubject', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify(body),
         })
           .then((res) => res.json())

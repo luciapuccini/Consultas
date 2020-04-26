@@ -7,6 +7,8 @@ import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { ProfessorList } from '../components/ProfessorList';
+import { getToken } from '../utils/authHelper';
+// import AsyncStorage from '@react-native-community/async-storage';
 
 export const Student = ({ user }) => {
   const [subjects, setSubjects] = React.useState([]);
@@ -18,11 +20,18 @@ export const Student = ({ user }) => {
 
   React.useEffect(() => {
     const fetchSubjects = async () => {
+      const token = await getToken();
       try {
         const response = await fetch(
-          'http://www.mocky.io/v2/5e9b5df63300005000bf1784',
-          // 'http://181.164.121.14:25565/subjects/findAll',
-          { headers: { 'Content-Type': 'application/json' } },
+          // 'http://www.mocky.io/v2/5e9b5df63300005000bf1784',
+          'http://181.164.121.14:25565/subjects/findAll',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
         const json = await response.json();
         setSubjects(json);
@@ -31,10 +40,14 @@ export const Student = ({ user }) => {
         console.log(error);
       }
     };
-    //FIXME: falta endpoint
-    const fetchProffesors = () => {
-      fetch('http://www.mocky.io/v2/5ea262b63100006b8f1ef091', {
-        headers: { 'Content-Type': 'application/json' },
+    const fetchProffesors = async () => {
+      const token = await getToken();
+      // fetch('http://www.mocky.io/v2/5ea262b63100006b8f1ef091', {
+      fetch('http://181.164.121.14:25565/users/getAllProfessors', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then((response) => response.json())
         .then((json) => {
