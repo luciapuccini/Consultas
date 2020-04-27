@@ -14,9 +14,10 @@ import {
 import { Image, TouchableOpacity, Linking, Alert, View } from 'react-native';
 import moment from 'moment';
 import _ from 'underscore';
-import { CustomSpinner } from '../components/CustomSpinner';
 import AsyncStorage from '@react-native-community/async-storage';
 import { getToken } from '../utils/authHelper';
+import { CustomSpinner } from '../components/CustomSpinner';
+import { ClassSummary } from '../components/ClassSummary';
 
 const getHora = (fecha) => {
   return moment(fecha).locale('es').format('HH:MM');
@@ -101,7 +102,7 @@ export const ClassDetail = ({ route, navigation }) => {
       <Layout level="1" style={{ flex: 1 }}>
         {!loading ? (
           <>
-            <ResumenClass
+            <ClassSummary
               fecha={getFecha()}
               hora={getHora(clase.initTime)}
               count={getCount()}
@@ -147,7 +148,6 @@ const styles = {
     margin: 10,
     justifyContent: 'space-between',
   },
-  notesCard: { margin: 10, alignSelf: 'flex-start' },
   disabled: {
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     flex: 1,
@@ -161,17 +161,6 @@ const styles = {
     borderRadius: 50,
   },
 };
-
-const NotesCard = ({ notes }) => (
-  <Card
-    header={() => (
-      <Text style={styles.notesCard} category="h6">
-        Notas
-      </Text>
-    )}>
-    <Text>{notes[0].message}</Text>
-  </Card>
-);
 
 const Inscripcion = ({
   canShowTurnos,
@@ -234,24 +223,6 @@ const TurnosTable = ({
         </Modal>
       </>
     ) : null}
-  </>
-);
-
-const ResumenClass = ({ fecha, hora, count, notes }) => (
-  <>
-    <Layout style={{ margin: 10 }}>
-      <Text category="h6" style={{ padding: 4 }}>
-        Fecha: {fecha}
-      </Text>
-      <Text category="h6" style={{ padding: 4 }}>
-        Hora: {hora}
-      </Text>
-      <Text category="h6" style={{ padding: 4 }}>
-        Empieza {count}
-      </Text>
-    </Layout>
-    <Divider />
-    {!_.isEmpty(notes) ? <NotesCard notes={notes} /> : null}
   </>
 );
 

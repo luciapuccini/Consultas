@@ -9,6 +9,7 @@ import {
 import { Fab, Thumbnail, Content, H1 } from 'native-base';
 import { Input, Icon, Text, Divider, Button } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
+import { getToken } from '../utils/authHelper';
 
 const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
@@ -16,14 +17,22 @@ export const Profile = ({ navigation }) => {
   const [photo, setPhoto] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
+  const [passwordPresent, setPasswordPresent] = React.useState(false);
 
   React.useEffect(() => {
     const fetchUser = async () => {
+      const token = await getToken();
       try {
+        //FIXME:'http://181.164.121.14:25565/users/id (????',
         const response = await fetch(
-          'http://www.mocky.io/v2/5e9fd3dc2d00006100cb7d36',
-          //FIXME:'http://181.164.121.14:25565/users/id (????',
-          { headers: { 'Content-Type': 'application/json' } },
+          `http://181.164.121.14:25565/users/getUser`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
         const json = await response.json();
         setUser(json);
@@ -37,25 +46,34 @@ export const Profile = ({ navigation }) => {
 
   const renderBrushIcon = (props) => (
     <TouchableWithoutFeedback>
-      <Icon {...props} name="brush" />
+      <Icon {...props} name="edit-2-outline" />
     </TouchableWithoutFeedback>
   );
 
   const save = () => {
     const handleSave = async () => {
+      const token = await getToken();
+      /*{
+        WARNING: manda basura de mas
+        password:'',
+        newPassword:'',
+      }*/
+      console.log('SAVE', token, user);
       try {
-        //FIXME: 'http://181.164.121.14:25565/users/edit (????',
-        console.log('SENDS', user);
+        //'http://181.164.121.14:25565/users/modify',
         const response = await fetch(
-          'http://www.mocky.io/v2/5e98fd103500005fa1c486f9',
+          'http://181.164.121.14:25565/users/modify',
           {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
             body: JSON.stringify(user),
           },
         );
         const json = await response.json();
-        console.log(json.message);
+        console.log(json);
       } catch (error) {
         console.log(error);
       }
@@ -122,7 +140,30 @@ export const Profile = ({ navigation }) => {
               </Text>
               <Divider style={{ backgroundColor: '#b0bec5' }} />
             </View>
-
+            <Input
+              style={[styles.inputStyle, { marginBottom: 10 }]}
+              label="Password"
+              status={passwordPresent ? null : 'danger'}
+              secureTextEntry
+              caption={passwordPresent ? null : 'Required!'}
+              placeholder="Password ..."
+              onChangeText={(value) => setUser({ ...user, password: value })}
+              onKeyPress={() => {
+                setHasEdited(true), setPasswordPresent(true);
+              }}
+              value={user.password}
+              accessoryRight={renderBrushIcon}
+            />
+            <Input
+              style={styles.inputStyle}
+              label="New Password"
+              secureTextEntry
+              placeholder="New password"
+              onChangeText={(value) => setUser({ ...user, newPassword: value })}
+              onKeyPress={() => setHasEdited(true)}
+              value={user.newPassword}
+              accessoryRight={renderBrushIcon}
+            />
             <Input
               style={styles.inputStyle}
               label="Nombre"
@@ -148,7 +189,7 @@ export const Profile = ({ navigation }) => {
                 width: '50%',
                 alignSelf: 'flex-end',
                 marginRight: 10,
-                marginTop: 20,
+                marginTop: 10,
               }}
               onPress={() => navigation.navigate('Classes')}>
               Mis Inscripciones
@@ -164,18 +205,25 @@ export const Profile = ({ navigation }) => {
 
 const ConfirmButton = ({ save }) => {
   return (
-    <TouchableOpacity
-      onPress={save}
-      style={{ backgroundColor: '#00C853', borderRadius: 20 }}>
-      <Icon
-        name="checkmark-circle-outline"
-        fill="white"
-        style={{
-          height: 40,
-          width: 40,
-        }}
-      />
-    </TouchableOpacity>
+    <View
+      style={{
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}>
+      <TouchableOpacity
+        onPress={save}
+        style={{ backgroundColor: '#00C853', borderRadius: 20, width: '60%' }}>
+        <Icon
+          name="checkmark-circle-outline"
+          fill="white"
+          style={{
+            height: 40,
+            width: 40,
+          }}
+        />
+      </TouchableOpacity>
+      <Text style={{ color: '#00C853' }}>Confirmar</Text>
+    </View>
   );
 };
 

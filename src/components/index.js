@@ -7,3 +7,4 @@ export * from './ClassList';
 export * from './ClassCard';
 export * from './CustomSpinner';
 export * from './ErrorMessage';
+export * from './ClassSummary';
