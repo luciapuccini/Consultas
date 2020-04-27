@@ -28,7 +28,7 @@ export const ProfessorList = ({ professors }) => {
     <FlatList
       data={professors}
       renderItem={renderItem}
-      keyExtractor={(item, index) => item.name}
+      keyExtractor={(item, index) => item.id}
       contentContainerStyle={{ paddingBottom: 360 }}
     />
   );

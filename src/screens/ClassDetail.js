@@ -11,61 +11,68 @@ import {
   Icon,
   Divider,
 } from '@ui-kitten/components';
-import { Image, TouchableOpacity, Linking, Alert, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
+
 import { getToken } from '../utils/authHelper';
+import { getHora } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
-
-const getHora = (fecha) => {
-  return moment(fecha).locale('es').format('HH:MM');
-};
+import { SimpleBookClass } from '../components/SimpleBookClass';
+import { TurnosTable } from '../components/TurnosTable';
 
 export const ClassDetail = ({ route, navigation }) => {
-  const { clase, hasSingleTurno } = route.params;
-  const isLive = clase.status === 'En Consulta';
+  const {
+    status,
+    hasSingleTurnos,
+    id,
+    initTime,
+    professor,
+  } = route.params.clase;
+  const isLive = status === 'En Consulta';
+
+  const [comments, setComments] = React.useState([]);
+  const [turnos, setTurnos] = React.useState([]);
+  const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
 
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const [showConfirm, setShowConfirm] = React.useState(false);
-  const [notes, setNotes] = React.useState('');
-  const [turnos, setTurnos] = React.useState([]);
-  const [inscriptionFlag, setInscriptionFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
 
-  const canShowTurnos = !hasSingleTurno && turnos.length > 1;
+  const canShowTurnos = !hasSingleTurnos && turnos.length > 1; // doble innecesario
 
   const checkInscription = (userInscriptions) => {
     userInscriptions.forEach((userInsc) => {
-      if (_.isEqual(clase.id, userInsc.classId)) {
-        setInscriptionFlag(true); // esta inscripto
+      if (_.isEqual(id, userInsc.classId)) {
+        setBookingFlag(true); // esta inscripto
       }
     });
   };
-
   React.useEffect(() => {
     const fetchClassData = async () => {
-      const token = getToken();
-      console.log('CLASE:', clase);
-      try {
-        //WIP : Comments + Turnos + inscripcioness del alum
-        fetch(`http://181.164.121.14:25565/clases/findClassData/${clase.id}`, {
-          // fetch(`http://www.mocky.io/v2/5ea4cb993000005900ce2dcf`, {
-          headers: { 'Content-Type': 'application/json' },
+      const token = await getToken();
+
+      //WIP : Comments + Turnos + inscripcioness del alum
+      // fetch(`http://www.mocky.io/v2/5ea4cb993000005900ce2dcf`, {
+      fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          setTurnos(json.turnos);
+          setComments(json.comments);
+          setLoading(false);
+          checkInscription(json.studentBookings);
         })
-          .then((response) => response.json())
-          .then((json) => {
-            console.log(json);
-            setTurnos(json.turnos);
-            setNotes(json.comments);
-            setLoading(false);
-            checkInscription(json.inscripciones);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+        .catch((error) => {
+          console.log('[ FAILED ]', error);
+        });
     };
     fetchClassData();
   }, []);
@@ -75,26 +82,20 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const onSubmit = () => {
-    if (inscriptionFlag) {
+    if (bookingFlag) {
       //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
     } else {
-      subscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+      subscribeTurno(id, turnos[selectedIndex - 1].turnoPk.startTime);
     }
     setShowConfirm(true);
   };
 
-  const showSelected = () => {
-    return moment(turnos[selectedIndex - 1].turnoPk.startTime)
-      .locale('es')
-      .format('HH:MM');
-  };
-
   const getFecha = () => {
-    return moment(clase.initTime).locale('es').format('ll');
+    return moment(initTime).locale('es').format('ll');
   };
 
   const getCount = () => {
-    return moment(clase.initTime).fromNow();
+    return moment(initTime).fromNow();
   };
 
   return (
@@ -104,27 +105,34 @@ export const ClassDetail = ({ route, navigation }) => {
           <>
             <ClassSummary
               fecha={getFecha()}
-              hora={getHora(clase.initTime)}
+              hora={getHora(initTime)}
               count={getCount()}
-              notes={notes}
+              notes={comments}
+              professor={professor}
             />
-            <Inscripcion
-              canShowTurnos={canShowTurnos}
-              showSelected={showSelected}
-              inscriptionFlag={inscriptionFlag}
-              onSubmit={onSubmit}
-            />
-            {turnos.length > 1 ? (
+            {/* canShowTurnos */}
+            {true ? (
               <TurnosTable
-                canShowTurnos={canShowTurnos}
                 selectedIndex={selectedIndex}
                 setSelectedIndex={setSelectedIndex}
-                turnos={turnos}
+                turnos={[
+                  { startTime: '2020-04-30T10:00:00', isTaken: true },
+                  { startTime: '2020-04-30T10:15:00' },
+                  { startTime: '2020-04-30T10:30:00' },
+                ]}
                 showConfirm={showConfirm}
                 setShowConfirm={setShowConfirm}
                 handleConfirm={handleConfirm}
+                bookingFlag={bookingFlag}
+                onSubmit={onSubmit}
               />
-            ) : null}
+            ) : (
+              <SimpleBookClass
+                bookingFlag={bookingFlag}
+                onSubmit={onSubmit}
+                hora={initTime}
+              />
+            )}
           </>
         ) : (
           <CustomSpinner />
@@ -161,70 +169,6 @@ const styles = {
     borderRadius: 50,
   },
 };
-
-const Inscripcion = ({
-  canShowTurnos,
-  showSelected,
-  onSubmit,
-  inscriptionFlag,
-}) => (
-  <Layout style={styles.selectionRow}>
-    {canShowTurnos ? (
-      <Text style={{ alignSelf: 'center' }} category="h6">
-        Turno Disponible: {showSelected()}
-      </Text>
-    ) : null}
-    <Button
-      appearance="outline"
-      status={inscriptionFlag ? 'danger' : 'primary'}
-      style={styles.inscriptionBtn}
-      onPress={onSubmit}>
-      Inscribirme
-    </Button>
-  </Layout>
-);
-const TurnosTable = ({
-  canShowTurnos,
-  selectedIndex,
-  setSelectedIndex,
-  turnos,
-  showConfirm,
-  setShowConfirm,
-  handleConfirm,
-}) => (
-  <>
-    {canShowTurnos ? (
-      <>
-        <Menu
-          selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}>
-          {turnos.map((turno) => (
-            <MenuItem
-              title={getHora(turno.startTime)}
-              disabled={turno.isTaken}
-            />
-          ))}
-        </Menu>
-        <Modal
-          visible={showConfirm}
-          backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-          onBackdropPress={() => setShowConfirm(false)}>
-          <Card disabled={true}>
-            <TouchableOpacity onPress={() => handleConfirm()}>
-              <Icon
-                style={{ height: 20, width: 20 }}
-                name="close"
-                fill="#8F9BB3"
-              />
-            </TouchableOpacity>
-
-            <Text>Inscipto a: {turnos[selectedIndex - 1].startTime}</Text>
-          </Card>
-        </Modal>
-      </>
-    ) : null}
-  </>
-);
 
 const subscribeTurno = async (idClass, startTimeTurno) => {
   const userId = await AsyncStorage.getItem('USER_ID');

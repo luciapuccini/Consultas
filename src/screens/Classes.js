@@ -16,28 +16,28 @@ export const Classes = ({ navigation, route }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    const token = getToken();
-    //ojo null async!!!
     const { subjectId } = route.params.subject;
     // http://181.164.121.14:25565/subejcts/findClasses/id
     // http://www.mocky.io/v2/5e9d222930000022cb0a80fd
+    const fetchClasses = async () => {
+      const token = await getToken();
+      fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
+        // fetch('http://www.mocky.io/v2/5e9fcd072d00005300cb7d08', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          setClasses(json);
+        });
+    };
+
     if (route.params?.subject) {
-      try {
-        fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
-          // fetch('http://www.mocky.io/v2/5e9fcd072d00005300cb7d08', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            setClasses(json);
-          });
-      } catch (error) {
-        console.log(error);
-      }
+      fetchClasses();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
@@ -59,7 +59,7 @@ export const Classes = ({ navigation, route }) => {
           data={results}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.id}
         />
       )}
     </Layout>
