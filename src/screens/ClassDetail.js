@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Layout,
-  Text,
-  Menu,
-  MenuItem,
-  IndexPath,
-  Button,
-  Modal,
-  Card,
-  Icon,
-  Divider,
-} from '@ui-kitten/components';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import moment from 'moment';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -24,21 +12,13 @@ import { SimpleBookClass } from '../components/SimpleBookClass';
 import { TurnosTable } from '../components/TurnosTable';
 
 export const ClassDetail = ({ route, navigation }) => {
-  const {
-    status,
-    hasSingleTurnos,
-    id,
-    initTime,
-    professor,
-  } = route.params.clase;
-  const isLive = status === 'En Consulta';
+  const { hasSingleTurnos, id, initTime, professor } = route.params.clase;
 
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
+  const [index, setIndex] = React.useState(null);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
 
-  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  const [showConfirm, setShowConfirm] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   const canShowTurnos = !hasSingleTurnos && turnos.length > 1; // doble innecesario
@@ -77,17 +57,22 @@ export const ClassDetail = ({ route, navigation }) => {
     fetchClassData();
   }, []);
 
-  const handleConfirm = () => {
-    navigation.goBack();
+  const handleConfirm = (index) => {
+    setIndex(index);
+    // navigation.goBack();
   };
 
   const onSubmit = () => {
-    if (bookingFlag) {
-      //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
-    } else {
-      subscribeTurno(id, turnos[selectedIndex - 1].turnoPk.startTime);
+    if (index) {
+      if (bookingFlag) {
+        console.log('dessubscribe', turnos[index]);
+        //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+      } else {
+        console.log('subscribe', turnos[index]);
+        // console.log(turnos);
+        // subscribeTurno(id, turnos[selectedIndex - 1].startTime);
+      }
     }
-    setShowConfirm(true);
   };
 
   const getFecha = () => {
@@ -100,48 +85,41 @@ export const ClassDetail = ({ route, navigation }) => {
 
   return (
     <>
-      <Layout level="1" style={{ flex: 1 }}>
-        {!loading ? (
-          <>
-            <ClassSummary
-              fecha={getFecha()}
-              hora={getHora(initTime)}
-              count={getCount()}
-              notes={comments}
-              professor={professor}
+      {!loading ? (
+        <>
+          <ClassSummary
+            fecha={getFecha()}
+            hora={getHora(initTime)}
+            count={getCount()}
+            notes={comments}
+            professor={professor}
+          />
+          {/* canShowTurnos */}
+          {true ? (
+            <TurnosTable
+              turnos={[
+                { startTime: '2020-04-30T10:00:00' },
+                { startTime: '2020-04-30T10:15:00' },
+                { startTime: '2020-04-30T10:30:00' },
+                { startTime: '2020-04-30T10:45:00' },
+                { startTime: '2020-04-30T11:00:00' },
+                { startTime: '2020-04-30T11:15:00' },
+              ]}
+              bookingFlag={bookingFlag}
+              handleConfirm={handleConfirm}
             />
-            {/* canShowTurnos */}
-            {true ? (
-              <TurnosTable
-                selectedIndex={selectedIndex}
-                setSelectedIndex={setSelectedIndex}
-                turnos={[
-                  { startTime: '2020-04-30T10:00:00', isTaken: true },
-                  { startTime: '2020-04-30T10:15:00' },
-                  { startTime: '2020-04-30T10:30:00' },
-                ]}
-                showConfirm={showConfirm}
-                setShowConfirm={setShowConfirm}
-                handleConfirm={handleConfirm}
-                bookingFlag={bookingFlag}
-                onSubmit={onSubmit}
-              />
-            ) : (
-              <SimpleBookClass
-                bookingFlag={bookingFlag}
-                onSubmit={onSubmit}
-                hora={initTime}
-              />
-            )}
-          </>
-        ) : (
-          <CustomSpinner />
-        )}
-      </Layout>
-
-      <Modal visible={isLive} backdropStyle={styles.disabled}>
-        <View style={{ height: 400 }} />
-      </Modal>
+          ) : (
+            <SimpleBookClass
+              bookingFlag={bookingFlag}
+              onSubmit={onSubmit}
+              hora={initTime}
+              handleConfirm={handleConfirm}
+            />
+          )}
+        </>
+      ) : (
+        <CustomSpinner />
+      )}
     </>
   );
 };

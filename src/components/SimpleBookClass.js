@@ -1,12 +1,17 @@
 import React from 'react';
-import { Layout, Text, Button, Divider } from '@ui-kitten/components';
+import { Text, Button, Modal, Card, Icon } from '@ui-kitten/components';
 import { TouchableOpacity, View } from 'react-native';
 import { getHora } from '../utils/functions';
 
-export const SimpleBookClass = ({ hora, onSubmit, bookingFlag }) => {
+export const SimpleBookClass = ({
+  hora,
+  onSubmit,
+  bookingFlag,
+  handleConfirm,
+}) => {
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   return (
-    <Layout style={styles.selectionRow}>
+    <View style={{ flex: 1 }}>
       <Text style={{ alignSelf: 'center' }} category="s1">
         Confirmar Reserva para: {getHora(hora)}
       </Text>
@@ -17,7 +22,7 @@ export const SimpleBookClass = ({ hora, onSubmit, bookingFlag }) => {
         onPress={onSubmit}>
         {btnText}
       </Button>
-    </Layout>
+    </View>
   );
 };
 

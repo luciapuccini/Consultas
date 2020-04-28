@@ -12,39 +12,37 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
 
   return (
     <>
-      <Layout style={{ margin: 10, flex: 1 }}>
-        <ImageBackground
-          source={placeholder}
-          style={{ flex: 1, maxHeight: 150 }}
-          imageStyle={{ opacity: 0.3 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              paddingTop: 15,
-            }}>
-            <View style={{ flexDirection: 'column' }}>
-              <Text category="s1" style={{ padding: 4 }}>
-                Fecha: {fecha}
-              </Text>
-              <Text category="s1" style={{ padding: 4 }}>
-                Hora: {hora}
-              </Text>
-              <Text category="s1" style={{ padding: 4 }}>
-                Empieza {count}
-              </Text>
-            </View>
-            <View style={{ margin: 10, alignItems: 'center' }}>
-              <Thumbnail
-                source={professorImage}
-                style={{ height: 80, width: 80, borderRadius: 50 }}
-              />
-              <Text appearance="hint">{professor.name}</Text>
-            </View>
+      <ImageBackground
+        source={placeholder}
+        style={{ flex: 1, maxHeight: 200 }}
+        imageStyle={{ opacity: 0.3 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            paddingTop: 15,
+          }}>
+          <View style={{ flexDirection: 'column' }}>
+            <Text category="s1" style={{ padding: 4 }}>
+              Fecha: {fecha}
+            </Text>
+            <Text category="s1" style={{ padding: 4 }}>
+              Hora: {hora}
+            </Text>
+            <Text category="s1" style={{ padding: 4 }}>
+              Empieza {count}
+            </Text>
           </View>
-        </ImageBackground>
-      </Layout>
+          <View style={{ margin: 10, alignItems: 'center' }}>
+            <Thumbnail
+              source={professorImage}
+              style={{ height: 80, width: 80, borderRadius: 50 }}
+            />
+            <Text appearance="hint">{professor.name}</Text>
+          </View>
+        </View>
+      </ImageBackground>
 
       <Divider />
       {!_.isEmpty(comments) ? (

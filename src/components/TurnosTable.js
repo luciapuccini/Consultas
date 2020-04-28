@@ -6,62 +6,46 @@ import {
   MenuItem,
   IndexPath,
   Button,
-  Modal,
-  Card,
-  Icon,
-  Divider,
 } from '@ui-kitten/components';
 import { TouchableOpacity, View } from 'react-native';
 import { getHora } from '../utils/functions';
 
-export const TurnosTable = ({
-  selectedIndex,
-  setSelectedIndex,
-  turnos,
-  showConfirm,
-  setShowConfirm,
-  handleConfirm,
-  bookingFlag,
-  onSubmit,
-}) => {
+export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(null);
+
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
+  const getSelectedTurno = () => {
+    return turnos[selectedIndex].startTime;
+  };
 
   return (
     <View style={{ flex: 1 }}>
-      <Menu
-        selectedIndex={selectedIndex}
-        onSelect={(index) => setSelectedIndex(index)}>
+      <Menu>
         {turnos.map((turno) => (
-          <MenuItem title={getHora(turno.startTime)} disabled={turno.isTaken} />
+          <MenuItem
+            title={getHora(turno.startTime)}
+            disabled={turno.isTaken}
+            onPress={(index) => setSelectedIndex(index)}
+          />
         ))}
       </Menu>
-      <Text style={{ alignSelf: 'center' }} category="s1">
-        Confirmar Reserva
-      </Text>
-      <Button
-        appearance="outline"
-        status={bookingFlag ? 'danger' : 'primary'}
-        style={styles.inscriptionBtn}
-        onPress={onSubmit}>
-        {btnText}
-      </Button>
-
-      <Modal
-        visible={showConfirm}
-        backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        onBackdropPress={() => setShowConfirm(false)}>
-        <Card disabled={true}>
-          <TouchableOpacity onPress={() => handleConfirm()}>
-            <Icon
-              style={{ height: 20, width: 20 }}
-              name="close"
-              fill="#8F9BB3"
-            />
-          </TouchableOpacity>
-
-          <Text>Inscipto a: {turnos[selectedIndex - 1].startTime}</Text>
-        </Card>
-      </Modal>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Text style={{ marginLeft: 10 }}>
+          Confirm: {getHora(getSelectedTurno())}
+        </Text>
+        <Button
+          appearance="outline"
+          status={bookingFlag ? 'danger' : 'primary'}
+          style={styles.inscriptionBtn}
+          onPress={handleConfirm(selectedIndex)}>
+          {btnText}
+        </Button>
+      </View>
     </View>
   );
 };
