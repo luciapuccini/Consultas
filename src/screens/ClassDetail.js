@@ -69,11 +69,10 @@ export const ClassDetail = ({ route, navigation }) => {
 
     if (bookingFlag) {
       console.log('dessubscribe', sendTurno);
-      //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+      // unsubscribeTurno(id, turnos[index].turnoPk.startTime);
     } else {
       console.log('subscribe', sendTurno);
-      // console.log(turnos);
-      // subscribeTurno(id, turnos[selectedIndex - 1].startTime);
+      subscribeTurno(id, sendTurno.turnoPk.startTime);
     }
     navigation.goBack();
   };
@@ -151,14 +150,17 @@ const styles = {
 };
 
 const subscribeTurno = async (idClass, startTimeTurno) => {
-  const userId = await AsyncStorage.getItem('USER_ID');
-  const turno = { consultaId: idClass, initTime: startTimeTurno, userId };
+  const token = await getToken();
+  const turno = { consultaId: idClass, initTime: startTimeTurno };
   console.log('SUBSCRIBITEE', turno);
 
   try {
     fetch(`http://181.164.121.14:25565/clases/subscribe`, {
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(turno),
     })
       .then((response) => response.json())

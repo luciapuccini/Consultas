@@ -1,35 +1,33 @@
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import _ from 'underscore';
+import { Container, Header, Content, List, ListItem, Text } from 'native-base';
 
 import { ProfessorCard } from './ProfessorCard';
 
 export const ProfessorList = ({ professors }) => {
-  // const [professors, setProfessors] = useState([]);
-  // React.useEffect(() => {
-  //   const fetchProffesors = () => {
-  //     fetch('http://www.mocky.io/v2/5ea262b63100006b8f1ef091', {
-  //       headers: { 'Content-Type': 'application/json' },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((json) => {
-  //         setProfessors(json);
-  //       });
-  //   };
-  //   fetchProffesors();
-  // }, []);
-
   const renderItem = ({ item, index }) => {
     // const img = findSubjectImage(item.name);
     return <ProfessorCard professor={item} />;
   };
 
   return (
-    <FlatList
-      data={professors}
-      renderItem={renderItem}
-      keyExtractor={(item, index) => item.id}
-      contentContainerStyle={{ paddingBottom: 360 }}
-    />
+    <List>
+      <ListItem itemDivider>
+        <Text>A</Text>
+      </ListItem>
+      <ListItem>
+        <Text>Aaron Bennet</Text>
+      </ListItem>
+      <ListItem>
+        <Text>Ali Connors</Text>
+      </ListItem>
+      <ListItem itemDivider>
+        <Text>B</Text>
+      </ListItem>
+      <ListItem>
+        <Text>Bradley Horowitz</Text>
+      </ListItem>
+    </List>
   );
 };
