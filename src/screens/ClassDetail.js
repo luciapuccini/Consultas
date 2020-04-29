@@ -1,5 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
+import { Button } from '@ui-kitten/components';
+
 import moment from 'moment';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -59,20 +61,21 @@ export const ClassDetail = ({ route, navigation }) => {
 
   const handleConfirm = (index) => {
     setIndex(index);
-    // navigation.goBack();
+    onSubmit();
   };
 
   const onSubmit = () => {
-    if (index) {
-      if (bookingFlag) {
-        console.log('dessubscribe', turnos[index]);
-        //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
-      } else {
-        console.log('subscribe', turnos[index]);
-        // console.log(turnos);
-        // subscribeTurno(id, turnos[selectedIndex - 1].startTime);
-      }
+    const sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
+
+    if (bookingFlag) {
+      console.log('dessubscribe', sendTurno);
+      //desinscribir unsubscribeTurno(clase.id, turnos[selectedIndex - 1].turnoPk.startTime);
+    } else {
+      console.log('subscribe', sendTurno);
+      // console.log(turnos);
+      // subscribeTurno(id, turnos[selectedIndex - 1].startTime);
     }
+    navigation.goBack();
   };
 
   const getFecha = () => {
@@ -94,8 +97,7 @@ export const ClassDetail = ({ route, navigation }) => {
             notes={comments}
             professor={professor}
           />
-          {/* canShowTurnos */}
-          {true ? (
+          {canShowTurnos ? (
             <TurnosTable
               turnos={[
                 { startTime: '2020-04-30T10:00:00' },

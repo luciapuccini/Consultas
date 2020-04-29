@@ -11,9 +11,15 @@ export const SimpleBookClass = ({
 }) => {
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={{ alignSelf: 'center' }} category="s1">
-        Confirmar Reserva para: {getHora(hora)}
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: 10,
+      }}>
+      <Text style={{ marginLeft: 10 }} category="s1">
+        Confirm: {getHora(hora)}
       </Text>
       <Button
         appearance="outline"

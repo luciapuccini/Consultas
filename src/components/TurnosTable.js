@@ -1,31 +1,27 @@
 import React from 'react';
-import {
-  Layout,
-  Text,
-  Menu,
-  MenuItem,
-  IndexPath,
-  Button,
-} from '@ui-kitten/components';
-import { TouchableOpacity, View } from 'react-native';
+import { Text, Menu, MenuItem, Button } from '@ui-kitten/components';
+import { View } from 'react-native';
 import { getHora } from '../utils/functions';
 
 export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   const getSelectedTurno = () => {
     return turnos[selectedIndex].startTime;
   };
+  const handleSelection = ({ index }) => {
+    setSelectedIndex(index.row);
+  };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <Menu>
         {turnos.map((turno) => (
           <MenuItem
             title={getHora(turno.startTime)}
             disabled={turno.isTaken}
-            onPress={(index) => setSelectedIndex(index)}
+            onPress={handleSelection}
           />
         ))}
       </Menu>
@@ -34,6 +30,7 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          margin: 10,
         }}>
         <Text style={{ marginLeft: 10 }}>
           Confirm: {getHora(getSelectedTurno())}
@@ -42,7 +39,7 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
           appearance="outline"
           status={bookingFlag ? 'danger' : 'primary'}
           style={styles.inscriptionBtn}
-          onPress={handleConfirm(selectedIndex)}>
+          onPress={() => handleConfirm(selectedIndex)}>
           {btnText}
         </Button>
       </View>
