@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button } from '@ui-kitten/components';
+import { Button, Layout } from '@ui-kitten/components';
 
 import moment from 'moment';
 import _ from 'underscore';
@@ -69,7 +69,7 @@ export const ClassDetail = ({ route, navigation }) => {
 
     if (bookingFlag) {
       console.log('dessubscribe', sendTurno);
-      // unsubscribeTurno(id, turnos[index].turnoPk.startTime);
+      unsubscribeTurno(id, sendTurno.turnoPk.startTime);
     } else {
       console.log('subscribe', sendTurno);
       subscribeTurno(id, sendTurno.turnoPk.startTime);
@@ -86,7 +86,7 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   return (
-    <>
+    <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
         <>
           <ClassSummary
@@ -98,14 +98,7 @@ export const ClassDetail = ({ route, navigation }) => {
           />
           {canShowTurnos ? (
             <TurnosTable
-              turnos={[
-                { startTime: '2020-04-30T10:00:00' },
-                { startTime: '2020-04-30T10:15:00' },
-                { startTime: '2020-04-30T10:30:00' },
-                { startTime: '2020-04-30T10:45:00' },
-                { startTime: '2020-04-30T11:00:00' },
-                { startTime: '2020-04-30T11:15:00' },
-              ]}
+              turnos={turnos}
               bookingFlag={bookingFlag}
               handleConfirm={handleConfirm}
             />
@@ -121,7 +114,7 @@ export const ClassDetail = ({ route, navigation }) => {
       ) : (
         <CustomSpinner />
       )}
-    </>
+    </Layout>
   );
 };
 
@@ -154,20 +147,41 @@ const subscribeTurno = async (idClass, startTimeTurno) => {
   const turno = { consultaId: idClass, initTime: startTimeTurno };
   console.log('SUBSCRIBITEE', turno);
 
-  try {
-    fetch(`http://181.164.121.14:25565/clases/subscribe`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(turno),
+  fetch(`http://181.164.121.14:25565/clases/subscribe`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(turno),
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json.message);
     })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json.message);
-      });
-  } catch (error) {
-    console.log(error);
-  }
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const unsubscribeTurno = async (idClass, startTimeTurno) => {
+  const token = await getToken();
+  const turno = { consultaId: idClass, initTime: startTimeTurno };
+  console.log('SUBSCRIBITEE', turno);
+
+  fetch(`http://181.164.121.14:25565/clases/unsubscribe`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(turno),
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json.message);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };

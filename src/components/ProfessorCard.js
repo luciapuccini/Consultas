@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, View, TouchableOpacity } from 'react-native';
-import { Card, Text } from '@ui-kitten/components';
+import { View, TouchableOpacity } from 'react-native';
+import { Icon, Card, Text, Button } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 
 const professorPlaceholder = require('../assets/rick.jpg');
@@ -19,24 +19,24 @@ export const ProfessorCard = ({ professor }) => {
     navigation.navigate('Professor', { professor });
   };
 
-  const Header = () => {
-    return (
-      <View style={styles.subjectCardHeaderStyle}>
-        <View style={{ width: '80%' }}>
-          <Text category="h6">{name}</Text>
-        </View>
-      </View>
-    );
-  };
+  const FollowIcon = (props) => <Icon {...props} name="star" />;
 
   return (
-    <Card footer={Header} style={styles.subjectCardStyle}>
-      <TouchableOpacity onPress={() => goToProfessor()}>
-        <Image
-          source={findSubjectImage(image)}
-          style={styles.subjectImageStyle}
-        />
-      </TouchableOpacity>
+    <Card style={styles.subjectCardStyle} onPress={goToProfessor}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Text category="h5">{professor.name}</Text>
+        <Button
+          appearance="outline"
+          status="primary"
+          accessoryRight={FollowIcon}>
+          Follow
+        </Button>
+      </View>
     </Card>
   );
 };
@@ -44,7 +44,7 @@ export const ProfessorCard = ({ professor }) => {
 const styles = {
   bellSize: { width: 22, height: 22 },
   subjectCardStyle: {
-    marginHorizontal: 30,
+    marginHorizontal: 20,
     marginVertical: 14,
     flex: 1,
     backgroundColor: '#E3F2FD',
