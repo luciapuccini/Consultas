@@ -6,14 +6,17 @@ import {
   TouchableOpacity,
   Image,
   SectionList,
+  FlatList,
 } from 'react-native';
 import {
   Text,
   Card,
   Avatar,
   Layout,
-  ListItem,
-  Divider,
+  Menu,
+  MenuItem,
+  MenuGroup,
+  IndexPath,
 } from '@ui-kitten/components';
 
 const chatImage = require('../assets/chat.png');
@@ -41,7 +44,7 @@ export const Professor = ({ route }) => {
       style={{
         flex: 1,
       }}>
-      <Card style={{ marginTop: 20, marginHorizontal: 5 }}>
+      <Card status="basic" style={{ marginTop: 5, marginHorizontal: 5 }}>
         <View
           style={{
             flexDirection: 'row',
@@ -56,25 +59,20 @@ export const Professor = ({ route }) => {
           <Details name={name} legajo={legajo} email={email} />
         </View>
       </Card>
-      <Layout level="1">
-        <SectionList
-          sections={[
-            {
-              title: 'Subjects',
-              data: ['Algoritmos', 'Mineria', 'Artificial', 'Agiles'],
-            },
-          ]}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({ item }) => <SubjectItem item={item} />}
-          renderSectionHeader={({ section }) => (
-            <Header title={section.title} />
-          )}
-        />
-      </Layout>
+      <Header title="Horarios De Consulta" />
+      <FlatList
+        data={['Algoritmos', 'Mineria', 'Artificial', 'Agiles']}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({ item }) => <SubjectItem item={item} />}
+      />
 
       {mobile ? (
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
-          <View style={{ flex: 1, width: '70%' }} />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+          }}>
+          <View style={{ flex: 1 }} />
           <TouchableOpacity onPress={() => openChat()}>
             <Image
               source={chatImage}
@@ -114,24 +112,31 @@ const Header = ({ title }) => {
   return (
     <Layout
       level="2"
-      style={{ flex: 1, alignItems: 'center', paddingVertical: 10 }}>
+      style={{ paddingVertical: 10, width: '100%', alignItems: 'center' }}>
       <Text category="h5">{title}</Text>
     </Layout>
   );
 };
 
 const SubjectItem = ({ item }) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(null);
+
   console.log(item);
   return (
-    <ListItem
-      title={() => (
-        <>
-          <Text style={{ marginBottom: 10 }} category="s1">
-            {item}
-          </Text>
-          <Divider />
-        </>
-      )}
-    />
+    <Layout
+      style={{
+        minHeight: 50,
+        marginTop: 10,
+      }}
+      level="1">
+      <Menu
+        selectedIndex={selectedIndex}
+        onSelect={(index) => setSelectedIndex(index)}>
+        <MenuGroup title={item}>
+          <MenuItem title="Martes 10:15" />
+          <MenuItem title="Jueves 14:30" />
+        </MenuGroup>
+      </Menu>
+    </Layout>
   );
 };
