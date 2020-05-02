@@ -19,13 +19,10 @@ export const SubjectCard = ({ subject }) => {
 
   const onNotificationChange = async () => {
     const token = await getToken();
-
     setNotification(!notification);
-
     const body = {
       id: subjectId,
     };
-
     if (notification !== true) {
       // http://www.mocky.io/v2/5e98fd103500005fa1c486f9
       // http://181.164.121.14:25565/subjects/followSubject

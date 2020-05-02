@@ -5,22 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 
 const professorPlaceholder = require('../assets/rick.jpg');
 
-const findSubjectImage = (subjectName) => {
-  // const image = require(`../assets/${subjectName}.png`);
-  return professorPlaceholder;
-};
-
 export const ProfessorCard = ({ professor }) => {
   const navigation = useNavigation();
-
-  const { name, image } = professor;
 
   const goToProfessor = () => {
     navigation.navigate('Professor', { professor });
   };
-
-  const FollowIcon = (props) => <Icon {...props} name="star" />;
-
+  const { name, surname } = professor;
   return (
     <Card style={styles.subjectCardStyle} onPress={goToProfessor}>
       <View
@@ -29,13 +20,9 @@ export const ProfessorCard = ({ professor }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <Text category="h5">{professor.name}</Text>
-        <Button
-          appearance="outline"
-          status="primary"
-          accessoryRight={FollowIcon}>
-          Follow
-        </Button>
+        <Text category="h5" appearance="alternative">
+          {name} {surname}
+        </Text>
       </View>
     </Card>
   );
@@ -47,7 +34,7 @@ const styles = {
     marginHorizontal: 20,
     marginVertical: 14,
     flex: 1,
-    backgroundColor: '#E3F2FD',
+    backgroundColor: '#3D5AFE',
   },
   subjectImageStyle: {
     height: 200,

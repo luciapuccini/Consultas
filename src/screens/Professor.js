@@ -11,7 +11,6 @@ import {
   Spinner,
   Icon,
 } from '@ui-kitten/components';
-import { Separator } from 'native-base';
 import { getToken } from '../utils/authHelper';
 import _ from 'underscore';
 import { getHora } from '../utils/functions';
@@ -21,7 +20,15 @@ const placeHolder = require('../assets/rick.jpg');
 
 export const Professor = ({ route }) => {
   const { professor } = route.params;
-  const { id, name, mobile, surName, email, profileImagePath } = professor;
+  const {
+    id,
+    name,
+    mobile,
+    legajo,
+    surname,
+    email,
+    profileImagePath,
+  } = professor;
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
 
@@ -85,10 +92,6 @@ export const Professor = ({ route }) => {
   };
 
   React.useEffect(() => {
-    // 1. fetch subjects ->
-    // await subjects ->
-    // fetch clases ->
-    // armo todo
     fetchProfessorSubjets();
   }, []);
 
@@ -117,12 +120,18 @@ export const Professor = ({ route }) => {
           }}>
           <Avatar
             source={profileImagePath || placeHolder}
-            style={{ height: 100, width: 100, alignSelf: 'center' }}
+            style={{
+              height: 100,
+              width: 100,
+              alignSelf: 'center',
+              marginLeft: -10,
+            }}
             shape="square"
           />
           <Details
             name={name}
-            surName={surName}
+            surname={surname}
+            legajo={legajo}
             email={email}
             mobile={mobile}
             openChat={openChat}
@@ -133,7 +142,7 @@ export const Professor = ({ route }) => {
       {!loading1 && !loading2 ? (
         <FlatList
           data={getSubjects()}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item) => item.name}
           renderItem={({ item }) => <SubjectItem subject={item} />}
         />
       ) : (
@@ -143,27 +152,29 @@ export const Professor = ({ route }) => {
   );
 };
 
-const Details = ({ name, surName, email, mobile, openChat }) => {
+const Details = ({ name, surname, legajo, email, mobile, openChat }) => {
+  console.log(mobile);
   return (
     <View
       style={{
         flexDirection: 'column',
         flex: 1,
-        marginLeft: 30,
-        marginRight: -15,
+        marginLeft: 20,
+        marginRight: -10,
         minHeight: 120,
         justifyContent: 'space-evenly',
       }}>
       <Text category="h5">
-        {name}
-        {surName || null}
+        {name} {surname}
       </Text>
-      <Text category="s1">Email:</Text>
-      <Text category="s1" appearance="hint">
+      <Text category="s1" status="info">
+        Legajo {legajo}
+      </Text>
+      <Text category="s1" status="info">
         {email}
       </Text>
 
-      {mobile ? (
+      {mobile !== 'secret' ? (
         <View
           style={{
             flexDirection: 'row',
