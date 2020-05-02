@@ -50,17 +50,18 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     let token;
     //http://181.164.121.14:25565/users/login
     //http://www.mocky.io/v2/5e9fce9c2d00002900cb7d10', {
-    await fetch('http://181.164.121.14:25565/users/login', {
+    const res = await fetch('http://181.164.121.14:25565/users/login', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const { jwt } = data;
-        storeData(jwt);
-        token = jwt;
-      });
+    });
+    const data = await res.json();
+    if (data.error) {
+      return data.message;
+    }
+    const { jwt } = data;
+    storeData(jwt);
+    token = jwt;
     dispatch({ type: 'SIGN_IN', payload: token });
   } catch (error) {
     console.log(error);
@@ -90,17 +91,16 @@ const signup = (dispatch) => async (user) => {
     let token;
     //http://181.164.121.14:25565/users/addStudent
     //http://www.mocky.io/v2/5e93a8953000009100156b76
-    await fetch('http://181.164.121.14:25565/users/addStudent', {
+    const res = await fetch('http://181.164.121.14:25565/users/addStudent', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('ALTA USER:', data);
-        // async () => await AsyncStorage.setItem('TOKEN', data.token);
-        // token = data.token;
-      });
+    });
+    const data = await res.json();
+    console.log('que es dataa', data);
+    if (data.error) {
+      return data.message;
+    }
     dispatch({ type: 'SIGN_IN', payload: token });
   } catch (err) {
     console.log(err);

@@ -34,11 +34,14 @@ export const SignInScreen = ({ navigation }) => {
     registerAppWithFCM(setDeviceToken);
   }, []);
 
-  const handleSingIn = () => {
+  const handleSingIn = async () => {
     if (!_.isEmpty(legajo) && !_.isEmpty(password)) {
-      signin({ legajo, password, deviceToken });
+      const data = await signin({ legajo, password, deviceToken });
+      if (data !== '') {
+        setError(data);
+      }
     } else {
-      setError(true);
+      setError('Complete the fields');
       setTimeout(() => {
         setError(false);
       }, 3000);
@@ -72,7 +75,7 @@ export const SignInScreen = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-      {error ? <ErrorMessage message="Complete the fields" /> : null}
+      {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
       <TouchableOpacity style={loginBtn} onPress={handleSingIn}>
         <Text style={loginText}>Sign In</Text>
       </TouchableOpacity>

@@ -23,7 +23,7 @@ export const SignUpScreen = ({ navigation }) => {
   const [phone, setPhone] = React.useState('');
   const [error, setError] = React.useState('');
 
-  const handleSingUp = () => {
+  const handleSingUp = async () => {
     const user = { legajo, name, email, password };
     const hasUser =
       !_.isEmpty(legajo) &&
@@ -31,12 +31,11 @@ export const SignUpScreen = ({ navigation }) => {
       !_.isEmpty(email) &&
       !_.isEmpty(password);
     if (hasUser) {
-      signup(user);
+      const data = await signup(user);
+      console.log('a ver que pasa', data);
+      setError(data);
     } else {
-      setError(true);
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
+      setError('Complete the fields');
     }
   };
   return (
@@ -83,7 +82,7 @@ export const SignUpScreen = ({ navigation }) => {
         />
       </View>
 
-      {error ? <ErrorMessage message="Complete the fields" /> : null}
+      {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
 
       <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
         <Text style={loginText}>Sign Up</Text>
