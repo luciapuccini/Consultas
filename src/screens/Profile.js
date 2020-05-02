@@ -190,7 +190,7 @@ export const Profile = ({ navigation }) => {
                 marginRight: 10,
                 marginTop: 10,
               }}
-              onPress={() => navigation.navigate('Classes')}>
+              onPress={() => navigation.navigate('Home')}>
               Mis Inscripciones
             </Button>
           </Content>

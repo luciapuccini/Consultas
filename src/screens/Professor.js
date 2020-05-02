@@ -8,12 +8,14 @@ import {
   Menu,
   MenuItem,
   MenuGroup,
-  IndexPath,
   Spinner,
+  Icon,
 } from '@ui-kitten/components';
-import { List, ListItem, Separator } from 'native-base';
+import { Separator } from 'native-base';
 import { getToken } from '../utils/authHelper';
 import _ from 'underscore';
+import { getHora } from '../utils/functions';
+
 const chatImage = require('../assets/chat.png');
 const placeHolder = require('../assets/rick.jpg');
 
@@ -26,6 +28,7 @@ export const Professor = ({ route }) => {
   const [professorSubjects, setProfessorSubjects] = useState([]);
   const [professorClases, setProfessorClases] = useState([]);
 
+  //WARNING error con las clases de cada subject
   const fetchProfessorSubjets = async () => {
     const token = await getToken();
     fetch(`http://181.164.121.14:25565/users/getProfessorSubjects/${id}`, {
@@ -37,7 +40,6 @@ export const Professor = ({ route }) => {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log('PROFES', json);
         setProfessorSubjects(json);
         json.forEach((subject) => {
           fetchProfessorClases(subject.subjectId);
@@ -61,7 +63,6 @@ export const Professor = ({ route }) => {
     )
       .then((res) => res.json())
       .then((json) => {
-        console.log('CLASES', json);
         setProfessorClases(json);
         setLoading2(false);
       })
@@ -69,17 +70,9 @@ export const Professor = ({ route }) => {
   };
 
   const getSubjects = () => {
-    // overridear el obj data para armar
-    // [ {name:'mineria', classes: [
-    // { initTime:'', status:'' } ]
-    // } ]
-    // { ...subject.name, ...clases.fecha }
-    console.log('SIN FALTA LOS DOS', professorSubjects, professorClases);
     let spreadedSubjects = [];
-
     professorSubjects.map((subject) => {
       let spreadedClases = [];
-      console.log('CLASE', professorClases);
       professorClases.values.forEach((clase) => {
         const newClase = { date: clase.initTime, status: clase.status };
         spreadedClases.push(newClase);
@@ -197,21 +190,46 @@ const Header = ({ title }) => {
 };
 
 const SubjectItem = ({ subject }) => {
-  console.log('VAMOA VER LA SUBJECT', subject);
   return (
-    <Layout
-      style={{
-        minHeight: 50,
-        marginTop: 10,
-      }}
-      level="1">
-      <Separator bordered>
-        <Text category="h6">{subject.name}</Text>
-      </Separator>
-
-      <ListItem>
-        <Text>{subject.classes[0].date}</Text>
-      </ListItem>
-    </Layout>
+    <Menu>
+      <MenuGroup title={subject.name}>
+        {subject.classes.map((clase) => {
+          return (
+            <MenuItem
+              style={styles.row}
+              title={getHora(clase.date)}
+              accessoryLeft={() => <StatusIcon status={clase.status} />}
+            />
+          );
+        })}
+      </MenuGroup>
+    </Menu>
   );
+};
+
+const StatusIcon = ({ status }) => {
+  const isLive = status === 'En curso';
+  const statusColor = !isLive ? '#FFCA28' : '#00C853';
+  return (
+    <Icon
+      name="checkmark-circle-outline"
+      style={styles.checkStyle}
+      fill={statusColor}
+    />
+  );
+};
+
+const styles = {
+  row: { flexDirection: 'row', justifyContent: 'space-around' },
+  space: { marginVertical: 14, marginHorizontal: 20 },
+  cardStyle: {
+    flexDirection: 'column',
+    padding: 10,
+  },
+  textRowStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  checkStyle: { width: 15, height: 15, marginTop: 2 },
 };
