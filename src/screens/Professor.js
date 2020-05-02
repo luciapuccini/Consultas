@@ -1,13 +1,5 @@
-import React from 'react';
-import {
-  Alert,
-  View,
-  Linking,
-  TouchableOpacity,
-  Image,
-  SectionList,
-  FlatList,
-} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, View, Linking, TouchableOpacity, FlatList } from 'react-native';
 import {
   Text,
   Card,
@@ -17,15 +9,95 @@ import {
   MenuItem,
   MenuGroup,
   IndexPath,
+  Spinner,
 } from '@ui-kitten/components';
-
+import { List, ListItem, Separator } from 'native-base';
+import { getToken } from '../utils/authHelper';
+import _ from 'underscore';
 const chatImage = require('../assets/chat.png');
 const placeHolder = require('../assets/rick.jpg');
 
 export const Professor = ({ route }) => {
-  React.useEffect(() => {}, []);
   const { professor } = route.params;
-  const { name, mobile, legajo, email, profileImagePath } = professor;
+  const { id, name, mobile, surName, email, profileImagePath } = professor;
+  const [loading1, setLoading1] = useState(true);
+  const [loading2, setLoading2] = useState(true);
+
+  const [professorSubjects, setProfessorSubjects] = useState([]);
+  const [professorClases, setProfessorClases] = useState([]);
+
+  const fetchProfessorSubjets = async () => {
+    const token = await getToken();
+    fetch(`http://181.164.121.14:25565/users/getProfessorSubjects/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        console.log('PROFES', json);
+        setProfessorSubjects(json);
+        json.forEach((subject) => {
+          fetchProfessorClases(subject.subjectId);
+        });
+
+        setLoading1(false);
+      });
+  };
+
+  const fetchProfessorClases = async (subjectId) => {
+    const token = await getToken();
+    fetch(
+      `http://181.164.121.14:25565/clases/findProfessorClasses?professorId=${id}&subjectId=${subjectId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        console.log('CLASES', json);
+        setProfessorClases(json);
+        setLoading2(false);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const getSubjects = () => {
+    // overridear el obj data para armar
+    // [ {name:'mineria', classes: [
+    // { initTime:'', status:'' } ]
+    // } ]
+    // { ...subject.name, ...clases.fecha }
+    console.log('SIN FALTA LOS DOS', professorSubjects, professorClases);
+    let spreadedSubjects = [];
+
+    professorSubjects.map((subject) => {
+      let spreadedClases = [];
+      console.log('CLASE', professorClases);
+      professorClases.values.forEach((clase) => {
+        const newClase = { date: clase.initTime, status: clase.status };
+        spreadedClases.push(newClase);
+      });
+      const newSubject = { name: subject.name, classes: spreadedClases };
+      spreadedSubjects.push(newSubject);
+    });
+
+    return spreadedSubjects;
+  };
+
+  React.useEffect(() => {
+    // 1. fetch subjects ->
+    // await subjects ->
+    // fetch clases ->
+    // armo todo
+    fetchProfessorSubjets();
+  }, []);
 
   const openChat = () => {
     const temp = professor.mobile || '3364637796';
@@ -48,7 +120,6 @@ export const Professor = ({ route }) => {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
             minHeight: 140,
           }}>
           <Avatar
@@ -56,15 +127,48 @@ export const Professor = ({ route }) => {
             style={{ height: 100, width: 100, alignSelf: 'center' }}
             shape="square"
           />
-          <Details name={name} legajo={legajo} email={email} />
+          <Details
+            name={name}
+            surName={surName}
+            email={email}
+            mobile={mobile}
+            openChat={openChat}
+          />
         </View>
       </Card>
       <Header title="Horarios De Consulta" />
-      <FlatList
-        data={['Algoritmos', 'Mineria', 'Artificial', 'Agiles']}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => <SubjectItem item={item} />}
-      />
+      {!loading1 && !loading2 ? (
+        <FlatList
+          data={getSubjects()}
+          keyExtractor={(item, index) => index}
+          renderItem={({ item }) => <SubjectItem subject={item} />}
+        />
+      ) : (
+        <Spinner />
+      )}
+    </Layout>
+  );
+};
+
+const Details = ({ name, surName, email, mobile, openChat }) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'column',
+        flex: 1,
+        marginLeft: 30,
+        marginRight: -15,
+        minHeight: 120,
+        justifyContent: 'space-evenly',
+      }}>
+      <Text category="h5">
+        {name}
+        {surName || null}
+      </Text>
+      <Text category="s1">Email:</Text>
+      <Text category="s1" appearance="hint">
+        {email}
+      </Text>
 
       {mobile ? (
         <View
@@ -74,41 +178,15 @@ export const Professor = ({ route }) => {
           }}>
           <View style={{ flex: 1 }} />
           <TouchableOpacity onPress={() => openChat()}>
-            <Image
-              source={chatImage}
-              style={{ height: 80, width: 80, margin: 20 }}
-            />
+            <Avatar source={chatImage} />
           </TouchableOpacity>
         </View>
       ) : null}
-    </Layout>
-  );
-};
-
-const Details = ({ name, email, legajo }) => {
-  return (
-    <View
-      style={{
-        flexDirection: 'column',
-        flex: 1,
-        marginLeft: 30,
-        minHeight: 120,
-        justifyContent: 'space-between',
-      }}>
-      <Text category="h5">{name}</Text>
-      <Text category="h6" appearance="hint">
-        Legajo: {legajo}
-      </Text>
-
-      <Text category="h6" appearance="hint">
-        Email: {email}
-      </Text>
     </View>
   );
 };
 
 const Header = ({ title }) => {
-  console.log(title);
   return (
     <Layout
       level="2"
@@ -118,10 +196,8 @@ const Header = ({ title }) => {
   );
 };
 
-const SubjectItem = ({ item }) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(null);
-
-  console.log(item);
+const SubjectItem = ({ subject }) => {
+  console.log('VAMOA VER LA SUBJECT', subject);
   return (
     <Layout
       style={{
@@ -129,14 +205,13 @@ const SubjectItem = ({ item }) => {
         marginTop: 10,
       }}
       level="1">
-      <Menu
-        selectedIndex={selectedIndex}
-        onSelect={(index) => setSelectedIndex(index)}>
-        <MenuGroup title={item}>
-          <MenuItem title="Martes 10:15" />
-          <MenuItem title="Jueves 14:30" />
-        </MenuGroup>
-      </Menu>
+      <Separator bordered>
+        <Text category="h6">{subject.name}</Text>
+      </Separator>
+
+      <ListItem>
+        <Text>{subject.classes[0].date}</Text>
+      </ListItem>
     </Layout>
   );
 };

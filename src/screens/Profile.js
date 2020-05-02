@@ -10,6 +10,7 @@ import { Fab, Thumbnail, Content, H1 } from 'native-base';
 import { Input, Icon, Text, Divider, Button } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
+import _ from 'underscore';
 
 const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
@@ -17,7 +18,7 @@ export const Profile = ({ navigation }) => {
   const [photo, setPhoto] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
-  const [passwordPresent, setPasswordPresent] = React.useState(false);
+  const [passwordPresent, setPasswordPresent] = React.useState(true);
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -145,12 +146,10 @@ export const Profile = ({ navigation }) => {
               label="Password"
               status={passwordPresent ? null : 'danger'}
               secureTextEntry
-              caption={passwordPresent ? null : 'Required!'}
+              caption="Required"
+              captionIcon={AlertIcon}
               placeholder="Password ..."
               onChangeText={(value) => setUser({ ...user, password: value })}
-              onKeyPress={() => {
-                setHasEdited(true), setPasswordPresent(true);
-              }}
               value={user.password}
               accessoryRight={renderBrushIcon}
             />
@@ -239,3 +238,4 @@ const styles = {
     maxHeight: 150,
   },
 };
+const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
