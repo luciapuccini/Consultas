@@ -10,6 +10,7 @@ import { Fab, Thumbnail, Content, H1 } from 'native-base';
 import { Input, Icon, Text, Divider, Button } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
+import { EditPasswordModal } from '../components/EditPasswordModal';
 import _ from 'underscore';
 
 const userPlaceholderImage = require('../assets/rick.jpg');
@@ -18,6 +19,7 @@ export const Profile = ({ navigation }) => {
   const [photo, setPhoto] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
+  const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
   const [passwordPresent, setPasswordPresent] = React.useState(true);
 
   React.useEffect(() => {
@@ -36,7 +38,8 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
-        setUser(json);
+        const { name, email, legajo } = json;
+        setUser({ name, email, legajo });
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -46,7 +49,7 @@ export const Profile = ({ navigation }) => {
   }, []);
 
   const renderBrushIcon = (props) => (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={() => console.log('pueod hacer esto')}>
       <Icon {...props} name="edit-2-outline" />
     </TouchableWithoutFeedback>
   );
@@ -54,12 +57,9 @@ export const Profile = ({ navigation }) => {
   const save = () => {
     const handleSave = async () => {
       const token = await getToken();
-      /*{
-        WARNING: manda basura de mas
-        password:'',
-        newPassword:'',
-      }*/
-      console.log('SAVE', token, user);
+      //WARNING: NO RESPONSE
+
+      console.log('SAVE', user);
       try {
         //'http://181.164.121.14:25565/users/modify',
         const response = await fetch(
@@ -74,7 +74,7 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
-        console.log(json);
+        console.log('response', json);
       } catch (error) {
         console.log(error);
       }
@@ -141,28 +141,7 @@ export const Profile = ({ navigation }) => {
               </Text>
               <Divider style={{ backgroundColor: '#b0bec5' }} />
             </View>
-            <Input
-              style={[styles.inputStyle, { marginBottom: 10 }]}
-              label="Password"
-              status={passwordPresent ? null : 'danger'}
-              secureTextEntry
-              caption="Required"
-              captionIcon={AlertIcon}
-              placeholder="Password ..."
-              onChangeText={(value) => setUser({ ...user, password: value })}
-              value={user.password}
-              accessoryRight={renderBrushIcon}
-            />
-            <Input
-              style={styles.inputStyle}
-              label="New Password"
-              secureTextEntry
-              placeholder="New password"
-              onChangeText={(value) => setUser({ ...user, newPassword: value })}
-              onKeyPress={() => setHasEdited(true)}
-              value={user.newPassword}
-              accessoryRight={renderBrushIcon}
-            />
+
             <Input
               style={styles.inputStyle}
               label="Nombre"
@@ -181,18 +160,30 @@ export const Profile = ({ navigation }) => {
               value={user.email}
               accessoryRight={renderBrushIcon}
             />
-
-            <Button
-              appearance="outline"
+            <View
               style={{
-                width: '50%',
-                alignSelf: 'flex-end',
-                marginRight: 10,
-                marginTop: 10,
-              }}
-              onPress={() => navigation.navigate('Home')}>
-              Mis Inscripciones
-            </Button>
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Button
+                style={styles.button}
+                appearance="ghost"
+                status="primary"
+                onPress={() => setOnPasswordEdit(true)}>
+                Edit Password{' '}
+              </Button>
+              <EditPasswordModal
+                visible={onPasswordEdit}
+                setVisible={setOnPasswordEdit}
+              />
+
+              <Button
+                appearance="ghost"
+                onPress={() => navigation.navigate('Home')}>
+                Mis Inscripciones
+              </Button>
+            </View>
           </Content>
         </>
       ) : (
@@ -238,4 +229,3 @@ const styles = {
     maxHeight: 150,
   },
 };
-const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
