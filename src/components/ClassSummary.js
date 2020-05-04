@@ -11,10 +11,10 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
   const professorImage = professor.profileImagePath || professorPlaceHolder;
 
   return (
-    <>
+    <View>
       <ImageBackground
         source={placeholder}
-        style={{ flex: 1, maxHeight: 200 }}
+        style={{ maxHeight: 200 }}
         imageStyle={{ opacity: 0.3 }}>
         <View
           style={{
@@ -55,7 +55,7 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
           <Text>{comments[0].message}</Text>
         </Card>
       ) : null}
-    </>
+    </View>
   );
 };
 
@@ -64,7 +64,7 @@ const styles = {
   subjectImageStyle: {
     height: 200,
     width: null,
-    flex: 1,
+    // flex: 1,
     marginVertical: -16,
     marginHorizontal: -24,
   },

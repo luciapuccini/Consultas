@@ -12,6 +12,7 @@ import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
 import { TurnosTable } from '../components/TurnosTable';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const ClassDetail = ({ route, navigation }) => {
   const { hasSingleTurnos, id, initTime, professor } = route.params.clase;
@@ -88,7 +89,7 @@ export const ClassDetail = ({ route, navigation }) => {
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
-        <>
+        <View style={{ flex: 1 }}>
           <ClassSummary
             fecha={getFecha()}
             hora={getHora(initTime)}
@@ -110,36 +111,12 @@ export const ClassDetail = ({ route, navigation }) => {
               handleConfirm={handleConfirm}
             />
           )}
-        </>
+        </View>
       ) : (
         <CustomSpinner />
       )}
     </Layout>
   );
-};
-
-const styles = {
-  inscriptionBtn: {
-    height: 20,
-    alignSelf: 'flex-end',
-  },
-  selectionRow: {
-    flexDirection: 'row',
-    margin: 10,
-    justifyContent: 'space-between',
-  },
-  disabled: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  chatStyle: {
-    height: 80,
-    width: 80,
-    backgroundColor: '#00C853',
-    borderRadius: 50,
-  },
 };
 
 const subscribeTurno = async (idClass, startTimeTurno) => {

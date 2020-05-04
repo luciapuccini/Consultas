@@ -1,5 +1,11 @@
 import React from 'react';
-import { Text, Menu, MenuItem, Button } from '@ui-kitten/components';
+import {
+  Text,
+  Menu,
+  MenuItem,
+  Button,
+  ScrollView,
+} from '@ui-kitten/components';
 import { View } from 'react-native';
 import { getHora } from '../utils/functions';
 
@@ -15,7 +21,7 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
   };
 
   return (
-    <View>
+    <>
       <Menu>
         {turnos.map((turno) => (
           <MenuItem
@@ -25,6 +31,7 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
           />
         ))}
       </Menu>
+
       <View
         style={{
           flexDirection: 'row',
@@ -43,7 +50,7 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
           {btnText}
         </Button>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -59,7 +66,7 @@ const styles = {
   },
   disabled: {
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    flex: 1,
+    // flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
