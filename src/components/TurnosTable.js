@@ -9,7 +9,13 @@ import {
 import { View } from 'react-native';
 import { getHora } from '../utils/functions';
 
-export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
+export const TurnosTable = ({
+  turnos,
+  handleConfirm,
+  bookingFlag,
+  onSubmit,
+  disabled,
+}) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
@@ -18,15 +24,15 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
   };
   const handleSelection = ({ index }) => {
     setSelectedIndex(index.row);
+    handleConfirm(selectedIndex);
   };
-
   return (
     <>
       <Menu>
         {turnos.map((turno) => (
           <MenuItem
             title={getHora(turno.startTime)}
-            disabled={turno.isTaken}
+            disabled={turno.hasUsers}
             onPress={handleSelection}
           />
         ))}
@@ -43,10 +49,11 @@ export const TurnosTable = ({ turnos, handleConfirm, bookingFlag }) => {
           Confirm: {getHora(getSelectedTurno())}
         </Text>
         <Button
+          disabled={disabled}
           appearance="outline"
           status={bookingFlag ? 'danger' : 'primary'}
           style={styles.inscriptionBtn}
-          onPress={() => handleConfirm(selectedIndex)}>
+          onPress={() => onSubmit()}>
           {btnText}
         </Button>
       </View>

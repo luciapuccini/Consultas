@@ -12,7 +12,7 @@ const handleDate = (date) => {
 };
 export const ClassCard = ({ clase }) => {
   const navigation = useNavigation();
-  const isLive = clase.status === 'En Consulta';
+  const isLive = clase.status === 'En curso';
   const statusColor = !isLive ? '#FFCA28' : '#00C853';
 
   return (

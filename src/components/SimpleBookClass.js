@@ -8,6 +8,7 @@ export const SimpleBookClass = ({
   onSubmit,
   bookingFlag,
   handleConfirm,
+  disabled,
 }) => {
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   return (
@@ -22,6 +23,7 @@ export const SimpleBookClass = ({
         Confirm: {getHora(hora)}
       </Text>
       <Button
+        disabled={disabled}
         appearance="outline"
         status={bookingFlag ? 'danger' : 'primary'}
         style={styles.inscriptionBtn}

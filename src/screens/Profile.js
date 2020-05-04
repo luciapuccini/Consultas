@@ -171,7 +171,7 @@ export const Profile = ({ navigation }) => {
                 appearance="ghost"
                 status="primary"
                 onPress={() => setOnPasswordEdit(true)}>
-                Edit Password{' '}
+                Edit Password
               </Button>
               <EditPasswordModal
                 visible={onPasswordEdit}

@@ -1,10 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Layout } from '@ui-kitten/components';
+import { Layout } from '@ui-kitten/components';
 
 import moment from 'moment';
 import _ from 'underscore';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { getToken } from '../utils/authHelper';
 import { getHora } from '../utils/functions';
@@ -12,10 +11,15 @@ import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
 import { TurnosTable } from '../components/TurnosTable';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export const ClassDetail = ({ route, navigation }) => {
-  const { hasSingleTurnos, id, initTime, professor } = route.params.clase;
+  const {
+    hasSingleTurnos,
+    id,
+    initTime,
+    professor,
+    status,
+  } = route.params.clase;
 
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
@@ -25,6 +29,7 @@ export const ClassDetail = ({ route, navigation }) => {
   const [loading, setLoading] = React.useState(true);
 
   const canShowTurnos = !hasSingleTurnos && turnos.length > 1; // doble innecesario
+  const isLive = status === 'En curso';
 
   const checkInscription = (userInscriptions) => {
     userInscriptions.forEach((userInsc) => {
@@ -62,10 +67,11 @@ export const ClassDetail = ({ route, navigation }) => {
 
   const handleConfirm = (index) => {
     setIndex(index);
-    onSubmit();
+    // onSubmit();
   };
 
   const onSubmit = () => {
+    console.log(index, turnos);
     const sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
 
     if (bookingFlag) {
@@ -102,6 +108,8 @@ export const ClassDetail = ({ route, navigation }) => {
               turnos={turnos}
               bookingFlag={bookingFlag}
               handleConfirm={handleConfirm}
+              onSubmit={onSubmit}
+              disabled={isLive}
             />
           ) : (
             <SimpleBookClass
@@ -109,6 +117,7 @@ export const ClassDetail = ({ route, navigation }) => {
               onSubmit={onSubmit}
               hora={initTime}
               handleConfirm={handleConfirm}
+              disabled={isLive}
             />
           )}
         </View>

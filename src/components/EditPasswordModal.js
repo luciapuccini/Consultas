@@ -2,17 +2,37 @@ import React, { useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, Card, Modal, Text, Input, Icon } from '@ui-kitten/components';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { getToken } from '../utils/authHelper';
+import { Context } from '../context/AuthContext';
 
 export const EditPasswordModal = ({ setVisible, visible }) => {
+  const { signout } = React.useContext(Context);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(false);
-  //TODO: ENDPOINT
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     const body = { password, newPassword };
     if (newPassword === confirmPassword) {
-      console.log('HANDLE SUBMIT', body);
+      const token = await getToken();
+      const response = await fetch(
+        'http://181.164.121.14:25565/users/modifyPassword',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        },
+      );
+      const json = await response.json();
+      if (json.message == 'Password updated') {
+        signout();
+      } else {
+        setError(json.message);
+      }
     } else {
       setError('Contraseñas no coinciden ');
     }
