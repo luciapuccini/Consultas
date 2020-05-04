@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'underscore';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { SubjectList } from '../components/SubjectList';
 import { SearchBox } from '../components/SearchBox';
 import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
@@ -8,6 +8,8 @@ import { CustomSpinner } from '../components/CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { ProfessorList } from '../components/ProfessorList';
 import { getToken } from '../utils/authHelper';
+import { View } from 'native-base';
+
 // import AsyncStorage from '@react-native-community/async-storage';
 
 export const Student = ({ user }) => {
@@ -90,11 +92,8 @@ export const Student = ({ user }) => {
             )}
           </Layout>
         </Tab>
-
         <Tab title="PROFES">
-          <Layout style={styles.tabContainer}>
-            <ProfessorList professors={resultProfessors} />
-          </Layout>
+          <ProfessorList professors={resultProfessors} />
         </Tab>
       </TabView>
     </Layout>
@@ -103,7 +102,6 @@ export const Student = ({ user }) => {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    // flex: 1,
   },
 });
