@@ -16,10 +16,10 @@ export const Classes = ({ navigation, route }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   React.useEffect(() => {
-    const { subjectId } = route.params.subject;
     // http://181.164.121.14:25565/subejcts/findClasses/id
     // http://www.mocky.io/v2/5e9d222930000022cb0a80fd
     const fetchClasses = async () => {
+      const { subjectId } = route.params.subject;
       const token = await getToken();
       fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
         // fetch('http://www.mocky.io/v2/5e9fcd072d00005300cb7d08', {
@@ -36,6 +36,9 @@ export const Classes = ({ navigation, route }) => {
 
     if (route.params?.subject) {
       fetchClasses();
+    } else if (route.params.bookings) {
+      console.log(route.params.bookings);
+      setClasses(route.params.bookings);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

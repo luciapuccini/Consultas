@@ -21,12 +21,13 @@ export const Profile = ({ navigation }) => {
   const [loading, setLoading] = React.useState(true);
   const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
   const [passwordPresent, setPasswordPresent] = React.useState(true);
+  const [inscripciones, setInscripciones] = React.useState(null);
 
   React.useEffect(() => {
     const fetchUser = async () => {
       const token = await getToken();
       try {
-        //FIXME:'http://181.164.121.14:25565/users/id (????',
+        //TODO: no books returned
         const response = await fetch(
           `http://181.164.121.14:25565/users/getUser`,
           {
@@ -38,8 +39,10 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
-        const { name, email, legajo } = json;
+        const { name, email, legajo, books } = json;
+        console.log('BOOKS', json);
         setUser({ name, email, legajo });
+        setInscripciones(books);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -180,7 +183,9 @@ export const Profile = ({ navigation }) => {
 
               <Button
                 appearance="ghost"
-                onPress={() => navigation.navigate('Home')}>
+                onPress={() =>
+                  navigation.navigate('Classes', { bookings: inscripciones })
+                }>
                 Mis Inscripciones
               </Button>
             </View>
