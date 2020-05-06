@@ -4,9 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
+import _ from 'underscore';
+
 import { RootStack, AuthStack } from './src/Routes';
 import { Context, Provider } from './src/context/AuthContext';
-import _ from 'underscore';
+import { ThemeContext } from './/src/context/ThemeContext';
 const { Navigator, Screen } = createStackNavigator();
 
 const App = ({ navigation }) => {
@@ -15,6 +17,7 @@ const App = ({ navigation }) => {
     restore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <NavigationContainer>
       <Navigator initialRouteName="SingIn">
@@ -37,13 +40,23 @@ const App = ({ navigation }) => {
 };
 
 const AppWrapper = () => {
+  const [theme, setTheme] = React.useState('light');
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+  };
   return (
-    <Provider>
+    <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <App />
-      </ApplicationProvider>
-    </Provider>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <Provider>
+          <ApplicationProvider {...eva} theme={eva[theme]}>
+            <App />
+          </ApplicationProvider>
+        </Provider>
+      </ThemeContext.Provider>
+    </>
   );
 };
 

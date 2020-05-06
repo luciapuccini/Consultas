@@ -2,16 +2,20 @@ import React from 'react';
 import { Image, View, TouchableOpacity } from 'react-native';
 import { Card, Text, Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
-// import { Icon } from 'native-base';
+import { ThemeContext } from '../context/ThemeContext';
 import { getToken } from '../utils/authHelper';
+
 const subjectPlaceholder = require('../assets/java.png');
+
 const findSubjectImage = (subjectName) => {
-  // const image = require(`../assets/${subjectName}.png`);
   return subjectPlaceholder;
 };
 
 export const SubjectCard = ({ subject }) => {
   const [notification, setNotification] = React.useState(subject.follows);
+  const themeContext = React.useContext(ThemeContext);
+  const isDark = themeContext.theme !== 'light' ? true : false;
+  const headerCardStyle = { backgroundColor: isDark ? '#1a2238' : '#E3F2FD' };
   const navigation = useNavigation();
   const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
 
@@ -66,7 +70,7 @@ export const SubjectCard = ({ subject }) => {
 
   const Header = () => {
     return (
-      <View style={styles.subjectCardHeaderStyle}>
+      <View style={[styles.subjectCardHeaderStyle, headerCardStyle]}>
         <View style={{ width: '80%' }}>
           <Text category="h6">{name}</Text>
         </View>
@@ -84,7 +88,7 @@ export const SubjectCard = ({ subject }) => {
   };
 
   return (
-    <Card header={Header} style={styles.subjectCardStyle}>
+    <Card header={Header} style={[styles.subjectCardStyle, headerCardStyle]}>
       <TouchableOpacity onPress={goToClasses}>
         <Image
           source={findSubjectImage(image)}
@@ -101,7 +105,6 @@ const styles = {
     marginHorizontal: 30,
     marginVertical: 14,
     flex: 1,
-    backgroundColor: '#E3F2FD',
   },
   subjectImageStyle: {
     height: 200,

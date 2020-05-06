@@ -13,7 +13,7 @@ import {
 } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
 import _ from 'underscore';
-import { getHora } from '../utils/functions';
+import { getHora, getFecha } from '../utils/functions';
 
 const chatImage = require('../assets/chat.png');
 const placeHolder = require('../assets/rick.jpg');
@@ -208,7 +208,7 @@ const SubjectItem = ({ subject }) => {
           return (
             <MenuItem
               style={styles.row}
-              title={getHora(clase.date)}
+              title={`${getFecha(clase.date)} ${getHora(clase.date)}`}
               accessoryLeft={() => <StatusIcon status={clase.status} />}
             />
           );

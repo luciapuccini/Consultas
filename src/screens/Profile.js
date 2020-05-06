@@ -7,7 +7,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Fab, Thumbnail, Content, H1 } from 'native-base';
-import { Input, Icon, Text, Divider, Button } from '@ui-kitten/components';
+import {
+  Input,
+  Icon,
+  Text,
+  Divider,
+  Button,
+  Layout,
+} from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
@@ -87,7 +94,7 @@ export const Profile = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
         <>
           <ImageBackground style={styles.loginFlowContainer}>
@@ -132,7 +139,7 @@ export const Profile = ({ navigation }) => {
                 marginVertical: 10,
                 flexDirection: 'row',
               }}>
-              <H1>{user.name}'s Profile</H1>
+              <Text category="h3">{user.name}'s Profile</Text>
               {hasEdited ? <ConfirmButton save={save} /> : null}
             </View>
             <View style={{ margin: 10 }}>
@@ -194,7 +201,7 @@ export const Profile = ({ navigation }) => {
       ) : (
         <CustomSpinner />
       )}
-    </SafeAreaView>
+    </Layout>
   );
 };
 

@@ -9,8 +9,20 @@ import { Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import { Context } from './context/AuthContext';
 import { ClassDetail } from './screens/ClassDetail';
+import { ThemeContext } from './context/ThemeContext';
+import { Toggle } from '@ui-kitten/components';
 
 export const RootStack = ({ navigation }) => {
+  const themeContext = React.useContext(ThemeContext);
+  const isDark = themeContext.theme !== 'light' ? true : false;
+  const darkHeaderConfig = isDark
+    ? {
+        headerStyle: {
+          backgroundColor: '#222b44',
+        },
+        headerTintColor: '#fff',
+      }
+    : null;
   const { Navigator, Screen } = createStackNavigator();
   return (
     <Navigator initialRouteName="Home">
@@ -19,17 +31,32 @@ export const RootStack = ({ navigation }) => {
         component={Home}
         options={{
           headerRight: () => <ProfileIcon />,
+          headerLeft: () => <ThemeSwitch />,
+          ...darkHeaderConfig,
         }}
       />
-      <Screen name="Classes" component={Classes} />
-      <Screen name="Professor" component={Professor} />
-      <Screen name="Class Detail" component={ClassDetail} />
+      <Screen
+        name="Classes"
+        component={Classes}
+        options={{ ...darkHeaderConfig }}
+      />
+      <Screen
+        name="Professor"
+        component={Professor}
+        options={{ ...darkHeaderConfig }}
+      />
+      <Screen
+        name="Class Detail"
+        component={ClassDetail}
+        options={{ ...darkHeaderConfig }}
+      />
 
       <Screen
         name="Profile"
         component={Profile}
         options={{
           headerRight: () => <LogOutIcon />,
+          ...darkHeaderConfig,
         }}
       />
     </Navigator>
@@ -79,6 +106,22 @@ const LogOutIcon = () => {
   );
 };
 
+const ThemeSwitch = () => {
+  const themeContext = React.useContext(ThemeContext);
+  const checked = themeContext.theme !== 'light' ? true : false;
+  return (
+    <Toggle
+      status="primary"
+      checked={checked}
+      onChange={themeContext.toggleTheme}
+      style={Styles.toggleStyle}
+    />
+  );
+};
+
 const Styles = {
   profileIconStyle: { height: 30, width: 30, marginRight: 20 },
+  toggleStyle: {
+    marginLeft: 15,
+  },
 };

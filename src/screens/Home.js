@@ -1,12 +1,13 @@
 import * as React from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Layout } from '@ui-kitten/components';
 
 import { Professor } from './Professor';
 import { Student } from './Student';
-import AsyncStorage from '@react-native-community/async-storage';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState('role_student');
+
   React.useEffect(() => {
     const fetchUser = async () => {
       const token = await AsyncStorage.getItem('TOKEN');
