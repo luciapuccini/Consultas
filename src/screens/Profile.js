@@ -1,12 +1,11 @@
 import React from 'react';
 import {
-  SafeAreaView,
   View,
   ImageBackground,
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import { Fab, Thumbnail, Content, H1 } from 'native-base';
+import { Fab, Thumbnail, Content } from 'native-base';
 import {
   Input,
   Icon,
@@ -18,7 +17,6 @@ import {
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
-import _ from 'underscore';
 
 const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
@@ -27,7 +25,6 @@ export const Profile = ({ navigation }) => {
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
-  const [passwordPresent, setPasswordPresent] = React.useState(true);
   const [inscripciones, setInscripciones] = React.useState(null);
 
   React.useEffect(() => {
@@ -69,7 +66,6 @@ export const Profile = ({ navigation }) => {
       const token = await getToken();
       //WARNING: NO RESPONSE
 
-      console.log('SAVE', user);
       try {
         //'http://181.164.121.14:25565/users/modify',
         const response = await fetch(

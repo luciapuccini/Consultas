@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Dimensions } from 'react-native';
-import { ListItem, Text } from 'native-base';
+import { ListItem } from 'native-base';
+import { Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from '../context/ThemeContext';
 import { _ } from 'underscore';
 
 export const ProfessorList = ({ professors }) => {
   const navigation = useNavigation();
   const [sortedProfes, setSortedProfes] = useState([]);
+  const themeContext = React.useContext(ThemeContext);
+  const isDark = themeContext.theme !== 'light' ? true : false;
+  const headerListStyle = { backgroundColor: isDark ? '#1a2238' : '#E3F2FD' };
+  const textStyle = { color: isDark ? '#fff' : '#000' };
   useEffect(() => {
     setSortedProfes(professors.sort());
   }, [professors]);
@@ -58,8 +64,8 @@ export const ProfessorList = ({ professors }) => {
         <View>
           {!_.isEmpty(sublista) ? (
             <>
-              <ListItem itemDivider>
-                <Text>{l}</Text>
+              <ListItem itemDivider style={{ ...headerListStyle }}>
+                <Text style={{ ...textStyle }}>{l}</Text>
               </ListItem>
               {sublista.map((subProfe, index) => (
                 <ListItem
@@ -68,7 +74,7 @@ export const ProfessorList = ({ professors }) => {
                       professor: sortedProfes[index],
                     })
                   }>
-                  <Text>{subProfe}</Text>
+                  <Text style={{ ...textStyle }}>{subProfe}</Text>
                 </ListItem>
               ))}
             </>
