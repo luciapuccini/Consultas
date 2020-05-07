@@ -2,7 +2,7 @@ import * as React from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Layout } from '@ui-kitten/components';
 
-import { Professor } from './Professor';
+import { ProfessorHome } from '../components/ProfessorHome';
 import { Student } from './Student';
 
 export const Home = ({ navigation }) => {
@@ -28,7 +28,8 @@ export const Home = ({ navigation }) => {
   }, []);
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {user.role === 'role_professor' ? <Professor /> : <Student user={user} />}
+      {/* WARNING TEMP user.role === 'role_professor' */}
+      {true ? <ProfessorHome /> : <Student user={user} />}
     </Layout>
   );
 };
