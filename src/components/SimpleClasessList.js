@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
 import { CustomSpinner } from './CustomSpinner';
-import { NextClassCard } from './NextClassCard';
+import { SimpleClassCard } from './SimpleClassCard';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -107,8 +107,7 @@ const SimpleClasessList = ({ subject, manager }) => {
       ) : (
         <ScrollView>
           {results.map((clase) => {
-            console.log('cuantas', clase.id);
-            return <NextClassCard clase={clase} subject={subject} />;
+            return <SimpleClassCard clase={clase} subject={subject} />;
           })}
         </ScrollView>
       )}

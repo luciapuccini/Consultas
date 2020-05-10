@@ -19,7 +19,6 @@ export const SubjectCard = ({ subject, professor }) => {
   const isDark = themeContext.theme !== 'light' ? true : false;
   const headerCardStyle = { backgroundColor: isDark ? '#1a2238' : '#E3F2FD' };
   const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
-
   const { subjectId, name, image } = subject;
 
   const onNotificationChange = async () => {
@@ -74,11 +73,13 @@ export const SubjectCard = ({ subject, professor }) => {
         </View>
         <View>
           <TouchableOpacity onPress={onNotificationChange}>
-            <Icon
-              style={styles.bellSize}
-              name={notificationIcon} //Disable for profe
-              fill="#8F9BB3"
-            />
+            {!professor && (
+              <Icon
+                style={styles.bellSize}
+                name={notificationIcon}
+                fill="#8F9BB3"
+              />
+            )}
           </TouchableOpacity>
         </View>
       </View>

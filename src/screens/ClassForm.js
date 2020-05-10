@@ -13,7 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
-import { getHora, getFecha } from '../utils/functions';
+import { getHora, getFecha, asMinutes } from '../utils/functions';
 
 export const ClassForm = ({ route }) => {
   const { subjectId } = route.params;
@@ -33,13 +33,17 @@ export const ClassForm = ({ route }) => {
   };
 
   const addClase = async () => {
+    const duracion = hasSingleTurnos
+      ? { durationInMinutes: duration }
+      : { turnoDuration: duration };
+    const hasTurnos = !hasSingleTurnos ? { cantidadTurnos } : null;
     const body = {
       subjectId,
       initTime: date,
-      duration,
+      duracion,
       hasSingleTurnos,
-      cantidadTurnos,
       isRegular,
+      hasTurnos,
     };
     console.log('CREO TURNO', body);
     const token = await getToken();
@@ -68,7 +72,11 @@ export const ClassForm = ({ route }) => {
       <Button appearance="outline" onPress={openTimePicker}>
         Elegir Hora de Inicio
       </Button>
-      <Input label="Duracion" onChangeText={setDuration} />
+      <Input
+        label="Duracion"
+        onChangeText={(text) => setDuration(asMinutes(text))}
+        keyboardType="numeric"
+      />
       <CheckBox
         checked={hasSingleTurnos}
         onChange={(nextChecked) => setHasSingleTurnos(nextChecked)}>

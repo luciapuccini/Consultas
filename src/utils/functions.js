@@ -7,3 +7,8 @@ export const getHora = (fecha) => {
 export const getFecha = (fecha) => {
   return moment(fecha).locale('es').format('ll');
 };
+export const asMinutes = (text) => {
+  const time = parseInt(text);
+  const minutes = moment.duration(time, 'hours').asMinutes();
+  return minutes;
+};
