@@ -6,13 +6,12 @@ import { ProfessorHome } from '../components/ProfessorHome';
 import { Student } from './Student';
 
 export const Home = ({ navigation }) => {
-  const [user, setUser] = React.useState('role_student');
+  const [user, setUser] = React.useState('ROLE_STUDENT');
 
   React.useEffect(() => {
     const fetchUser = async () => {
       const token = await AsyncStorage.getItem('TOKEN');
       fetch(`http://181.164.121.14:25565/users/getUser`, {
-        // fetch(`http://www.mocky.io/v2/5ea4bb583000006e00ce2dc2`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,8 +27,11 @@ export const Home = ({ navigation }) => {
   }, []);
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {/* WARNING TEMP user.role === 'role_professor' */}
-      {true ? <ProfessorHome /> : <Student user={user} />}
+      {user.role === 'ROLE_PROFESSOR' ? (
+        <ProfessorHome user={user} />
+      ) : (
+        <Student user={user} />
+      )}
     </Layout>
   );
 };

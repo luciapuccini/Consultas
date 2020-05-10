@@ -11,12 +11,13 @@ const findSubjectImage = (subjectName) => {
   return subjectPlaceholder;
 };
 
-export const SubjectCard = ({ subject }) => {
+export const SubjectCard = ({ subject, professor }) => {
   const [notification, setNotification] = React.useState(subject.follows);
   const themeContext = React.useContext(ThemeContext);
+  const navigation = useNavigation();
+
   const isDark = themeContext.theme !== 'light' ? true : false;
   const headerCardStyle = { backgroundColor: isDark ? '#1a2238' : '#E3F2FD' };
-  const navigation = useNavigation();
   const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
 
   const { subjectId, name, image } = subject;
@@ -28,9 +29,6 @@ export const SubjectCard = ({ subject }) => {
       id: subjectId,
     };
     if (notification !== true) {
-      // http://www.mocky.io/v2/5e98fd103500005fa1c486f9
-      // http://181.164.121.14:25565/subjects/followSubject
-      // http://181.164.121.14:25565/subjects/unfollowSubject
       try {
         fetch('http://181.164.121.14:25565/subjects/followSubject', {
           method: 'POST',
@@ -64,8 +62,8 @@ export const SubjectCard = ({ subject }) => {
   };
 
   const goToClasses = () => {
-    //TODO: handle class de esa sub
-    navigation.navigate('Classes', { subject });
+    const path = professor ? 'Classes Manager' : 'Classes';
+    navigation.navigate(path, { subject, manager: professor });
   };
 
   const Header = () => {
@@ -78,7 +76,7 @@ export const SubjectCard = ({ subject }) => {
           <TouchableOpacity onPress={onNotificationChange}>
             <Icon
               style={styles.bellSize}
-              name={notificationIcon}
+              name={notificationIcon} //Disable for profe
               fill="#8F9BB3"
             />
           </TouchableOpacity>

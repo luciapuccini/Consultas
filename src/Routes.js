@@ -1,16 +1,18 @@
 import React from 'react';
-import { Home, SignInScreen, SignUpScreen } from './screens';
 import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from './context/ThemeContext';
+import { Toggle, Icon } from '@ui-kitten/components';
+
+import { Home, SignInScreen, SignUpScreen } from './screens';
 import { Classes } from './screens/Classes';
 import { Professor } from './screens/Professor';
 import { Profile } from './screens/Profile';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Icon } from '@ui-kitten/components';
-import { useNavigation } from '@react-navigation/native';
 import { Context } from './context/AuthContext';
 import { ClassDetail } from './screens/ClassDetail';
-import { ThemeContext } from './context/ThemeContext';
-import { Toggle } from '@ui-kitten/components';
+import { ClassesManager } from './screens/ClassesManager';
+import { ClassForm } from './screens/ClassForm';
 
 export const RootStack = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -41,8 +43,18 @@ export const RootStack = ({ navigation }) => {
         options={{ ...darkHeaderConfig }}
       />
       <Screen
+        name="Classes Manager"
+        component={ClassesManager}
+        options={{ ...darkHeaderConfig }}
+      />
+      <Screen
         name="Professor"
         component={Professor}
+        options={{ ...darkHeaderConfig }}
+      />
+      <Screen
+        name="Add Class"
+        component={ClassForm}
         options={{ ...darkHeaderConfig }}
       />
       <Screen

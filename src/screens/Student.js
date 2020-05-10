@@ -79,7 +79,7 @@ export const Student = ({ user }) => {
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}>
         <Tab title="SUBJECTS">
-          <Layout style={styles.tabContainer}>
+          <Layout>
             {!_.isEmpty(resultSubjects) ? (
               <SubjectList
                 allSubjects={resultSubjects}
@@ -100,8 +100,4 @@ export const Student = ({ user }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  tabContainer: {
-    // flex: 1,
-  },
-});
+const styles = StyleSheet.create({});
