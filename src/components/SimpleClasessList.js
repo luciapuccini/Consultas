@@ -4,6 +4,7 @@ import { Layout, Icon } from '@ui-kitten/components';
 import { CustomSpinner } from './CustomSpinner';
 import { NextClassCard } from './NextClassCard';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const results = [
   {
@@ -100,39 +101,49 @@ const results = [
 
 const SimpleClasessList = ({ subject, manager }) => {
   return (
-    <Layout level="1">
+    <Layout level="1" style={{ flex: 1 }}>
       {!results ? (
         <CustomSpinner />
       ) : (
-        results.map((clase) => {
-          return <NextClassCard clase={clase} subject={subject} />;
-        })
+        <ScrollView>
+          {results.map((clase) => {
+            console.log('cuantas', clase.id);
+            return <NextClassCard clase={clase} subject={subject} />;
+          })}
+        </ScrollView>
       )}
-      <AddClass />
+      <AddClass subjectId={subject.subjectId} />
     </Layout>
   );
 };
 
-const AddClass = ({ addClase }) => {
+const AddClass = ({ subjectId }) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Add Class')}>
-      <View style={style.fab}>
-        <Icon name="plus" fill="#fff" />
-      </View>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Add Class', { subjectId })}
+      style={style.touchableStyle}>
+      <Icon name="plus" fill="#fff" style={style.FloatingButtonStyle} />
     </TouchableOpacity>
   );
 };
 
 const style = {
-  fab: {
-    height: 60,
-    width: 60,
+  touchableStyle: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+  },
+  FloatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 50,
+    height: 50,
     backgroundColor: '#8FD4F2',
-    borderRadius: 30,
-    padding: 5,
-    bottom: 60,
-    alignSelf: 'flex-end',
+    borderRadius: 25,
   },
 };
 export default SimpleClasessList;

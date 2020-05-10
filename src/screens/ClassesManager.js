@@ -9,17 +9,14 @@ import FixedClassesList from '../components/FixedClasessList';
 export const ClassesManager = ({ route }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { subject, manager } = route.params;
-  console.log(manager, 'es?');
   return (
-    <Layout level="1">
+    <Layout level="1" style={{ flex: 1 }}>
       <TabView
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 10, flex: 1 }}
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}>
         <Tab title="Simples">
-          <Layout>
-            <SimpleClassesList subject={subject} manager={manager} />
-          </Layout>
+          <SimpleClassesList subject={subject} manager={manager} />
         </Tab>
         <Tab title="Regulares">
           <FixedClassesList />
