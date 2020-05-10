@@ -48,8 +48,6 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
   const user = { legajo, password, deviceToken };
   try {
     let token;
-    //http://181.164.121.14:25565/users/login
-    //http://www.mocky.io/v2/5e9fce9c2d00002900cb7d10', {
     const res = await fetch('http://181.164.121.14:25565/users/login', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },

@@ -1,116 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
 import { CustomSpinner } from './CustomSpinner';
 import { SimpleClassCard } from './SimpleClassCard';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
+import _ from 'underscore';
+import { ErrorMessage } from './ErrorMessage';
 
-const results = [
-  {
-    endTime: '2020-05-12T18:30:00',
-    hasSingleTurnos: false,
-    id: '2a0abdb070714dd281960650212e8cf2',
-    initTime: '2020-05-12T18:30:00',
-    professor: {
-      email: 'augustoarlt95@gmail.com',
-      id: '1931f41de1fd4cb8affbcf4bc9e9ae79',
-      legajo: '2',
-      mobile: 'secret',
-      name: 'Augusto prof',
-      profileImagePath: null,
-      role: 'ROLE_PROFESSOR',
-      showMobile: false,
-      surname: 'Arlt prof',
-    },
-    status: 'Confirmada',
-  },
-  {
-    endTime: '2020-05-11T15:56:00',
-    hasSingleTurnos: true,
-    id: '8fce149eadfd4e01a04ae457da6dbe85',
-    initTime: '2020-05-11T15:26:00',
-    professor: {
-      email: 'augustoarlt95@gmail.com',
-      id: '1931f41de1fd4cb8affbcf4bc9e9ae79',
-      legajo: '2',
-      mobile: 'secret',
-      name: 'Augusto prof',
-      profileImagePath: null,
-      role: 'ROLE_PROFESSOR',
-      showMobile: false,
-      surname: 'Arlt prof',
-    },
-    status: 'En curso',
-  },
-  {
-    endTime: '2020-05-19T15:56:00',
-    hasSingleTurnos: true,
-    id: 'a715924c2cd647a6aa95b78f248127d0',
-    initTime: '2020-05-19T15:26:00',
-    professor: {
-      email: 'augustoarlt95@gmail.com',
-      id: '1931f41de1fd4cb8affbcf4bc9e9ae79',
-      legajo: '2',
-      mobile: 'secret',
-      name: 'Augusto prof',
-      profileImagePath: null,
-      role: 'ROLE_PROFESSOR',
-      showMobile: false,
-      surname: 'Arlt prof',
-    },
-    status: 'Confirmada',
-  },
-  {
-    endTime: '2020-05-12T18:30:00',
-    hasSingleTurnos: false,
-    id: '2a0abdb070714dd281960650212e8cf2',
-    initTime: '2020-05-12T18:30:00',
-    professor: {
-      email: 'augustoarlt95@gmail.com',
-      id: '1931f41de1fd4cb8affbcf4bc9e9ae79',
-      legajo: '2',
-      mobile: 'secret',
-      name: 'Augusto prof',
-      profileImagePath: null,
-      role: 'ROLE_PROFESSOR',
-      showMobile: false,
-      surname: 'Arlt prof',
-    },
-    status: 'Confirmada',
-  },
-  {
-    endTime: '2020-05-12T18:30:00',
-    hasSingleTurnos: false,
-    id: '2a0abdb070714dd281960650212e8cf2',
-    initTime: '2020-05-12T18:30:00',
-    professor: {
-      email: 'augustoarlt95@gmail.com',
-      id: '1931f41de1fd4cb8affbcf4bc9e9ae79',
-      legajo: '2',
-      mobile: 'secret',
-      name: 'Augusto prof',
-      profileImagePath: null,
-      role: 'ROLE_PROFESSOR',
-      showMobile: false,
-      surname: 'Arlt prof',
-    },
-    status: 'Confirmada',
-  },
-];
+const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-const SimpleClasessList = ({ subject, manager }) => {
+  useEffect(() => {
+    if (_.isEmpty(simpleClasses)) {
+      setError('No Simples to show');
+    } else {
+      setError(false);
+      setLoading(false);
+    }
+  }, [simpleClasses]);
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {!results ? (
+      {loading ? (
         <CustomSpinner />
+      ) : error ? (
+        <ErrorMessage message={error} />
       ) : (
         <ScrollView>
-          {results.map((clase) => {
+          {simpleClasses.map((clase) => {
             return <SimpleClassCard clase={clase} subject={subject} />;
           })}
         </ScrollView>
       )}
+
       <AddClass subjectId={subject.subjectId} />
     </Layout>
   );

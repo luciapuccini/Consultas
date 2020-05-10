@@ -7,7 +7,7 @@ import { SubjectCard } from './SubjectCard';
 
 export const ProfessorHome = ({ user }) => {
   // TODO: Professor flow
-  // Alta clases, Baja, ==> clases/add
+  // clases Baja
   // Alta comentarios, baja
   const [subjects, setSubjects] = useState([]);
   useEffect(() => {
