@@ -17,7 +17,8 @@ import { getHora, getFecha, asMinutes } from '../utils/functions';
 
 export const ClassForm = ({ route }) => {
   const { subjectId } = route.params;
-  const [mode, setMode] = useState(null);
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
 
   const [date, setDate] = useState(new Date());
   const [duration, setDuration] = useState(1);
@@ -25,25 +26,33 @@ export const ClassForm = ({ route }) => {
   const [cantidadTurnos, setCantidadTurnos] = useState(1);
   const [isRegular, setIsRegular] = React.useState(false);
 
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
   const openDatePicker = () => {
-    setMode('date');
+    showMode('date');
   };
   const openTimePicker = () => {
-    setMode('time');
+    showMode('time');
   };
 
   const addClase = async () => {
+    const basicClass = {
+      subjectId,
+      initTime: date,
+      hasSingleTurnos,
+      isRegular,
+    };
     const duracion = hasSingleTurnos
       ? { durationInMinutes: duration }
       : { turnoDuration: duration };
-    const hasTurnos = !hasSingleTurnos ? { cantidadTurnos } : null;
+    const turnos = !hasSingleTurnos ? { cantidadTurnos } : null;
     const body = {
-      subjectId,
-      initTime: date,
-      duracion,
-      hasSingleTurnos,
-      isRegular,
-      hasTurnos,
+      ...basicClass,
+      ...duracion,
+      ...turnos,
     };
     console.log('CREO TURNO', body);
     const token = await getToken();
@@ -104,12 +113,12 @@ export const ClassForm = ({ route }) => {
         Clase Regular
       </CheckBox>
 
-      {mode && (
+      {show && (
         <ModalPicker
-          showMode={mode}
-          setMode={setMode}
+          mode={mode}
           date={date}
           setDate={setDate}
+          setShow={setShow}
         />
       )}
       <Button appearance="primary" onPress={addClase}>
@@ -119,11 +128,11 @@ export const ClassForm = ({ route }) => {
   );
 };
 
-const ModalPicker = ({ showMode, setMode, date, setDate }) => {
+const ModalPicker = ({ mode, date, setDate, setShow }) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+    setShow(false);
     setDate(currentDate);
-    setMode(false);
   };
 
   return (
@@ -131,7 +140,7 @@ const ModalPicker = ({ showMode, setMode, date, setDate }) => {
       testID="dateTimePicker"
       timeZoneOffsetInMinutes={0}
       value={date}
-      mode={showMode}
+      mode={mode}
       is24Hour={true}
       display="default"
       onChange={onChange}
