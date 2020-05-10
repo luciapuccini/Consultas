@@ -21,7 +21,7 @@ export const ClassForm = ({ route }) => {
 
   const [date, setDate] = useState(new Date());
   const [duration, setDuration] = useState(1);
-  const [hasSingleTurnos, setHasSingleTurnos] = React.useState(true);
+  const [hasSingleTurnos, setHasSingleTurnos] = React.useState(false);
   const [cantidadTurnos, setCantidadTurnos] = useState(1);
   const [isRegular, setIsRegular] = React.useState(false);
 
@@ -63,20 +63,36 @@ export const ClassForm = ({ route }) => {
   };
   return (
     <Layout level="1" style={styles.layout}>
-      <Text category="h6">
-        Selecione fecha: {getFecha(date)} {getHora(date)}
+      <Text category="h5">
+        Selecione fecha: {'\n'}
+        {getFecha(date)} {getHora(date)}
       </Text>
-      <Button appearance="outline" onPress={openDatePicker}>
-        Elegir Fecha
-      </Button>
-      <Button appearance="outline" onPress={openTimePicker}>
-        Elegir Hora de Inicio
-      </Button>
+      <View style={styles.dateRow}>
+        <Button
+          style={styles.pickerStyle}
+          appearance="ghost"
+          accessoryLeft={CalenderIcon}
+          onPress={openDatePicker}
+        />
+        <Button
+          style={styles.pickerStyle}
+          appearance="ghost"
+          onPress={openTimePicker}
+          accessoryLeft={ClockIcon}
+        />
+      </View>
       <Input
         label="Duracion"
         onChangeText={(text) => setDuration(asMinutes(text))}
         keyboardType="numeric"
       />
+      {!hasSingleTurnos && (
+        <Input
+          label="Cantidad de Turnos"
+          caption="Nosotros asignaremos una duracion a cada turno"
+          onChangeText={setCantidadTurnos}
+        />
+      )}
       <CheckBox
         checked={hasSingleTurnos}
         onChange={(nextChecked) => setHasSingleTurnos(nextChecked)}>
@@ -87,13 +103,7 @@ export const ClassForm = ({ route }) => {
         onChange={(nextChecked) => setIsRegular(nextChecked)}>
         Clase Regular
       </CheckBox>
-      {!hasSingleTurnos && (
-        <Input
-          label="Cantidad de Turnos"
-          caption="Nosotros asignaremos una duracion a cada turno"
-          onChangeText={setCantidadTurnos}
-        />
-      )}
+
       {mode && (
         <ModalPicker
           showMode={mode}
@@ -135,4 +145,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     padding: 15,
   },
+  pickerStyle: {
+    height: 30,
+    width: 30,
+    marginRight: 10,
+  },
+  dateRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
 });
+
+const CalenderIcon = (props) => (
+  <Icon {...props} style={styles.pickerStyle} fill="#4169E1" name="calendar" />
+);
+const ClockIcon = (props) => (
+  <Icon {...props} style={styles.pickerStyle} fill="#4169E1" name="clock" />
+);
