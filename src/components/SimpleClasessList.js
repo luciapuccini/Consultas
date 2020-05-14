@@ -30,7 +30,13 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
       ) : (
         <ScrollView>
           {simpleClasses.map((clase) => {
-            return <SimpleClassCard clase={clase} subject={subject} />;
+            return (
+              <SimpleClassCard
+                clase={clase}
+                subject={subject}
+                manager={manager}
+              />
+            );
           })}
         </ScrollView>
       )}

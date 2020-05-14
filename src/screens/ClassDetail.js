@@ -20,6 +20,7 @@ export const ClassDetail = ({ route, navigation }) => {
     professor,
     status,
   } = route.params.clase;
+  const { manager } = route.params;
 
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
@@ -110,6 +111,7 @@ export const ClassDetail = ({ route, navigation }) => {
               handleConfirm={handleConfirm}
               onSubmit={onSubmit}
               disabled={isLive}
+              manager={manager}
             />
           ) : (
             <SimpleBookClass
@@ -118,6 +120,8 @@ export const ClassDetail = ({ route, navigation }) => {
               hora={initTime}
               handleConfirm={handleConfirm}
               disabled={isLive}
+              manager={manager}
+              id={id}
             />
           )}
         </View>

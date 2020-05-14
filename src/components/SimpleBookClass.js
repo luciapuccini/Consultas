@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, Button, Modal, Card, Icon } from '@ui-kitten/components';
+import { Text, Button, Modal, Card, Icon, Input } from '@ui-kitten/components';
 import { TouchableOpacity, View } from 'react-native';
 import { getHora } from '../utils/functions';
+import { getToken } from '../utils/authHelper';
 
 export const SimpleBookClass = ({
   hora,
@@ -9,8 +10,32 @@ export const SimpleBookClass = ({
   bookingFlag,
   handleConfirm,
   disabled,
+  manager,
+  id,
 }) => {
+  const [comment, setComment] = React.useState('');
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
+  const addNote = async () => {
+    const body = { id, comment };
+    const token = await getToken();
+    console.log('comment', body);
+
+    fetch(`http://181.164.121.14:25565/clases/addComment`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json.message);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <View
       style={{
@@ -19,17 +44,38 @@ export const SimpleBookClass = ({
         alignItems: 'center',
         margin: 10,
       }}>
-      <Text style={{ marginLeft: 10 }} category="s1">
-        Confirm: {getHora(hora)}
-      </Text>
-      <Button
-        disabled={disabled}
-        appearance="outline"
-        status={bookingFlag ? 'danger' : 'primary'}
-        style={styles.inscriptionBtn}
-        onPress={onSubmit}>
-        {btnText}
-      </Button>
+      {!manager ? (
+        <>
+          <Text style={{ marginLeft: 10 }} category="s1">
+            Confirm: {getHora(hora)}
+          </Text>
+          <Button
+            disabled={disabled}
+            appearance="outline"
+            status={bookingFlag ? 'danger' : 'primary'}
+            style={styles.inscriptionBtn}
+            onPress={onSubmit}>
+            {btnText}
+          </Button>
+        </>
+      ) : (
+        <View
+          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <Input
+            label="Notas"
+            placeholder={comment}
+            onChangeText={setComment}
+            value={comment}
+          />
+          <Button
+            appearance="outline"
+            status="primary"
+            style={styles.inscriptionBtn}
+            onPress={addNote}>
+            Add notes
+          </Button>
+        </View>
+      )}
     </View>
   );
 };

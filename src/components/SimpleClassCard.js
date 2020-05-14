@@ -8,7 +8,7 @@ import 'moment/locale/es';
 const handleDate = (date) => {
   return moment(date).locale('es').format('lll');
 };
-export const SimpleClassCard = ({ clase, subject }) => {
+export const SimpleClassCard = ({ clase, subject, manager }) => {
   const [toDelete, setToDelete] = useState(false);
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
@@ -18,7 +18,7 @@ export const SimpleClassCard = ({ clase, subject }) => {
   return (
     <Card style={styles.space}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Class Detail', { clase })}>
+        onPress={() => navigation.navigate('Class Detail', { clase, manager })}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={styles.cardStyle}>
             <Text category="h6">{subject.name}</Text>
