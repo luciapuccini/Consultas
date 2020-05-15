@@ -5,6 +5,7 @@ import {
   MenuItem,
   Button,
   ScrollView,
+  Input,
 } from '@ui-kitten/components';
 import { View } from 'react-native';
 import { getHora } from '../utils/functions';

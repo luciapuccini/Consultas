@@ -7,10 +7,39 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import _ from 'underscore';
 import { ErrorMessage } from './ErrorMessage';
+import { getToken } from '../utils/authHelper';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [toDelete, setToDelete] = useState([]);
+
+  const deleteClasses = async () => {
+    const token = await getToken();
+    try {
+      fetch(`http://181.164.121.14:25565/clases/cancelClass`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(toDelete),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data.message));
+    } catch (error) {
+      console.log('Upss');
+    }
+  };
+
+  const DeleteClass = () => {
+    return (
+      <TouchableOpacity
+        style={style.touchableDeleteStyle}
+        onPress={deleteClasses}>
+        <Icon name="close" fill="#fff" style={style.FABDeleteStyle} />
+      </TouchableOpacity>
+    );
+  };
 
   useEffect(() => {
     if (_.isEmpty(simpleClasses)) {
@@ -35,6 +64,8 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
                 clase={clase}
                 subject={subject}
                 manager={manager}
+                toDelete={toDelete}
+                setToDelete={setToDelete}
               />
             );
           })}
@@ -42,6 +73,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
       )}
 
       <AddClass subjectId={subject.subjectId} />
+      <DeleteClass subjectId={subject.subjectId} />
     </Layout>
   );
 };
@@ -67,11 +99,27 @@ const style = {
     right: 30,
     bottom: 30,
   },
+  touchableDeleteStyle: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: 30,
+    bottom: 30,
+  },
   FloatingButtonStyle: {
     resizeMode: 'contain',
     width: 50,
     height: 50,
     backgroundColor: '#8FD4F2',
+    borderRadius: 25,
+  },
+  FABDeleteStyle: {
+    resizeMode: 'contain',
+    width: 50,
+    height: 50,
+    backgroundColor: '#E53935',
     borderRadius: 25,
   },
 };

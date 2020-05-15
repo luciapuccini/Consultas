@@ -8,8 +8,14 @@ import 'moment/locale/es';
 const handleDate = (date) => {
   return moment(date).locale('es').format('lll');
 };
-export const SimpleClassCard = ({ clase, subject, manager }) => {
-  const [toDelete, setToDelete] = useState(false);
+export const SimpleClassCard = ({
+  clase,
+  subject,
+  manager,
+  toDelete,
+  setToDelete,
+}) => {
+  console.log('toDelete', toDelete);
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
   const statusColor = !isLive ? '#FFCA28' : '#00C853';
@@ -24,7 +30,14 @@ export const SimpleClassCard = ({ clase, subject, manager }) => {
             <Text category="h6">{subject.name}</Text>
             <Text style={{ fontSize: 14 }}>{handleDate(clase.initTime)}</Text>
           </View>
-          <CheckBox checked={toDelete} onChange={setToDelete} />
+          <CheckBox
+            checked={toDelete.includes(clase.id)}
+            onChange={() =>
+              toDelete.includes(clase.id)
+                ? setToDelete(toDelete.splice(clase.id))
+                : setToDelete([...toDelete, clase.id])
+            }
+          />
         </View>
 
         <View style={styles.textRowStyle}>
