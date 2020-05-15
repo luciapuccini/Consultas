@@ -112,6 +112,7 @@ export const ClassDetail = ({ route, navigation }) => {
               onSubmit={onSubmit}
               disabled={isLive}
               manager={manager}
+              id={id}
             />
           ) : (
             <SimpleBookClass
