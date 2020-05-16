@@ -18,9 +18,9 @@ export const SimpleClassCard = ({
   console.log('toDelete', toDelete);
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
-  const statusColor = !isLive ? '#FFCA28' : '#00C853';
-  // add btn delete , add y checkbox c/u
-  //
+  const cancel = clase.status === 'Cancelada';
+  const statusColor = isLive ? '#42A5F5' : cancel ? '#E53935' : '#AEEA00';
+
   return (
     <Card style={styles.space}>
       <TouchableOpacity
@@ -30,14 +30,16 @@ export const SimpleClassCard = ({
             <Text category="h6">{subject.name}</Text>
             <Text style={{ fontSize: 14 }}>{handleDate(clase.initTime)}</Text>
           </View>
-          <CheckBox
-            checked={toDelete.includes(clase.id)}
-            onChange={() =>
-              toDelete.includes(clase.id)
-                ? setToDelete(toDelete.splice(clase.id))
-                : setToDelete([...toDelete, clase.id])
-            }
-          />
+          {!cancel && (
+            <CheckBox
+              checked={toDelete.includes(clase.id)}
+              onChange={() =>
+                toDelete.includes(clase.id)
+                  ? setToDelete(toDelete.splice(clase.id))
+                  : setToDelete([...toDelete, clase.id])
+              }
+            />
+          )}
         </View>
 
         <View style={styles.textRowStyle}>

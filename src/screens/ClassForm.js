@@ -91,9 +91,10 @@ export const ClassForm = ({ route }) => {
         />
       </View>
       <Input
-        label="Duracion"
-        onChangeText={(text) => setDuration(asMinutes(text))}
+        label={hasSingleTurnos ? 'Duracion' : 'Duracion de cada turno'}
+        onChangeText={setDuration}
         keyboardType="numeric"
+        caption="en minutos"
       />
       {!hasSingleTurnos && (
         <Input

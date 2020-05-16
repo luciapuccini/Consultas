@@ -9,6 +9,6 @@ export const getFecha = (fecha) => {
 };
 export const asMinutes = (text) => {
   const time = parseInt(text);
-  const minutes = moment.duration(time, 'hours').asMinutes();
-  return minutes;
+  const hours = moment.duration(time, 'hours');
+  return hours;
 };

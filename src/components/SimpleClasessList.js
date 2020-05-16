@@ -17,17 +17,18 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
   const deleteClasses = async () => {
     const token = await getToken();
     try {
-      fetch(`http://181.164.121.14:25565/clases/cancelClass`, {
+      fetch('http://181.164.121.14:25565/clases/cancelClass', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(toDelete),
+        body: JSON.stringify({ classesToRemove: toDelete }),
       })
         .then((res) => res.json())
-        .then((data) => console.log(data.message));
+        .then((data) => console.log(data));
     } catch (error) {
-      console.log('Upss');
+      console.log('Upss', error);
     }
   };
 
