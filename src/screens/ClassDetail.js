@@ -1,12 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Layout } from '@ui-kitten/components';
+import { View, TouchableOpacity, Alert } from 'react-native';
+import { Layout, Icon } from '@ui-kitten/components';
 
 import moment from 'moment';
 import _ from 'underscore';
 
 import { getToken } from '../utils/authHelper';
-import { getHora } from '../utils/functions';
+import { getHora, timeToStart } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -26,11 +26,11 @@ export const ClassDetail = ({ route, navigation }) => {
   const [turnos, setTurnos] = React.useState([]);
   const [index, setIndex] = React.useState(null);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
-
   const [loading, setLoading] = React.useState(true);
 
   const canShowTurnos = !hasSingleTurnos && turnos.length > 1; // doble innecesario
   const isLive = status === 'En curso';
+  const canStart = timeToStart(initTime) < 5;
 
   const checkInscription = (userInscriptions) => {
     userInscriptions.forEach((userInsc) => {
@@ -42,9 +42,7 @@ export const ClassDetail = ({ route, navigation }) => {
   React.useEffect(() => {
     const fetchClassData = async () => {
       const token = await getToken();
-
-      //WIP : Comments + Turnos + inscripcioness del alum
-      // fetch(`http://www.mocky.io/v2/5ea4cb993000005900ce2dcf`, {
+      //FIXME:  cambiar --> student en cada turno
       fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
         method: 'GET',
         headers: {
@@ -125,6 +123,7 @@ export const ClassDetail = ({ route, navigation }) => {
               id={id}
             />
           )}
+          {canStart && <StartClass id={id} />}
         </View>
       ) : (
         <CustomSpinner />
@@ -175,4 +174,64 @@ const unsubscribeTurno = async (idClass, startTimeTurno) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+const onstartClass = async (id, setStarted) => {
+  const token = await getToken();
+
+  try {
+    fetch(`http://181.164.121.14:25565/clases/startClass/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.message === 'success') {
+          setStarted(true);
+          Alert.alert(
+            'Class Started',
+            [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+            { cancelable: false },
+          );
+        }
+      });
+  } catch (error) {
+    console.log('Upss', error);
+  }
+};
+
+const StartClass = (id) => {
+  const [started, setStarted] = React.useState(false);
+  const { idleStyle, startedStyle } = style;
+  const startIcon = started ? 'play-circle' : 'play-circle-outline';
+
+  return (
+    <TouchableOpacity
+      style={style.touchableStartStyle}
+      onPress={() => onstartClass(id, setStarted)}>
+      <Icon name={startIcon} fill="#4CAF50" style={idleStyle} />
+    </TouchableOpacity>
+  );
+};
+
+const style = {
+  touchableStartStyle: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: 30,
+    bottom: 30,
+  },
+  idleStyle: {
+    resizeMode: 'contain',
+    width: 80,
+    height: 80,
+    borderRadius: 25,
+  },
 };

@@ -13,7 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
-import { getHora, getFecha, asMinutes } from '../utils/functions';
+import { getHora, getFecha } from '../utils/functions';
 
 export const ClassForm = ({ route }) => {
   const { subjectId } = route.params;
@@ -66,6 +66,7 @@ export const ClassForm = ({ route }) => {
     })
       .then((response) => response.json())
       .then((json) => {
+        //validar no se que trae esto
         console.log('ADD?', json);
       })
       .catch((error) => console.log(error));
