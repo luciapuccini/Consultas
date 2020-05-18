@@ -53,7 +53,7 @@ export const TurnosTable = ({
   };
   return (
     <>
-      <Menu>
+      <Menu style={{ flex: 1, maxHeight: 400 }}>
         {turnos.map((turno) => (
           <MenuItem
             title={getHora(turno.startTime)}
@@ -71,7 +71,7 @@ export const TurnosTable = ({
           margin: 10,
         }}>
         {!manager ? (
-          <>
+          <View>
             <Text style={{ marginLeft: 10 }}>
               Confirm: {getHora(getSelectedTurno())}
             </Text>
@@ -83,10 +83,9 @@ export const TurnosTable = ({
               onPress={() => onSubmit()}>
               {btnText}
             </Button>
-          </>
+          </View>
         ) : (
-          <View
-            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <View style={{ flexDirection: 'column', width: '100%' }}>
             <Input
               label="Notas"
               placeholder={comment}

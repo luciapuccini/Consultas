@@ -6,12 +6,7 @@ import moment from 'moment';
 import _ from 'underscore';
 
 import { getToken } from '../utils/authHelper';
-import {
-  getHora,
-  timeToStart,
-  asArray,
-  getUserLegajo,
-} from '../utils/functions';
+import { getHora, timeToStart, getUserLegajo } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -37,15 +32,11 @@ export const ClassDetail = ({ route, navigation }) => {
   const canStart = timeToStart(initTime) < 5;
 
   const checkUserPresent = async (turnitos) => {
-    // console.log('que carajo', turnitos);
     const legajo = await getUserLegajo();
-    const algo = turnitos.map((turno) => {
-      return turno.students;
-    });
-    // console.log('ALGO', algo);
-    algo.forEach((student) => {
-      console.log(student);
-      if (parseInt(student.legajo) === legajo) setBookingFlag(true);
+    turnitos.forEach((turnito) => {
+      turnito.students.forEach((student) => {
+        if (student.legajo == legajo) setBookingFlag(true);
+      });
     });
   };
 
@@ -62,7 +53,6 @@ export const ClassDetail = ({ route, navigation }) => {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log('imprimo todo', json.turnos);
           setTurnos(json.turnos); //FIXME: starTime -> turnoTime
           setComments(json.comments);
           setLoading(false);
@@ -146,8 +136,6 @@ export const ClassDetail = ({ route, navigation }) => {
 const subscribeTurno = async (idClass, startTimeTurno) => {
   const token = await getToken();
   const turno = { consultaId: idClass, initTime: startTimeTurno };
-  console.log('SUBSCRIBITEE', turno);
-
   fetch(`http://181.164.121.14:25565/clases/subscribe`, {
     method: 'post',
     headers: {
@@ -195,27 +183,25 @@ const onstartClass = async (id, setStarted) => {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        if (data.message === 'success') {
-          setStarted(true);
-          Alert.alert(
-            'Class Started',
-            [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
-            { cancelable: false },
-          );
-        }
+        setStarted(true);
+        Alert.alert(
+          'Empezando la clase',
+          `${data.message}`,
+          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+          { cancelable: false },
+        );
       });
   } catch (error) {
     console.log('Upss', error);
   }
 };
 
-const StartClass = (id) => {
+const StartClass = ({ id }) => {
   const [started, setStarted] = React.useState(false);
   const { idleStyle, startedStyle } = style;
   const startIcon = started ? 'play-circle' : 'play-circle-outline';

@@ -66,7 +66,7 @@ export const ClassForm = ({ route }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        //validar no se que trae esto
+        // fechas que no se agregaron
         console.log('ADD?', json);
       })
       .catch((error) => console.log(error));

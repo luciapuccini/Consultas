@@ -17,9 +17,9 @@ export const SimpleClassCard = ({
 }) => {
   console.log('toDelete', toDelete);
   const navigation = useNavigation();
-  const isLive = clase.status === 'En curso';
+  const isLive = clase.status === 'En Curso';
   const cancel = clase.status === 'Cancelada';
-  const statusColor = isLive ? '#42A5F5' : cancel ? '#E53935' : '#AEEA00';
+  const statusColor = isLive ? '#66BB6A' : cancel ? '#E53935' : '#64B5F6';
 
   return (
     <Card style={styles.space}>
