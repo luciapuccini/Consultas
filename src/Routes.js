@@ -13,6 +13,7 @@ import { Context } from './context/AuthContext';
 import { ClassDetail } from './screens/ClassDetail';
 import { ClassesManager } from './screens/ClassesManager';
 import { ClassForm } from './screens/ClassForm';
+import { SubjectForm } from './screens/SubjectForm';
 
 export const RootStack = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -58,8 +59,8 @@ export const RootStack = ({ navigation }) => {
         options={{ ...darkHeaderConfig }}
       />
       <Screen
-        name="Class Detail"
-        component={ClassDetail}
+        name="Add Subject"
+        component={SubjectForm}
         options={{ ...darkHeaderConfig }}
       />
 

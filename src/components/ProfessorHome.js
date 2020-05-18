@@ -6,9 +6,6 @@ import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
 
 export const ProfessorHome = ({ user }) => {
-  // TODO: Professor flow
-  // clases Baja
-  // Alta comentarios, baja
   const [subjects, setSubjects] = useState([]);
   useEffect(() => {
     const fetchProfessorSubjects = async () => {

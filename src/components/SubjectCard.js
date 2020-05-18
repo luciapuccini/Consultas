@@ -11,7 +11,7 @@ const findSubjectImage = (subjectName) => {
   return subjectPlaceholder;
 };
 
-export const SubjectCard = ({ subject, professor }) => {
+export const SubjectCard = ({ subject, professor, admin }) => {
   const [notification, setNotification] = React.useState(subject.follows);
   const themeContext = React.useContext(ThemeContext);
   const navigation = useNavigation();
@@ -73,11 +73,19 @@ export const SubjectCard = ({ subject, professor }) => {
         </View>
         <View>
           <TouchableOpacity onPress={onNotificationChange}>
-            {!professor && (
+            {!professor && !admin && (
               <Icon
                 style={styles.bellSize}
                 name={notificationIcon}
                 fill="#8F9BB3"
+              />
+            )}
+            {admin && (
+              <Icon
+                style={styles.bellSize}
+                name="trash"
+                fill="#8F9BB3"
+                onPress={() => console.log('TODO: DELETE SUBJECT')}
               />
             )}
           </TouchableOpacity>
