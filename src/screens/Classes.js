@@ -50,7 +50,7 @@ export const Classes = ({ navigation, route }) => {
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!manager && (
-        <SearchBox setSearchTerm={setSearchTerm} placeholder="Professor" />
+        <SearchBox setSearchTerm={setSearchTerm} placeholder="Profesor" />
       )}
       {!results ? (
         <CustomSpinner />

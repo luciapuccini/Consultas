@@ -25,7 +25,6 @@ export const Student = ({ user }) => {
       const token = await getToken();
       try {
         const response = await fetch(
-          // 'http://www.mocky.io/v2/5e9b5df63300005000bf1784',
           'http://181.164.121.14:25565/subjects/findAll',
           {
             method: 'GET',
@@ -44,7 +43,6 @@ export const Student = ({ user }) => {
     };
     const fetchProffesors = async () => {
       const token = await getToken();
-      // fetch('http://www.mocky.io/v2/5ea262b63100006b8f1ef091', {
       fetch('http://181.164.121.14:25565/users/getAllProfessors', {
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +76,7 @@ export const Student = ({ user }) => {
         style={{ marginTop: 10 }}
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}>
-        <Tab title="SUBJECTS">
+        <Tab title="MATERIAS">
           <Layout>
             {!_.isEmpty(resultSubjects) ? (
               <SubjectList
@@ -92,7 +90,7 @@ export const Student = ({ user }) => {
             )}
           </Layout>
         </Tab>
-        <Tab title="PROFES">
+        <Tab title="PROFESORES">
           <ProfessorList professors={resultProfessors} />
         </Tab>
       </TabView>

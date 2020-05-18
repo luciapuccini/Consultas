@@ -4,6 +4,7 @@ import { Layout } from '@ui-kitten/components';
 
 import { ProfessorHome } from '../components/ProfessorHome';
 import { Student } from './Student';
+import { storeUser } from '../utils/functions';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState('ROLE_STUDENT');
@@ -21,6 +22,7 @@ export const Home = ({ navigation }) => {
         .then((res) => res.json())
         .then((data) => {
           setUser(data);
+          storeUser(data);
         });
     };
     fetchUser();

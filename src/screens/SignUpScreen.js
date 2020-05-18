@@ -20,11 +20,11 @@ export const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = React.useState('');
   const [legajo, setLegajo] = React.useState('');
   const [name, setName] = React.useState('');
-  const [phone, setPhone] = React.useState('');
+  const [surname, setSurname] = React.useState('');
   const [error, setError] = React.useState('');
 
   const handleSingUp = async () => {
-    const user = { legajo, name, email, password };
+    const user = { legajo, name, surname, email, password };
     const hasUser =
       !_.isEmpty(legajo) &&
       !_.isEmpty(name) &&
@@ -35,18 +35,17 @@ export const SignUpScreen = ({ navigation }) => {
       console.log('a ver que pasa', data);
       setError(data);
     } else {
-      setError('Complete the fields');
+      setError('Complete los campos');
     }
   };
   return (
     <ImageBackground source={Background} style={loginFlowContainer}>
       <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
-        Create an Account
+        Crear una Cuenta
       </Text>
 
       <View style={[inputView]}>
         <TextInput
-          secureTextEntry
           style={inputText}
           placeholder="Legajo..."
           placeholderTextColor="#003f5c"
@@ -58,9 +57,17 @@ export const SignUpScreen = ({ navigation }) => {
       <View style={[inputView]}>
         <TextInput
           style={inputText}
-          placeholder="Nombre Completo..."
+          placeholder="Nombre..."
           placeholderTextColor="#003f5c"
           onChangeText={setName}
+        />
+      </View>
+      <View style={[inputView]}>
+        <TextInput
+          style={inputText}
+          placeholder="Apellido..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setSurname}
         />
       </View>
       <View style={[inputView]}>
@@ -71,7 +78,7 @@ export const SignUpScreen = ({ navigation }) => {
           onChangeText={setEmail}
         />
       </View>
-
+      {/* TODO: passwords match */}
       <View style={inputView}>
         <TextInput
           secureTextEntry
@@ -81,15 +88,24 @@ export const SignUpScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
       </View>
+      <View style={inputView}>
+        <TextInput
+          secureTextEntry
+          style={inputText}
+          placeholder="Confirme Contraseña..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setPassword}
+        />
+      </View>
 
       {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
 
       <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
-        <Text style={loginText}>Sign Up</Text>
+        <Text style={loginText}>Registrarse</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-        <Text style={loginText}>Already a User?</Text>
+        <Text style={loginText}>Ya esta registrado?</Text>
       </TouchableOpacity>
     </ImageBackground>
   );

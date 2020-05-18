@@ -51,7 +51,6 @@ export const TurnosTable = ({
         console.log(error);
       });
   };
-  console.log('TURNITOS', turnos);
   return (
     <>
       <Menu>

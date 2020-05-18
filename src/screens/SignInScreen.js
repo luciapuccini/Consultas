@@ -77,11 +77,11 @@ export const SignInScreen = ({ navigation }) => {
       </View>
       {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
       <TouchableOpacity style={loginBtn} onPress={handleSingIn}>
-        <Text style={loginText}>Sign In</Text>
+        <Text style={loginText}>Entrar</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-        <Text style={loginText}>Sign Up</Text>
+        <Text style={loginText}>Registrarme</Text>
       </TouchableOpacity>
     </ImageBackground>
   );

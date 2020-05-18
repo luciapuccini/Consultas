@@ -13,7 +13,7 @@ const handleDate = (date) => {
 export const ClassCard = ({ clase, manager }) => {
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
-  const statusColor = !isLive ? '#FFCA28' : '#00C853';
+  const statusColor = isLive ? '#F44336' : '#81C784';
 
   return (
     <Card style={styles.space}>

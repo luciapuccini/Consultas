@@ -1,5 +1,6 @@
 import moment from 'moment';
 import _ from 'underscore';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const getHora = (fecha) => {
   return moment(fecha).locale('es').format('HH:mm');
@@ -23,4 +24,25 @@ export const asArray = (obj) => {
     turnitos.push({ starTime: key, alumnos: value });
   });
   return turnitos;
+};
+
+export const storeUser = async (user) => {
+  try {
+    await AsyncStorage.setItem('LEGAJO', user.legajo);
+  } catch (e) {
+    console.log(e);
+    // saving error
+  }
+};
+
+export const getUserLegajo = async (user) =>
+  await AsyncStorage.getItem('LEGAJO');
+
+export const removeUser = async () => {
+  try {
+    await AsyncStorage.removeItem('LEGAJO');
+  } catch (e) {
+    console.log(e);
+    // saving error
+  }
 };

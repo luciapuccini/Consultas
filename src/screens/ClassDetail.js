@@ -6,7 +6,12 @@ import moment from 'moment';
 import _ from 'underscore';
 
 import { getToken } from '../utils/authHelper';
-import { getHora, timeToStart, asArray } from '../utils/functions';
+import {
+  getHora,
+  timeToStart,
+  asArray,
+  getUserLegajo,
+} from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -31,13 +36,19 @@ export const ClassDetail = ({ route, navigation }) => {
   const isLive = status === 'En curso';
   const canStart = timeToStart(initTime) < 5;
 
-  const checkInscription = (userInscriptions) => {
-    userInscriptions.forEach((userInsc) => {
-      if (_.isEqual(id, userInsc.classId)) {
-        setBookingFlag(true); // esta inscripto
-      }
+  const checkUserPresent = async (turnitos) => {
+    // console.log('que carajo', turnitos);
+    const legajo = await getUserLegajo();
+    const algo = turnitos.map((turno) => {
+      return turno.students;
+    });
+    // console.log('ALGO', algo);
+    algo.forEach((student) => {
+      console.log(student);
+      if (parseInt(student.legajo) === legajo) setBookingFlag(true);
     });
   };
+
   React.useEffect(() => {
     const fetchClassData = async () => {
       const token = await getToken();
@@ -51,11 +62,11 @@ export const ClassDetail = ({ route, navigation }) => {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log('[ detalle data ]', json.turnos);
-          setTurnos(asArray(json.turnos));
+          console.log('imprimo todo', json.turnos);
+          setTurnos(json.turnos); //FIXME: starTime -> turnoTime
           setComments(json.comments);
           setLoading(false);
-          // checkInscription(json.turno); esta re raro estoo
+          checkUserPresent(json.turnos);
         })
         .catch((error) => {
           console.log('[ FAILED ]', error);
@@ -70,15 +81,15 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const onSubmit = () => {
-    console.log(index, turnos);
+    console.log('aca algo esta mal', hasSingleTurnos, turnos);
     const sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
 
     if (bookingFlag) {
       console.log('dessubscribe', sendTurno);
-      unsubscribeTurno(id, sendTurno.turnoPk.startTime);
+      unsubscribeTurno(id, sendTurno.turnoTime);
     } else {
       console.log('subscribe', sendTurno);
-      subscribeTurno(id, sendTurno.turnoPk.startTime);
+      subscribeTurno(id, sendTurno.turnoTime);
     }
     navigation.goBack();
   };
