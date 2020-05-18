@@ -9,7 +9,7 @@ const professorPlaceHolder = require('../assets/rick.jpg');
 
 export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
   const professorImage = professor.profileImagePath || professorPlaceHolder;
-
+  console.log('que llega', comments);
   return (
     <View>
       <ImageBackground
@@ -45,18 +45,19 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
       </ImageBackground>
 
       <Divider />
-      {!_.isEmpty(comments) ? (
+      {!_.isEmpty(comments) && (
         <Card
+          style={{ margin: 10 }}
           header={() => (
             <Text style={styles.notesCard} category="h6">
               Notas
             </Text>
           )}>
-          {comments.map((index) => (
-            <Text>{comments[index].message}</Text>
+          {comments.map((comment) => (
+            <Text>{comment.comment}</Text>
           ))}
         </Card>
-      ) : null}
+      )}
     </View>
   );
 };

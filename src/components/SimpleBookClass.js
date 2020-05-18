@@ -59,12 +59,21 @@ export const SimpleBookClass = ({
         </>
       ) : (
         <View
-          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            justifyContent: 'space-between',
+          }}>
           <Input
             label="Notas"
             placeholder={comment}
             onChangeText={setComment}
             value={comment}
+            size="large"
+            multiline={true}
+            textStyle={{ minHeight: 64 }}
+            accessoryRight={renderIcon}
           />
           <Button
             appearance="outline"
@@ -78,6 +87,19 @@ export const SimpleBookClass = ({
     </View>
   );
 };
+
+const renderIcon = () => (
+  <Icon
+    name="trash-2"
+    fill="#E53935"
+    style={{
+      height: 25,
+      width: 25,
+      bottom: 20,
+    }}
+    onPress={() => console.log('TODO: DELETE NOTES')}
+  />
+);
 
 const styles = {
   inscriptionBtn: {

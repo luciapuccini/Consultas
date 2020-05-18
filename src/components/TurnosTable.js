@@ -72,7 +72,7 @@ export const TurnosTable = ({
           margin: 10,
         }}>
         {!manager ? (
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={{ marginLeft: 10 }}>
               Confirm: {getHora(getSelectedTurno())}
             </Text>
@@ -86,12 +86,19 @@ export const TurnosTable = ({
             </Button>
           </View>
         ) : (
-          <View style={{ flexDirection: 'column', width: '100%' }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              width: '100%',
+            }}>
             <Input
+              textStyle={{ minHeight: 64 }}
               label="Notas"
               placeholder={comment}
               onChangeText={setComment}
               value={comment}
+              multiline={true}
             />
             <Button
               appearance="outline"

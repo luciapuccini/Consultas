@@ -100,7 +100,7 @@ export const ClassDetail = ({ route, navigation }) => {
             fecha={getFecha()}
             hora={getHora(initTime)}
             count={getCount()}
-            notes={comments}
+            comments={comments}
             professor={professor}
           />
           {canShowTurnos ? (
