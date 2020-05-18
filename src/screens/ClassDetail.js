@@ -6,7 +6,7 @@ import moment from 'moment';
 import _ from 'underscore';
 
 import { getToken } from '../utils/authHelper';
-import { getHora, timeToStart } from '../utils/functions';
+import { getHora, timeToStart, asArray } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -21,7 +21,6 @@ export const ClassDetail = ({ route, navigation }) => {
     status,
   } = route.params.clase;
   const { manager } = route.params;
-
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
   const [index, setIndex] = React.useState(null);
@@ -52,10 +51,11 @@ export const ClassDetail = ({ route, navigation }) => {
       })
         .then((response) => response.json())
         .then((json) => {
-          setTurnos(json.turnos);
+          console.log('[ detalle data ]', json.turnos);
+          setTurnos(asArray(json.turnos));
           setComments(json.comments);
           setLoading(false);
-          checkInscription(json.studentBookings);
+          // checkInscription(json.turno); esta re raro estoo
         })
         .catch((error) => {
           console.log('[ FAILED ]', error);
@@ -123,7 +123,7 @@ export const ClassDetail = ({ route, navigation }) => {
               id={id}
             />
           )}
-          {canStart && <StartClass id={id} />}
+          {canStart && manager && <StartClass id={id} />}
         </View>
       ) : (
         <CustomSpinner />

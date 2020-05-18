@@ -52,7 +52,9 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
               Notas
             </Text>
           )}>
-          <Text>{comments[0].message}</Text>
+          {comments.map((index) => (
+            <Text>{comments[index].message}</Text>
+          ))}
         </Card>
       ) : null}
     </View>

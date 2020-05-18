@@ -10,7 +10,7 @@ const profe = require('../assets/rick.jpg');
 const handleDate = (date) => {
   return moment(date).locale('es').format('lll');
 };
-export const ClassCard = ({ clase, isManager }) => {
+export const ClassCard = ({ clase, manager }) => {
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
   const statusColor = !isLive ? '#FFCA28' : '#00C853';
@@ -18,7 +18,7 @@ export const ClassCard = ({ clase, isManager }) => {
   return (
     <Card style={styles.space}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Class Detail', { clase })}>
+        onPress={() => navigation.navigate('Class Detail', { clase, manager })}>
         <View style={styles.row}>
           <Thumbnail source={profe} />
           <View>
@@ -29,7 +29,6 @@ export const ClassCard = ({ clase, isManager }) => {
               </Text>
             </View>
           </View>
-          {isManager && <DeleteButton />}
         </View>
         <View style={styles.textRowStyle}>
           <Text style={{ color: statusColor }}>{clase.status} </Text>
@@ -58,38 +57,3 @@ const styles = StyleSheet.create({
   },
   checkStyle: { width: 15, height: 15, marginTop: 2 },
 });
-
-const DeleteButton = () => {
-  return (
-    <TouchableOpacity
-      style={{
-        height: 30,
-        width: 30,
-      }}
-      onPress={deleteClass}>
-      <Icon name="close-circle-outline" fill="#E12C2C" />
-    </TouchableOpacity>
-  );
-};
-const deleteClass = () => {
-  return Alert.alert(
-    'Borrar Clase',
-    'Esta por borrar permanentemente la clase',
-    [
-      {
-        text: 'Entiendo',
-        onPress: () => onDelete(),
-      },
-      {
-        text: 'Cancelar',
-        style: 'cancel',
-      },
-    ],
-    { cancelable: true },
-  );
-};
-
-const onDelete = () => {
-  //TODO:
-  return console.log('por ahora no se puede piyo');
-};

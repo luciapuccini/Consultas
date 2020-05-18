@@ -1,7 +1,7 @@
 import React from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { ClassCard } from '../components/ClassCard';
-import { Layout, Icon } from '@ui-kitten/components';
+import { Layout } from '@ui-kitten/components';
 import { SearchBox } from '../components/SearchBox';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
@@ -10,7 +10,7 @@ export const Classes = ({ navigation, route }) => {
   const [classes, setClasses] = React.useState(null);
   const [searchTerm, setSearchTerm] = React.useState('');
   const { subjectId } = route.params.subject;
-
+  const { manager } = route.params;
   React.useEffect(() => {
     const fetchClasses = async () => {
       const token = await getToken();
@@ -44,12 +44,12 @@ export const Classes = ({ navigation, route }) => {
       );
 
   const renderItem = ({ item }) => {
-    return <ClassCard clase={item} isManager={isManager} />;
+    return <ClassCard clase={item} manager={manager} />;
   };
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {!isManager && (
+      {!manager && (
         <SearchBox setSearchTerm={setSearchTerm} placeholder="Professor" />
       )}
       {!results ? (

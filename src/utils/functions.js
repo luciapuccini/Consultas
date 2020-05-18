@@ -15,7 +15,12 @@ export const asMinutes = (text) => {
 export const timeToStart = (initTime) => {
   const now = moment();
   const future = moment(initTime);
-  console.log('pasado a moment', future);
-  console.log('result diff', future.diff(now));
   return now.diff(future, 'minute');
+};
+export const asArray = (obj) => {
+  const turnitos = [];
+  _.mapObject(obj, (value, key) => {
+    turnitos.push({ starTime: key, alumnos: value });
+  });
+  return turnitos;
 };

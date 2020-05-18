@@ -34,7 +34,6 @@ export const TurnosTable = ({
   const addNote = async () => {
     const body = { id, comment };
     const token = await getToken();
-    console.log('comment', body);
 
     fetch(`http://181.164.121.14:25565/clases/addComment`, {
       method: 'post',
@@ -52,6 +51,7 @@ export const TurnosTable = ({
         console.log(error);
       });
   };
+  console.log('TURNITOS', turnos);
   return (
     <>
       <Menu>
