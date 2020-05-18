@@ -51,12 +51,13 @@ export const TurnosTable = ({
         console.log(error);
       });
   };
+
   return (
     <>
       <Menu style={{ flex: 1, maxHeight: 400 }}>
         {turnos.map((turno) => (
           <MenuItem
-            title={getHora(turno.startTime)}
+            title={getHora(turno.turnoTime)}
             disabled={turno.hasUsers}
             onPress={handleSelection}
           />

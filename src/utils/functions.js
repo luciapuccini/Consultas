@@ -3,6 +3,7 @@ import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const getHora = (fecha) => {
+  console.log('GET HORA', fecha, moment(fecha).locale('es').format('HH:mm'));
   return moment(fecha).locale('es').format('HH:mm');
 };
 export const getFecha = (fecha) => {
