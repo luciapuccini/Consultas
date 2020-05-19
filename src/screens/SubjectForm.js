@@ -14,25 +14,33 @@ import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
 import { getHora, getFecha } from '../utils/functions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import { isEmpty } from 'underscore';
 
 export const SubjectForm = ({ route }) => {
   const { professors } = route.params;
   const [name, setName] = useState(null);
-  const [resaltado, setResaltado] = useState({});
+  const [image, setImage] = useState();
+  const [subjectProfessors, setSubjectProfessors] = useState([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  console.log(professors);
+  console.log('a ver los profes', professors);
   // useEffect(() => {}, [professors]);
   const addSubject = async () => {
-    const body = {};
+    const body = {
+      name,
+      subjectProfessors,
+    };
+
+    const formData = new FormData();
+    formData.append('subject', JSON.stringify(body));
+    formData.append('imageFile', image);
     const token = await getToken();
     fetch(`http://181.164.121.14:25565/subject/add`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+      body: formData,
     })
       .then((response) => response.json())
       .then((json) => {
@@ -40,28 +48,32 @@ export const SubjectForm = ({ route }) => {
       })
       .catch((error) => console.log(error));
   };
+
+  const addProfeToList = (profe) => {
+    setSubjectProfessors([...subjectProfessors, profe.id]);
+  };
+
   return (
     <Layout level="1" style={styles.layout}>
       <Input label="Nombre" onChangeText={setName} value={name} />
       <Text style={styles.space} category="h5">
-        Profesores habilitados
+        Habilitar Profesores
       </Text>
       {!isEmpty(professors) &&
         professors.map((profe) => (
           <View style={styles.space}>
             <TouchableOpacity
-              onPress={() =>
-                setResaltado({
-                  backgroundColor: '#90CAF9',
-                })
-              }
-              style={resaltado}>
+              onPress={() => {
+                addProfeToList(profe);
+              }}>
               <Text category="s1">{profe.name}</Text>
             </TouchableOpacity>
             <Divider />
           </View>
         ))}
-
+      <Button appearance="primary" onPress={openGallery}>
+        Subir Foto
+      </Button>
       <Button appearance="primary" onPress={addSubject} style={styles.space}>
         Confirmar
       </Button>

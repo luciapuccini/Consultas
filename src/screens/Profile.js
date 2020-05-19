@@ -31,7 +31,6 @@ export const Profile = ({ navigation }) => {
     const fetchUser = async () => {
       const token = await getToken();
       try {
-        //TODO: no books returned
         const response = await fetch(
           `http://181.164.121.14:25565/users/getUser`,
           {
@@ -44,7 +43,6 @@ export const Profile = ({ navigation }) => {
         );
         const json = await response.json();
         const { name, email, legajo, books } = json;
-        console.log('BOOKS', json);
         setUser({ name, email, legajo });
         setInscripciones(books);
         setLoading(false);

@@ -30,14 +30,13 @@ export const Home = ({ navigation }) => {
   }, []);
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {/* {user.role === 'ROLE_PROFESSOR' ? (
+      {user.role === 'ROLE_PROFESSOR' ? (
         <ProfessorHome user={user} />
       ) : user.role === 'ROLE_STUDENT' ? (
         <Student user={user} />
       ) : (
         <Admin user={user} />
-      )} */}
-      <Admin user={user} />
+      )}
     </Layout>
   );
 };
