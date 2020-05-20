@@ -14,16 +14,17 @@ import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
 import { getHora, getFecha } from '../utils/functions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ImagePicker from 'react-native-image-picker';
 
 import { isEmpty } from 'underscore';
 
 export const SubjectForm = ({ route }) => {
   const { professors } = route.params;
   const [name, setName] = useState(null);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState('');
+  const [fileName, setFileName] = useState('');
   const [subjectProfessors, setSubjectProfessors] = useState([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  console.log('a ver los profes', professors);
   // useEffect(() => {}, [professors]);
   const addSubject = async () => {
     const body = {
@@ -34,11 +35,13 @@ export const SubjectForm = ({ route }) => {
     const formData = new FormData();
     formData.append('subject', JSON.stringify(body));
     formData.append('imageFile', image);
+
     const token = await getToken();
-    fetch(`http://181.164.121.14:25565/subject/add`, {
+    fetch(`http://181.164.121.14:25565/subjects/add`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
       body: formData,
     })
@@ -52,7 +55,27 @@ export const SubjectForm = ({ route }) => {
   const addProfeToList = (profe) => {
     setSubjectProfessors([...subjectProfessors, profe.id]);
   };
-
+  const openGallery = () => {
+    const options = {
+      title: 'Buscar Foto',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setImage(response);
+        console.log(response);
+      }
+    });
+  };
   return (
     <Layout level="1" style={styles.layout}>
       <Input label="Nombre" onChangeText={setName} value={name} />
@@ -87,7 +110,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   space: {
-    marginVertical: 20,
+    marginVertical: 10,
   },
   dateRow: {
     flexDirection: 'row',

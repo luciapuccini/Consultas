@@ -19,8 +19,8 @@ export const SubjectCard = ({ subject, professor, admin }) => {
   const isDark = themeContext.theme !== 'light' ? true : false;
   const headerCardStyle = { backgroundColor: isDark ? '#1a2238' : '#E3F2FD' };
   const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
-  const { subjectId, name, image } = subject;
-
+  const { subjectId, name, imagePath } = subject;
+  console.log('SUBJECT CARD', imagePath);
   const onNotificationChange = async () => {
     const token = await getToken();
     setNotification(!notification);
@@ -98,7 +98,7 @@ export const SubjectCard = ({ subject, professor, admin }) => {
     <Card header={Header} style={[styles.subjectCardStyle, headerCardStyle]}>
       <TouchableOpacity onPress={goToClasses}>
         <Image
-          source={findSubjectImage(image)}
+          source={imagePath || subjectPlaceholder}
           style={styles.subjectImageStyle}
         />
       </TouchableOpacity>

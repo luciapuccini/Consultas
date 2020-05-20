@@ -12,11 +12,9 @@ export const Admin = ({ user }) => {
   useEffect(() => {
     const fetchSubjects = async () => {
       const token = await getToken();
-      const { id } = user;
-      fetch(`http://181.164.121.14:25565/users/getProfessorSubjects/${id}`, {
+      fetch(`http://181.164.121.14:25565/subjects/findAll`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       })
@@ -26,9 +24,7 @@ export const Admin = ({ user }) => {
         })
         .catch((error) => console.log(error));
     };
-    if (user.id) {
-      fetchSubjects();
-    }
+    fetchSubjects();
     const fetchProffesors = async () => {
       const token = await getToken();
       fetch('http://181.164.121.14:25565/users/getAllProfessors', {
