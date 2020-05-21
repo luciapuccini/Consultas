@@ -46,3 +46,10 @@ export const removeUser = async () => {
     // saving error
   }
 };
+
+export const getUserImage = (id) => {
+  console.log(id);
+  return {
+    uri: `http://181.164.121.14:25565/users/images/profileImages/${id}`,
+  };
+};

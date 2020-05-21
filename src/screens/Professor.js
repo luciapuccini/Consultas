@@ -12,8 +12,7 @@ import {
   Icon,
 } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
-import _ from 'underscore';
-import { getHora, getFecha } from '../utils/functions';
+import { getHora, getFecha, getUserImage } from '../utils/functions';
 
 const chatImage = require('../assets/chat.png');
 const placeHolder = require('../assets/rick.jpg');
@@ -119,7 +118,7 @@ export const Professor = ({ route }) => {
             minHeight: 140,
           }}>
           <Avatar
-            source={profileImagePath || placeHolder}
+            source={getUserImage(id)}
             style={{
               height: 100,
               width: 100,

@@ -4,8 +4,11 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ScrollView,
+  Image,
 } from 'react-native';
-import { Fab, Thumbnail, Content } from 'native-base';
+import ImagePicker from 'react-native-image-picker';
+import { Fab } from 'native-base';
 import {
   Input,
   Icon,
@@ -13,6 +16,7 @@ import {
   Divider,
   Button,
   Layout,
+  CheckBox,
 } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
@@ -21,7 +25,7 @@ import { EditPasswordModal } from '../components/EditPasswordModal';
 const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
   const [hasEdited, setHasEdited] = React.useState(false);
-  const [photo, setPhoto] = React.useState(false);
+  const [showMobile, setShowMobile] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
@@ -42,8 +46,26 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
-        const { name, email, legajo, books } = json;
-        setUser({ name, email, legajo });
+        const {
+          name,
+          email,
+          legajo,
+          books,
+          id,
+          surname,
+          mobile,
+          showMobile,
+        } = json;
+        //FIXME: porqueee?
+        setUser({
+          name,
+          email,
+          legajo,
+          userId: id,
+          surname,
+          mobile,
+        });
+        setShowMobile(showMobile);
         setInscripciones(books);
         setLoading(false);
       } catch (error) {
@@ -62,10 +84,8 @@ export const Profile = ({ navigation }) => {
   const save = () => {
     const handleSave = async () => {
       const token = await getToken();
-      //WARNING: NO RESPONSE
-
+      const userBody = { ...user, showMobile };
       try {
-        //'http://181.164.121.14:25565/users/modify',
         const response = await fetch(
           'http://181.164.121.14:25565/users/modify',
           {
@@ -74,7 +94,7 @@ export const Profile = ({ navigation }) => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(userBody),
           },
         );
         const json = await response.json();
@@ -87,6 +107,40 @@ export const Profile = ({ navigation }) => {
     console.log('save');
   };
 
+  const handleImage = async () => {
+    const token = await getToken();
+    const options = {
+      title: 'Subir Foto',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    let imageFile;
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const { type, data, fileName } = response;
+        imageFile = { imageType: type, base64Image: data, fileName };
+        fetch('http://181.164.121.14:25565/users/images/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(imageFile),
+        })
+          .then((resp) => resp.json())
+          .then((val) => console.log('response', val))
+          .catch((err) => console.log('catch', err));
+      }
+    });
+  };
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
@@ -97,13 +151,14 @@ export const Profile = ({ navigation }) => {
                 flex: 1,
                 justifyContent: 'center',
               }}>
-              <Thumbnail
-                source={userPlaceholderImage}
+              <Image
+                source={{
+                  uri: `http://181.164.121.14:25565/users/images/profileImages/${user.userId}`,
+                }}
                 style={{ height: 100, width: 100, borderRadius: 50 }}
               />
 
               <Fab
-                active={photo}
                 containerStyle={{ marginLeft: 20 }}
                 style={{
                   backgroundColor: '#5067FF',
@@ -111,7 +166,7 @@ export const Profile = ({ navigation }) => {
                   width: 40,
                 }}
                 position="bottomLeft"
-                onPress={() => setPhoto(!photo)}>
+                onPress={handleImage}>
                 <Icon
                   name="camera"
                   fill="white"
@@ -124,7 +179,7 @@ export const Profile = ({ navigation }) => {
             </View>
           </ImageBackground>
 
-          <Content>
+          <ScrollView style={{ flex: 1 }}>
             <View
               style={{
                 flex: 1,
@@ -133,7 +188,10 @@ export const Profile = ({ navigation }) => {
                 marginVertical: 10,
                 flexDirection: 'row',
               }}>
-              <Text category="h3">{user.name}'s Profile</Text>
+              <Text category="h3">
+                {user.name}
+                {user.surname}
+              </Text>
               {hasEdited ? <ConfirmButton save={save} /> : null}
             </View>
             <View style={{ margin: 10 }}>
@@ -157,6 +215,15 @@ export const Profile = ({ navigation }) => {
             />
             <Input
               style={styles.inputStyle}
+              label="Apellido"
+              placeholder={user.surname}
+              onChangeText={(value) => setUser({ ...user, surname: value })}
+              onKeyPress={() => setHasEdited(true)}
+              value={user.surname}
+              accessoryRight={renderBrushIcon}
+            />
+            <Input
+              style={styles.inputStyle}
               label="Email"
               placeholder={user.email}
               onChangeText={(value) => setUser({ ...user, email: value })}
@@ -164,6 +231,22 @@ export const Profile = ({ navigation }) => {
               value={user.email}
               accessoryRight={renderBrushIcon}
             />
+            <Input
+              style={styles.inputStyle}
+              label="Telefono"
+              placeholder={user.mobile}
+              onChangeText={(value) => setUser({ ...user, mobile: value })}
+              onKeyPress={() => setHasEdited(true)}
+              value={user.mobile}
+              accessoryRight={renderBrushIcon}
+              keyboardType="number-pad"
+            />
+            <CheckBox
+              style={{ marginLeft: 10, marginTop: 10 }}
+              checked={showMobile}
+              onChange={() => setShowMobile(!showMobile)}>
+              Mostar mi telefono publicamente
+            </CheckBox>
             <View
               style={{
                 flexDirection: 'row',
@@ -190,7 +273,7 @@ export const Profile = ({ navigation }) => {
                 Mis Inscripciones
               </Button>
             </View>
-          </Content>
+          </ScrollView>
         </>
       ) : (
         <CustomSpinner />

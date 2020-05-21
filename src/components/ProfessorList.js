@@ -48,14 +48,15 @@ export const ProfessorList = ({ professors }) => {
     const profes = [];
 
     sortedProfes.forEach((profe) => {
-      const nombre = `${profe.surname} ${profe.name}`;
-      profes.push(nombre);
+      const nombreCompleto = `${profe.surname} ${profe.name}`;
+      const profeEntero = { nombreCompleto, ...profe };
+      profes.push(profeEntero);
     });
 
     return leters.map((l) => {
       const sublista = [];
       profes.forEach((profe) => {
-        const pertenece = profe.startsWith(l);
+        const pertenece = profe.nombreCompleto.startsWith(l);
         if (pertenece) {
           sublista.push(profe);
         }
@@ -67,14 +68,16 @@ export const ProfessorList = ({ professors }) => {
               <ListItem itemDivider style={{ ...headerListStyle }}>
                 <Text style={{ ...textStyle }}>{l}</Text>
               </ListItem>
-              {sublista.map((subProfe, index) => (
+              {sublista.map((subProfe) => (
                 <ListItem
                   onPress={() =>
                     navigation.navigate('Professor', {
-                      professor: sortedProfes[index],
+                      professor: subProfe,
                     })
                   }>
-                  <Text style={{ ...textStyle }}>{subProfe}</Text>
+                  <Text style={{ ...textStyle }}>
+                    {subProfe.nombreCompleto}
+                  </Text>
                 </ListItem>
               ))}
             </>

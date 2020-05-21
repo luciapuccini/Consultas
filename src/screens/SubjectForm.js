@@ -22,7 +22,6 @@ export const SubjectForm = ({ route }) => {
   const { professors } = route.params;
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
-  // const [fileName, setFileName] = useState('');
   const [subjectProfessors, setSubjectProfessors] = useState([]);
 
   const addSubject = async () => {
