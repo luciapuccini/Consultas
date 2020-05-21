@@ -4,8 +4,7 @@ import { Card, Text, Icon } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import { ThemeContext } from '../context/ThemeContext';
 import { getToken } from '../utils/authHelper';
-
-const subjectPlaceholder = require('../assets/java.png');
+import { isEmpty } from 'underscore';
 
 const findSubjectImage = (subjectName) => {
   return subjectPlaceholder;
@@ -20,7 +19,6 @@ export const SubjectCard = ({ subject, professor, admin }) => {
   const headerCardStyle = { backgroundColor: isDark ? '#1a2238' : '#E3F2FD' };
   const notificationIcon = notification ? 'bell-outline' : 'bell-off-outline';
   const { subjectId, name, imagePath } = subject;
-  console.log('SUBJECT CARD', imagePath);
   const onNotificationChange = async () => {
     const token = await getToken();
     setNotification(!notification);
@@ -65,6 +63,16 @@ export const SubjectCard = ({ subject, professor, admin }) => {
     navigation.navigate(path, { subject, manager: professor });
   };
 
+  const getImage = () => {
+    const subjectPlaceholder = require('../assets/java.png');
+    const image = `http://181.164.121.14:25565/subjects/images/${subjectId}`;
+    if (!isEmpty(imagePath)) {
+      return { uri: image };
+    } else {
+      return subjectPlaceholder;
+    }
+  };
+
   const Header = () => {
     return (
       <View style={[styles.subjectCardHeaderStyle, headerCardStyle]}>
@@ -97,10 +105,7 @@ export const SubjectCard = ({ subject, professor, admin }) => {
   return (
     <Card header={Header} style={[styles.subjectCardStyle, headerCardStyle]}>
       <TouchableOpacity onPress={goToClasses}>
-        <Image
-          source={imagePath || subjectPlaceholder}
-          style={styles.subjectImageStyle}
-        />
+        <Image source={getImage()} style={styles.subjectImageStyle} />
       </TouchableOpacity>
     </Card>
   );

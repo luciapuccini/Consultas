@@ -22,10 +22,9 @@ export const SubjectForm = ({ route }) => {
   const { professors } = route.params;
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
-  const [fileName, setFileName] = useState('');
+  // const [fileName, setFileName] = useState('');
   const [subjectProfessors, setSubjectProfessors] = useState([]);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  // useEffect(() => {}, [professors]);
+
   const addSubject = async () => {
     const body = {
       name,
@@ -34,7 +33,7 @@ export const SubjectForm = ({ route }) => {
 
     const formData = new FormData();
     formData.append('subject', JSON.stringify(body));
-    formData.append('imageFile', image);
+    formData.append('imageFile', JSON.stringify(image));
 
     const token = await getToken();
     fetch(`http://181.164.121.14:25565/subjects/add`, {
@@ -71,8 +70,9 @@ export const SubjectForm = ({ route }) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setImage(response);
-        console.log(response);
+        const { type, data, fileName } = response;
+        const imageResp = { imageType: type, base64Image: data, fileName };
+        setImage(imageResp);
       }
     });
   };
