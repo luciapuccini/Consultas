@@ -21,6 +21,7 @@ import {
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
+import { ErrorMessage } from '../components/ErrorMessage';
 
 const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
@@ -28,6 +29,7 @@ export const Profile = ({ navigation }) => {
   const [showMobile, setShowMobile] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
   const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
   const [inscripciones, setInscripciones] = React.useState(null);
 
@@ -103,8 +105,14 @@ export const Profile = ({ navigation }) => {
         console.log(error);
       }
     };
+
     handleSave();
-    console.log('save');
+    const isValid = validatePhone(user.mobile);
+    if (isValid) {
+      //FIXME: in this case save
+    } else {
+      setError('Wrong number format');
+    }
   };
 
   const handleImage = async () => {
@@ -140,6 +148,11 @@ export const Profile = ({ navigation }) => {
           .catch((err) => console.log('catch', err));
       }
     });
+  };
+
+  const validatePhone = (num) => {
+    const phoneRegex = /\+549\d\+{9}/;
+    return num.match(phoneRegex);
   };
   return (
     <Layout level="1" style={{ flex: 1 }}>
@@ -192,7 +205,7 @@ export const Profile = ({ navigation }) => {
                 {user.name}
                 {user.surname}
               </Text>
-              {hasEdited ? <ConfirmButton save={save} /> : null}
+              {hasEdited && <ConfirmButton save={save} />}
             </View>
             <View style={{ margin: 10 }}>
               <Text
@@ -235,12 +248,19 @@ export const Profile = ({ navigation }) => {
               style={styles.inputStyle}
               label="Telefono"
               placeholder={user.mobile}
-              onChangeText={(value) => setUser({ ...user, mobile: value })}
+              onChangeText={(text) => setUser({ ...user, mobile: text })}
               onKeyPress={() => setHasEdited(true)}
               value={user.mobile}
               accessoryRight={renderBrushIcon}
-              keyboardType="number-pad"
+              keyboardType="phone-pad"
+              caption="+ 54 9 111 1111111"
             />
+            {error && (
+              <View style={{ marginLeft: 10 }}>
+                <ErrorMessage message={error} />
+              </View>
+            )}
+
             <CheckBox
               style={{ marginLeft: 10, marginTop: 10 }}
               checked={showMobile}
@@ -291,13 +311,18 @@ const ConfirmButton = ({ save }) => {
       }}>
       <TouchableOpacity
         onPress={save}
-        style={{ backgroundColor: '#00C853', borderRadius: 20, width: '60%' }}>
+        style={{
+          backgroundColor: '#00C853',
+          borderRadius: 20,
+          width: '45%',
+        }}>
         <Icon
           name="checkmark-circle-outline"
           fill="white"
           style={{
-            height: 40,
-            width: 40,
+            height: 30,
+            width: 30,
+            padding: 5,
           }}
         />
       </TouchableOpacity>
