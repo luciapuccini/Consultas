@@ -24,7 +24,6 @@ import { EditPasswordModal } from '../components/EditPasswordModal';
 import { ErrorMessage } from '../components/ErrorMessage';
 
 export const Profile = ({ navigation }) => {
-  const [hasEdited, setHasEdited] = React.useState(false);
   const [showMobile, setShowMobile] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
@@ -56,8 +55,8 @@ export const Profile = ({ navigation }) => {
           surname,
           mobile,
           showMobile,
+          role,
         } = json;
-        //FIXME: porqueee?
         setUser({
           name,
           email,
@@ -65,6 +64,7 @@ export const Profile = ({ navigation }) => {
           userId: id,
           surname,
           mobile,
+          role,
         });
         setShowMobile(showMobile);
         setInscripciones(books);
@@ -76,6 +76,7 @@ export const Profile = ({ navigation }) => {
     fetchUser();
   }, []);
 
+  const isProfessor = user.role === 'ROLE_PROFESSOR';
   const renderBrushIcon = (props) => (
     <TouchableWithoutFeedback onPress={() => console.log('pueod hacer esto')}>
       <Icon {...props} name="edit-2-outline" />
@@ -105,13 +106,16 @@ export const Profile = ({ navigation }) => {
       }
     };
 
-    handleSave();
     const isValid = validatePhone(user.mobile);
-    if (isValid) {
-      //FIXME: in this case save
-    } else {
-      setError('Wrong number format');
+    //FIXME: si no es valido solo aviso
+    if (!isValid) {
+      setError('Error de formato de telefono');
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
     }
+
+    handleSave();
   };
 
   const handleImage = async () => {
@@ -153,6 +157,7 @@ export const Profile = ({ navigation }) => {
     const phoneRegex = /\+549\d\+{9}/;
     return num.match(phoneRegex);
   };
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
@@ -201,10 +206,8 @@ export const Profile = ({ navigation }) => {
                 flexDirection: 'row',
               }}>
               <Text category="h3">
-                {user.name}
-                {user.surname}
+                {user.name} {user.surname}
               </Text>
-              <ConfirmButton save={save} />
             </View>
             <View style={{ margin: 10 }}>
               <Text
@@ -221,7 +224,6 @@ export const Profile = ({ navigation }) => {
               label="Nombre"
               placeholder={user.name}
               onChangeText={(value) => setUser({ ...user, name: value })}
-              onKeyPress={() => setHasEdited(true)}
               value={user.name}
               accessoryRight={renderBrushIcon}
             />
@@ -230,7 +232,6 @@ export const Profile = ({ navigation }) => {
               label="Apellido"
               placeholder={user.surname}
               onChangeText={(value) => setUser({ ...user, surname: value })}
-              onKeyPress={() => setHasEdited(true)}
               value={user.surname}
               accessoryRight={renderBrushIcon}
             />
@@ -239,33 +240,35 @@ export const Profile = ({ navigation }) => {
               label="Email"
               placeholder={user.email}
               onChangeText={(value) => setUser({ ...user, email: value })}
-              onKeyPress={() => setHasEdited(true)}
               value={user.email}
               accessoryRight={renderBrushIcon}
             />
-            <Input
-              style={styles.inputStyle}
-              label="Telefono"
-              placeholder={user.mobile}
-              onChangeText={(text) => setUser({ ...user, mobile: text })}
-              onKeyPress={() => setHasEdited(true)}
-              value={user.mobile}
-              accessoryRight={renderBrushIcon}
-              keyboardType="phone-pad"
-              caption="+ 54 9 111 1111111"
-            />
-            {error && (
-              <View style={{ marginLeft: 10 }}>
-                <ErrorMessage message={error} />
-              </View>
+            {isProfessor && (
+              <>
+                <Input
+                  style={styles.inputStyle}
+                  label="Telefono"
+                  placeholder={user.mobile}
+                  onChangeText={(text) => setUser({ ...user, mobile: text })}
+                  value={user.mobile}
+                  accessoryRight={renderBrushIcon}
+                  keyboardType="phone-pad"
+                  caption="+ 54 9 111 1111111"
+                />
+                {error && (
+                  <View style={{ marginLeft: 10 }}>
+                    <ErrorMessage message={error} />
+                  </View>
+                )}
+                <CheckBox
+                  style={{ marginLeft: 10, marginTop: 10 }}
+                  checked={showMobile}
+                  onChange={() => setShowMobile(!showMobile)}>
+                  Mostar mi telefono publicamente
+                </CheckBox>
+              </>
             )}
-
-            <CheckBox
-              style={{ marginLeft: 10, marginTop: 10 }}
-              checked={showMobile}
-              onChange={() => setShowMobile(!showMobile)}>
-              Mostar mi telefono publicamente
-            </CheckBox>
+            <ConfirmButton save={save} />
             <View
               style={{
                 flexDirection: 'row',
@@ -277,7 +280,7 @@ export const Profile = ({ navigation }) => {
                 appearance="ghost"
                 status="primary"
                 onPress={() => setOnPasswordEdit(true)}>
-                Edit Password
+                Editar Contraseña
               </Button>
               <EditPasswordModal
                 visible={onPasswordEdit}
@@ -305,27 +308,13 @@ const ConfirmButton = ({ save }) => {
   return (
     <View
       style={{
-        flexDirection: 'column',
-        alignItems: 'center',
+        flex: 1,
+        alignItems: 'flex-end',
+        marginRight: 10,
       }}>
-      <TouchableOpacity
-        onPress={save}
-        style={{
-          backgroundColor: '#00C853',
-          borderRadius: 20,
-          width: '45%',
-        }}>
-        <Icon
-          name="checkmark-circle-outline"
-          fill="white"
-          style={{
-            height: 30,
-            width: 30,
-            padding: 5,
-          }}
-        />
-      </TouchableOpacity>
-      <Text style={{ color: '#00C853' }}>Confirmar</Text>
+      <Button status="success" onPress={save}>
+        Aceptar
+      </Button>
     </View>
   );
 };
