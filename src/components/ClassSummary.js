@@ -1,19 +1,18 @@
 import React from 'react';
-import { ImageBackground, View, Image } from 'react-native';
-import { Layout, Text, Card, Divider } from '@ui-kitten/components';
+import { ImageBackground, View } from 'react-native';
+import { Text, Card, Divider } from '@ui-kitten/components';
 import _ from 'underscore';
 import { Thumbnail } from 'native-base';
 
-const placeholder = require('../assets/java.png');
-const professorPlaceHolder = require('../assets/rick.jpg');
+const placeHolder = require('../assets/placeholder.png');
 
 export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
-  const professorImage = professor.profileImagePath || professorPlaceHolder;
-  console.log('que llega', comments);
+  const professorImage = professor.profileImagePath || placeHolder;
+  const subjectImage = placeHolder; //FIXME: get images
   return (
     <View>
       <ImageBackground
-        source={placeholder}
+        source={subjectImage}
         style={{ maxHeight: 200 }}
         imageStyle={{ opacity: 0.3 }}>
         <View
@@ -67,7 +66,6 @@ const styles = {
   subjectImageStyle: {
     height: 200,
     width: null,
-    // flex: 1,
     marginVertical: -16,
     marginHorizontal: -24,
   },

@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { Icon, Card, Text, Button } from '@ui-kitten/components';
+import { View } from 'react-native';
+import { Card, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
-
-const professorPlaceholder = require('../assets/rick.jpg');
 
 export const ProfessorCard = ({ professor }) => {
   const navigation = useNavigation();

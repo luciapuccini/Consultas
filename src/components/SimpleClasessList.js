@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
 import { CustomSpinner } from './CustomSpinner';
 import { SimpleClassCard } from './SimpleClassCard';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
-import _ from 'underscore';
+import { isEmpty } from 'underscore';
 import { ErrorMessage } from './ErrorMessage';
 import { getToken } from '../utils/authHelper';
 
@@ -13,6 +13,13 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [toDelete, setToDelete] = useState([]);
+
+  useEffect(() => {
+    setLoading(false);
+    if (isEmpty(simpleClasses)) {
+      setError('No Hay clases para mostrar');
+    }
+  }, [simpleClasses]);
 
   const deleteClasses = async () => {
     const token = await getToken();
@@ -41,15 +48,6 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
       </TouchableOpacity>
     );
   };
-
-  useEffect(() => {
-    if (_.isEmpty(simpleClasses)) {
-      setError('No Simples to show');
-    } else {
-      setError(false);
-      setLoading(false);
-    }
-  }, [simpleClasses]);
 
   return (
     <Layout level="1" style={{ flex: 1 }}>

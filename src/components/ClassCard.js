@@ -5,8 +5,10 @@ import { Card, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import 'moment/locale/es';
+import { getUserImage } from '../utils/functions';
 
-const profe = require('../assets/rick.jpg');
+const placeHolder = require('../assets/placeholder.png');
+
 const handleDate = (date) => {
   return moment(date).locale('es').format('lll');
 };
@@ -20,7 +22,7 @@ export const ClassCard = ({ clase, manager }) => {
       <TouchableOpacity
         onPress={() => navigation.navigate('Class Detail', { clase, manager })}>
         <View style={styles.row}>
-          <Thumbnail source={profe} />
+          <Thumbnail source={getUserImage(clase.professor.id) || placeHolder} />
           <View>
             <View style={styles.cardStyle}>
               <Text category="h6">{clase.professor.name}</Text>

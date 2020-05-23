@@ -64,7 +64,7 @@ export const SubjectCard = ({ subject, professor, admin }) => {
   };
 
   const getImage = () => {
-    const subjectPlaceholder = require('../assets/java.png');
+    const subjectPlaceholder = require('../assets/placeholder.png');
     const image = `http://181.164.121.14:25565/subjects/images/${subjectId}`;
     if (!isEmpty(imagePath)) {
       return { uri: image };

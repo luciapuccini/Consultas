@@ -23,7 +23,6 @@ import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
 import { ErrorMessage } from '../components/ErrorMessage';
 
-const userPlaceholderImage = require('../assets/rick.jpg');
 export const Profile = ({ navigation }) => {
   const [hasEdited, setHasEdited] = React.useState(false);
   const [showMobile, setShowMobile] = React.useState(false);
@@ -205,7 +204,7 @@ export const Profile = ({ navigation }) => {
                 {user.name}
                 {user.surname}
               </Text>
-              {hasEdited && <ConfirmButton save={save} />}
+              <ConfirmButton save={save} />
             </View>
             <View style={{ margin: 10 }}>
               <Text

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Layout } from '@ui-kitten/components';
-import _ from 'underscore';
+import { isEmpty } from 'underscore';
 import { CustomSpinner } from './CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 
@@ -9,12 +9,9 @@ const FixedClasessList = ({ regularClasses }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log('FIXED', regularClasses);
-    if (_.isEmpty(regularClasses)) {
-      setError('No regulars to show');
-    } else {
-      setError(false);
-      setloading(false);
+    setloading(false);
+    if (isEmpty(regularClasses)) {
+      setError('No Hay clases para mostrar');
     }
   }, [regularClasses]);
 

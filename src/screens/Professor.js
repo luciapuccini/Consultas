@@ -15,19 +15,11 @@ import { getToken } from '../utils/authHelper';
 import { getHora, getFecha, getUserImage } from '../utils/functions';
 
 const chatImage = require('../assets/chat.png');
-const placeHolder = require('../assets/rick.jpg');
+const placeHolder = require('../assets/placeholder.png');
 
 export const Professor = ({ route }) => {
   const { professor } = route.params;
-  const {
-    id,
-    name,
-    mobile,
-    legajo,
-    surname,
-    email,
-    profileImagePath,
-  } = professor;
+  const { id, name, mobile, legajo, surname, email, showMobile } = professor;
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
 
@@ -118,7 +110,7 @@ export const Professor = ({ route }) => {
             minHeight: 140,
           }}>
           <Avatar
-            source={getUserImage(id)}
+            source={getUserImage(id) || placeHolder}
             style={{
               height: 100,
               width: 100,
@@ -134,6 +126,7 @@ export const Professor = ({ route }) => {
             email={email}
             mobile={mobile}
             openChat={openChat}
+            showMobile={showMobile}
           />
         </View>
       </Card>
@@ -151,8 +144,15 @@ export const Professor = ({ route }) => {
   );
 };
 
-const Details = ({ name, surname, legajo, email, mobile, openChat }) => {
-  console.log(mobile);
+const Details = ({
+  name,
+  surname,
+  legajo,
+  email,
+  mobile,
+  openChat,
+  showMobile,
+}) => {
   return (
     <View
       style={{
@@ -173,7 +173,7 @@ const Details = ({ name, surname, legajo, email, mobile, openChat }) => {
         {email}
       </Text>
 
-      {mobile !== 'secret' ? (
+      {showMobile ? (
         <View
           style={{
             flexDirection: 'row',

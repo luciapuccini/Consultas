@@ -1,8 +1,13 @@
 import React from 'react';
-import { Layout, Button, Text } from '@ui-kitten/components';
+import { View } from 'react-native';
+import { Text } from '@ui-kitten/components';
 
 export const ErrorMessage = ({ message, style }) => {
-  return <Text style={styles.errorTextStyle}>{message}</Text>;
+  return (
+    <View style={styles.errorStyle}>
+      <Text style={styles.errorTextStyle}>{message}</Text>
+    </View>
+  );
 };
 
 const styles = {
