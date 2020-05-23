@@ -106,13 +106,15 @@ export const Profile = ({ navigation }) => {
       }
     };
 
-    const isValid = validatePhone(user.mobile);
-    //FIXME: si no es valido solo aviso
-    if (!isValid) {
-      setError('Error de formato de telefono');
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
+    if (isProfessor && user.mobile) {
+      const isValid = validatePhone(user.mobile);
+      //FIXME: si no es valido solo aviso
+      if (!isValid) {
+        setError('Error de formato de telefono');
+        setTimeout(() => {
+          setError(false);
+        }, 3000);
+      }
     }
 
     handleSave();
