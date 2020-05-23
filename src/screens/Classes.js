@@ -31,7 +31,6 @@ export const Classes = ({ navigation, route }) => {
     };
 
     if (route.params.subject) {
-      console.log('Classes -> route.params?.subject', route.params?.subject);
       fetchClasses();
     } else if (route.params.bookings) {
       setClasses(route.params.bookings);
@@ -41,7 +40,13 @@ export const Classes = ({ navigation, route }) => {
   }, [searchTerm]);
 
   React.useEffect(() => {
-    setError(isEmpty(classes) ? 'No tienes inscripciones' : false);
+    if (route.params.subject) {
+      setError(isEmpty(classes) ? 'No hay clases' : false);
+    } else if (route.params.bookings) {
+      setError(
+        isEmpty(classes) ? 'No tienes inscripciones a ninguna clase' : false,
+      );
+    }
   }, [classes]);
 
   const results = !searchTerm
