@@ -6,9 +6,9 @@ import { ThemeContext } from '../context/ThemeContext';
 import { getToken } from '../utils/authHelper';
 import { isEmpty } from 'underscore';
 
-const findSubjectImage = (subjectName) => {
-  return subjectPlaceholder;
-};
+// const findSubjectImage = (subjectName) => {
+//   return subjectPlaceholder;
+// };
 
 export const SubjectCard = ({ subject, professor, admin }) => {
   const [notification, setNotification] = React.useState(subject.follows);
@@ -60,7 +60,7 @@ export const SubjectCard = ({ subject, professor, admin }) => {
 
   const goToClasses = () => {
     const path = professor ? 'Classes Manager' : 'Classes';
-    navigation.navigate(path, { subject, manager: professor });
+    !admin && navigation.navigate(path, { subject, manager: professor });
   };
 
   const getImage = () => {

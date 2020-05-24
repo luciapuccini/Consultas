@@ -29,7 +29,6 @@ export const Profile = ({ navigation }) => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
-  const [inscripciones, setInscripciones] = React.useState(null);
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -67,7 +66,6 @@ export const Profile = ({ navigation }) => {
           role,
         });
         setShowMobile(showMobile);
-        setInscripciones(books);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -294,7 +292,7 @@ export const Profile = ({ navigation }) => {
               <Button
                 appearance="ghost"
                 onPress={() =>
-                  navigation.navigate('Classes', { bookings: inscripciones })
+                  navigation.navigate('Classes', { studentSubscriptions: true })
                 }>
                 Mis Inscripciones
               </Button>

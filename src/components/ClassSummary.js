@@ -7,7 +7,7 @@ import { getUserImage, getFecha, getHora } from '../utils/functions';
 
 const placeHolder = require('../assets/placeholder.png');
 
-export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
+export const ClassSummary = ({ fecha, count, comments, professor }) => {
   const professorImage = getUserImage(professor.id) || placeHolder;
   const subjectImage = placeHolder; //FIXME: get images
   return (
@@ -25,10 +25,10 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
           }}>
           <View style={{ flexDirection: 'column' }}>
             <Text category="s1" style={{ padding: 4 }}>
-              Fecha: {fecha}
+              Fecha: {getFecha(fecha)}
             </Text>
             <Text category="s1" style={{ padding: 4 }}>
-              Hora: {hora}
+              Hora: {getHora(fecha)}
             </Text>
             <Text category="s1" style={{ padding: 4 }}>
               Empieza {count}

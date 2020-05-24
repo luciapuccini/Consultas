@@ -96,8 +96,7 @@ export const ClassDetail = ({ route, navigation }) => {
       {!loading ? (
         <View style={{ flex: 1 }}>
           <ClassSummary
-            fecha={getFecha(initTime)}
-            hora={getHora(initTime)}
+            fecha={initTime}
             count={getCount()}
             comments={comments}
             professor={professor}

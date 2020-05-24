@@ -26,27 +26,46 @@ export const Classes = ({ navigation, route }) => {
       })
         .then((response) => response.json())
         .then((json) => {
+          if (json.error) {
+            console.log('Classes -> FetchClasses -> ERROR', json);
+            setError(json.error);
+          }
+          console.log('Classes -> json', json);
+          setClasses(json);
+        });
+    };
+
+    const fetchStudentSubscriptions = async () => {
+      const token = await getToken();
+      fetch(`http://181.164.121.14:25565/users/getStudentInscriptions`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log('fetchStudentSubscriptions -> json', json);
           setClasses(json);
         });
     };
 
     if (route.params.subject) {
       fetchClasses();
-    } else if (route.params.bookings) {
-      setClasses(route.params.bookings);
+    } else if (route.params.studentSubscriptions) {
+      fetchStudentSubscriptions();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
   React.useEffect(() => {
     if (route.params.subject) {
       setError(isEmpty(classes) ? 'No hay clases' : false);
-    } else if (route.params.bookings) {
+    } else if (route.params.studentSubscriptions) {
       setError(
         isEmpty(classes) ? 'No tienes inscripciones a ninguna clase' : false,
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes]);
 
   const results = !searchTerm
@@ -68,6 +87,8 @@ export const Classes = ({ navigation, route }) => {
       )}
       {!results ? (
         <CustomSpinner />
+      ) : error ? (
+        <ErrorMessage message={error} />
       ) : (
         <FlatList
           data={results}
@@ -76,7 +97,6 @@ export const Classes = ({ navigation, route }) => {
           keyExtractor={(item) => item.id}
         />
       )}
-      {error && <ErrorMessage message={error} />}
     </Layout>
   );
 };

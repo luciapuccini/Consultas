@@ -4,12 +4,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const ARG = 'America/Argentina/Buenos_Aires';
 export const getHora = (fecha) => {
-  const fixFecha = fecha.concat('Z');
+  console.log('getHora -> fecha', typeof fecha);
+  const fixFecha = JSON.stringify(fecha).concat('Z');
   return moment
     .tz(fixFecha, 'America/Argentina/Buenos_Aires')
     .format('HH:mm a');
 };
 export const getFecha = (fecha) => {
+  console.log('getFecha -> fecha', fecha);
   const fixFecha = fecha.concat('Z');
   return moment(fixFecha).tz(ARG).locale('es').format('ll');
 };
