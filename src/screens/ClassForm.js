@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, Alert } from 'react-native';
 import {
   Button,
   Card,
@@ -14,7 +14,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
 import moment from 'moment';
-export const ClassForm = ({ route }) => {
+
+export const ClassForm = ({ route, navigation }) => {
   const { subjectId } = route.params;
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -24,7 +25,7 @@ export const ClassForm = ({ route }) => {
   const [hasSingleTurnos, setHasSingleTurnos] = React.useState(false);
   const [cantidadTurnos, setCantidadTurnos] = useState(1);
   const [isRegular, setIsRegular] = React.useState(false);
-
+  const [failed, setFailed] = React.useState(null);
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -66,8 +67,24 @@ export const ClassForm = ({ route }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        // fechas que no se agregaron
         console.log('ADD?', json);
+        if (json.lenght > 0) {
+          Alert.alert(
+            'No pudimos crear las siguientes clases',
+            `${JSON.stringify(json)}`,
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.goBack();
+                },
+              },
+            ],
+            { cancelable: false },
+          );
+        } else {
+          navigation.goBack();
+        }
       })
       .catch((error) => console.log(error));
   };
