@@ -3,10 +3,14 @@ import { View, TouchableOpacity, Alert } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
 
 import moment from 'moment';
-import _ from 'underscore';
 
 import { getToken } from '../utils/authHelper';
-import { getHora, timeToStart, getUserLegajo } from '../utils/functions';
+import {
+  getHora,
+  timeToStart,
+  getUserLegajo,
+  getFecha,
+} from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -20,7 +24,7 @@ export const ClassDetail = ({ route, navigation }) => {
     professor,
     status,
   } = route.params.clase;
-  const { manager } = route.params;
+  const manager = route.params?.manager;
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
   const [index, setIndex] = React.useState(null);
@@ -71,7 +75,6 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const onSubmit = () => {
-    console.log('aca algo esta mal', hasSingleTurnos, turnos);
     const sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
 
     if (bookingFlag) {
@@ -84,10 +87,6 @@ export const ClassDetail = ({ route, navigation }) => {
     navigation.goBack();
   };
 
-  const getFecha = () => {
-    return moment(initTime).locale('es').format('ll');
-  };
-
   const getCount = () => {
     return moment(initTime).fromNow();
   };
@@ -97,7 +96,7 @@ export const ClassDetail = ({ route, navigation }) => {
       {!loading ? (
         <View style={{ flex: 1 }}>
           <ClassSummary
-            fecha={getFecha()}
+            fecha={getFecha(initTime)}
             hora={getHora(initTime)}
             count={getCount()}
             comments={comments}

@@ -1,13 +1,28 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export const getHora = (fecha) => {
-  return moment(fecha).locale('es').format('HH:mm');
+  console.log('getHora -> moment(fecha)', fecha);
+  return moment(fecha)
+    .tz('America/Argentina/Buenos_Aires')
+    .locale('es')
+    .format('HH:mm a');
 };
 export const getFecha = (fecha) => {
-  return moment(fecha).locale('es').format('ll');
+  console.log('getFecha -> fecha', fecha);
+  return moment(fecha)
+    .tz('America/Argentina/Buenos_Aires')
+    .locale('es')
+    .format('ll');
 };
+export const getFechaHora = (fecha) => {
+  return moment(fecha)
+    .tz('America/Argentina/Buenos_Aires')
+    .locale('es')
+    .format('lll');
+};
+
 export const asMinutes = (text) => {
   const time = parseInt(text);
   const hours = moment.duration(time, 'hours');

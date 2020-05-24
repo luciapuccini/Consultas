@@ -44,6 +44,11 @@ export const RootStack = ({ navigation }) => {
         options={{ ...darkHeaderConfig }}
       />
       <Screen
+        name="Class Detail"
+        component={ClassDetail}
+        options={{ ...darkHeaderConfig }}
+      />
+      <Screen
         name="Classes Manager"
         component={ClassesManager}
         options={{ ...darkHeaderConfig }}

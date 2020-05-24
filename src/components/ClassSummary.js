@@ -3,11 +3,12 @@ import { ImageBackground, View } from 'react-native';
 import { Text, Card, Divider } from '@ui-kitten/components';
 import _ from 'underscore';
 import { Thumbnail } from 'native-base';
+import { getUserImage, getFecha, getHora } from '../utils/functions';
 
 const placeHolder = require('../assets/placeholder.png');
 
 export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
-  const professorImage = professor.profileImagePath || placeHolder;
+  const professorImage = getUserImage(professor.id) || placeHolder;
   const subjectImage = placeHolder; //FIXME: get images
   return (
     <View>
@@ -36,9 +37,11 @@ export const ClassSummary = ({ fecha, hora, count, comments, professor }) => {
           <View style={{ margin: 10, alignItems: 'center' }}>
             <Thumbnail
               source={professorImage}
-              style={{ height: 80, width: 80, borderRadius: 50 }}
+              style={{ height: 80, width: 80, borderRadius: 4 }}
             />
-            <Text appearance="hint">{professor.name}</Text>
+            <Text appearance="hint">
+              {professor.name} {professor.surname}
+            </Text>
           </View>
         </View>
       </ImageBackground>
