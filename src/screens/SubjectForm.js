@@ -12,7 +12,6 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
-import { getHora, getFecha } from '../utils/functions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
 

@@ -9,9 +9,13 @@ const FixedClasessList = ({ regularClasses }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setloading(false);
-    if (isEmpty(regularClasses)) {
+    if (regularClasses && isEmpty(regularClasses)) {
       setError('No Hay clases para mostrar');
+      setloading(false);
+    }
+    if (!isEmpty(regularClasses)) {
+      setloading(false);
+      setError(false);
     }
   }, [regularClasses]);
 

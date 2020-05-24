@@ -159,12 +159,14 @@ export const Profile = ({ navigation }) => {
     const phoneRegex = /\+549\d\+{9}/;
     return num.match(phoneRegex);
   };
-
+  const profileBack = require('../assets/background-profile.png');
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
         <>
-          <ImageBackground style={styles.loginFlowContainer}>
+          <ImageBackground
+            style={styles.loginFlowContainer}
+            source={profileBack}>
             <View
               style={{
                 flex: 1,
@@ -329,7 +331,6 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3949ab',
     maxHeight: 150,
   },
 };

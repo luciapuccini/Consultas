@@ -15,7 +15,6 @@ export const SimpleClassCard = ({
   toDelete,
   setToDelete,
 }) => {
-  console.log('toDelete', toDelete);
   const navigation = useNavigation();
   const isLive = clase.status === 'En Curso';
   const cancel = clase.status === 'Cancelada';

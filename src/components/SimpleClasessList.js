@@ -15,9 +15,13 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
-    setLoading(false);
-    if (isEmpty(simpleClasses)) {
-      setError('No Hay clases para mostrar');
+    if (simpleClasses) {
+      if (isEmpty(simpleClasses)) {
+        setError('No Hay clases para mostrar');
+      } else {
+        setLoading(false);
+        setError(false);
+      }
     }
   }, [simpleClasses]);
 
