@@ -2,25 +2,20 @@ import moment from 'moment-timezone';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
 
+const ARG = 'America/Argentina/Buenos_Aires';
 export const getHora = (fecha) => {
-  console.log('getHora -> moment(fecha)', fecha);
-  return moment(fecha)
-    .tz('America/Argentina/Buenos_Aires')
-    .locale('es')
+  const fixFecha = fecha.concat('Z');
+  return moment
+    .tz(fixFecha, 'America/Argentina/Buenos_Aires')
     .format('HH:mm a');
 };
 export const getFecha = (fecha) => {
-  console.log('getFecha -> fecha', fecha);
-  return moment(fecha)
-    .tz('America/Argentina/Buenos_Aires')
-    .locale('es')
-    .format('ll');
+  const fixFecha = fecha.concat('Z');
+  return moment(fixFecha).tz(ARG).locale('es').format('ll');
 };
 export const getFechaHora = (fecha) => {
-  return moment(fecha)
-    .tz('America/Argentina/Buenos_Aires')
-    .locale('es')
-    .format('lll');
+  const fixFecha = fecha.concat('Z');
+  return moment(fixFecha).tz(ARG).locale('es').format('lll a');
 };
 
 export const asMinutes = (text) => {
@@ -30,7 +25,8 @@ export const asMinutes = (text) => {
 };
 export const timeToStart = (initTime) => {
   const now = moment();
-  const future = moment(initTime);
+  const future = moment(initTime).tz(ARG);
+
   return now.diff(future, 'minute');
 };
 export const asArray = (obj) => {
@@ -63,7 +59,6 @@ export const removeUser = async () => {
 };
 
 export const getUserImage = (id) => {
-  console.log(id);
   return {
     uri: `http://181.164.121.14:25565/users/images/profileImages/${id}`,
   };

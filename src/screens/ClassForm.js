@@ -14,7 +14,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import ErrorMessage from '../components/ErrorMessage';
 import { getHora, getFecha } from '../utils/functions';
-
+import moment from 'moment';
 export const ClassForm = ({ route }) => {
   const { subjectId } = route.params;
   const [mode, setMode] = useState('date');
@@ -39,6 +39,7 @@ export const ClassForm = ({ route }) => {
   };
 
   const addClase = async () => {
+    console.log('addClase -> date', date);
     const basicClass = {
       subjectId,
       initTime: date,
@@ -75,7 +76,7 @@ export const ClassForm = ({ route }) => {
     <Layout level="1" style={styles.layout}>
       <Text category="h5">
         Selecione fecha: {'\n'}
-        {getFecha(date)} {getHora(date)}
+        {date ? `${moment(date).locale('es').format('lll a')}` : null}
       </Text>
       <View style={styles.dateRow}>
         <Button
@@ -135,6 +136,7 @@ const ModalPicker = ({ mode, date, setDate, setShow }) => {
     const currentDate = selectedDate || date;
     setShow(false);
     setDate(currentDate);
+    console.log('onChange -> currentDate', currentDate);
   };
 
   return (

@@ -10,6 +10,7 @@ import { getUserImage, getFechaHora } from '../utils/functions';
 const placeHolder = require('../assets/placeholder.png');
 
 export const ClassCard = ({ clase, manager }) => {
+  console.log('ClassCard -> clase', clase);
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
   const statusColor = isLive ? '#F44336' : '#81C784';
