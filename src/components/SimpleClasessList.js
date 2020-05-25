@@ -55,10 +55,10 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {loading ? (
-        <CustomSpinner />
-      ) : error ? (
+      {error ? (
         <ErrorMessage message={error} />
+      ) : loading ? (
+        <CustomSpinner />
       ) : (
         <ScrollView>
           {simpleClasses.map((clase) => {

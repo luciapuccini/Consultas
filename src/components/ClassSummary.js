@@ -8,8 +8,9 @@ import { getUserImage, getFecha, getHora } from '../utils/functions';
 const placeHolder = require('../assets/placeholder.png');
 
 export const ClassSummary = ({ fecha, count, comments, professor }) => {
-  const professorImage = getUserImage(professor.id) || placeHolder;
-  const subjectImage = placeHolder; //FIXME: get images
+  const subjectImage = professor.imagePath
+    ? getUserImage(professor.id)
+    : placeHolder;
   return (
     <View>
       <ImageBackground
@@ -36,7 +37,7 @@ export const ClassSummary = ({ fecha, count, comments, professor }) => {
           </View>
           <View style={{ margin: 10, alignItems: 'center' }}>
             <Thumbnail
-              source={professorImage}
+              source={subjectImage}
               style={{ height: 80, width: 80, borderRadius: 4 }}
             />
             <Text appearance="hint">

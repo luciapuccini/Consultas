@@ -13,13 +13,16 @@ export const ClassCard = ({ clase, manager }) => {
   const navigation = useNavigation();
   const isLive = clase.status === 'En curso';
   const statusColor = isLive ? '#66BB6A' : '#64B5F6';
-
+  const classCardImg = clase.professor.imagePath
+    ? getUserImage(clase.professor.id)
+    : placeHolder;
+  console.log('ClassCard -> getUserImage(clase.professor.id)', classCardImg);
   return (
     <Card style={styles.space}>
       <TouchableOpacity
         onPress={() => navigation.navigate('Class Detail', { clase, manager })}>
         <View style={styles.row}>
-          <Thumbnail source={getUserImage(clase.professor.id) || placeHolder} />
+          <Thumbnail source={classCardImg} />
           <View>
             <View style={styles.cardStyle}>
               <Text category="h6">{clase.professor.name}</Text>

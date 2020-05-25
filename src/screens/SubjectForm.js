@@ -21,9 +21,12 @@ export const SubjectForm = ({ route }) => {
   const { professors } = route.params;
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
+  const [disabled, setDisabled] = useState(false);
+
   const [subjectProfessors, setSubjectProfessors] = useState([]);
 
   const addSubject = async () => {
+    setDisabled(true);
     const body = {
       name,
       subjectProfessors,
@@ -45,6 +48,7 @@ export const SubjectForm = ({ route }) => {
       .then((response) => response.json())
       .then((json) => {
         console.log('ADD?', json);
+        setDisabled(false);
       })
       .catch((error) => console.log(error));
   };
@@ -95,7 +99,11 @@ export const SubjectForm = ({ route }) => {
       <Button appearance="primary" onPress={openGallery}>
         Subir Foto
       </Button>
-      <Button appearance="primary" onPress={addSubject} style={styles.space}>
+      <Button
+        appearance="primary"
+        onPress={addSubject}
+        style={styles.space}
+        disabled={disabled}>
         Confirmar
       </Button>
     </Layout>
