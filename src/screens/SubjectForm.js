@@ -24,7 +24,6 @@ export const SubjectForm = ({ route }) => {
   const [disabled, setDisabled] = useState(false);
   const [selected, setSelected] = useState(null);
   const [subjectProfessors, setSubjectProfessors] = useState([]);
-  console.log('addSubject -> subjectProfessors', subjectProfessors);
 
   const addSubject = async () => {
     setDisabled(true);

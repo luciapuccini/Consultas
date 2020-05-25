@@ -14,6 +14,7 @@ import { ClassDetail } from './screens/ClassDetail';
 import { ClassesManager } from './screens/ClassesManager';
 import { ClassForm } from './screens/ClassForm';
 import { SubjectForm } from './screens/SubjectForm';
+import { EditSubject } from './screens/EditSubject';
 
 export const RootStack = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -77,6 +78,14 @@ export const RootStack = ({ navigation }) => {
           headerRight: () => <LogOutIcon />,
           ...darkHeaderConfig,
           title: 'Perfil',
+        }}
+      />
+      <Screen
+        name="Edit Subject"
+        component={EditSubject}
+        options={{
+          ...darkHeaderConfig,
+          title: 'Modificar',
         }}
       />
     </Navigator>

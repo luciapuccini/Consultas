@@ -29,7 +29,6 @@ export const SubjectList = ({ allSubjects, followed }) => {
   }, [allSubjects, followed]);
 
   const renderItem = ({ item, index }) => {
-    // const img = findSubjectImage(item.name);
     return <SubjectCard subject={item} />;
   };
   return (
