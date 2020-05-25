@@ -22,7 +22,6 @@ export const SubjectForm = ({ route }) => {
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const [selected, setSelected] = useState(null);
   const [subjectProfessors, setSubjectProfessors] = useState([]);
 
   const addSubject = async () => {
@@ -60,7 +59,6 @@ export const SubjectForm = ({ route }) => {
       setSubjectProfessors([...removedSubject]);
     } else {
       //agregalo
-      setSelected(profe.id);
       setSubjectProfessors([...subjectProfessors, profe.id]);
     }
   };
