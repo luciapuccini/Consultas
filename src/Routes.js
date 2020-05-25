@@ -33,6 +33,7 @@ export const RootStack = ({ navigation }) => {
         name="Home"
         component={Home}
         options={{
+          title: 'Inicio',
           headerRight: () => <ProfileIcon />,
           headerLeft: () => <ThemeSwitch />,
           ...darkHeaderConfig,
@@ -41,32 +42,32 @@ export const RootStack = ({ navigation }) => {
       <Screen
         name="Classes"
         component={Classes}
-        options={{ ...darkHeaderConfig }}
+        options={{ ...darkHeaderConfig, title: 'Clases' }}
       />
       <Screen
         name="Class Detail"
         component={ClassDetail}
-        options={{ ...darkHeaderConfig }}
+        options={{ ...darkHeaderConfig, title: 'Detalles de Clase' }}
       />
       <Screen
         name="Classes Manager"
         component={ClassesManager}
-        options={{ ...darkHeaderConfig }}
+        options={{ ...darkHeaderConfig, title: 'Administrar' }}
       />
       <Screen
         name="Professor"
         component={Professor}
-        options={{ ...darkHeaderConfig }}
+        options={{ ...darkHeaderConfig, title: 'Profesor' }}
       />
       <Screen
         name="Add Class"
         component={ClassForm}
-        options={{ ...darkHeaderConfig }}
+        options={{ ...darkHeaderConfig, title: 'Nueva Clase' }}
       />
       <Screen
         name="Add Subject"
         component={SubjectForm}
-        options={{ ...darkHeaderConfig }}
+        options={{ ...darkHeaderConfig, title: 'Nueva Materia' }}
       />
 
       <Screen
@@ -75,6 +76,7 @@ export const RootStack = ({ navigation }) => {
         options={{
           headerRight: () => <LogOutIcon />,
           ...darkHeaderConfig,
+          title: 'Perfil',
         }}
       />
     </Navigator>
