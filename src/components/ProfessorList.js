@@ -50,13 +50,15 @@ export const ProfessorList = ({ professors }) => {
     sortedProfes.forEach((profe) => {
       const nombreCompleto = `${profe.surname} ${profe.name}`;
       const profeEntero = { nombreCompleto, ...profe };
-      profes.push(profeEntero);
+      if (profeEntero.role !== 'ROLE_ADMIN') {
+        profes.push(profeEntero);
+      }
     });
 
     return leters.map((l) => {
       const sublista = [];
       profes.forEach((profe) => {
-        const pertenece = profe.nombreCompleto.startsWith(l);
+        const pertenece = profe.nombreCompleto.toUpperCase().startsWith(l);
         if (pertenece) {
           sublista.push(profe);
         }
