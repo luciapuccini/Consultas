@@ -22,8 +22,9 @@ export const SubjectForm = ({ route }) => {
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
   const [disabled, setDisabled] = useState(false);
-
+  const [selected, setSelected] = useState(null);
   const [subjectProfessors, setSubjectProfessors] = useState([]);
+  console.log('addSubject -> subjectProfessors', subjectProfessors);
 
   const addSubject = async () => {
     setDisabled(true);
@@ -54,7 +55,15 @@ export const SubjectForm = ({ route }) => {
   };
 
   const addProfeToList = (profe) => {
-    setSubjectProfessors([...subjectProfessors, profe.id]);
+    if (subjectProfessors.includes(profe.id)) {
+      //pertenece
+      const removedSubject = subjectProfessors.filter((p) => profe.id !== p);
+      setSubjectProfessors([...removedSubject]);
+    } else {
+      //agregalo
+      setSelected(profe.id);
+      setSubjectProfessors([...subjectProfessors, profe.id]);
+    }
   };
   const openGallery = () => {
     const options = {
@@ -86,28 +95,47 @@ export const SubjectForm = ({ route }) => {
       </Text>
       {!isEmpty(professors) &&
         professors.map((profe) => (
-          <View style={styles.space}>
-            <TouchableOpacity
-              onPress={() => {
-                addProfeToList(profe);
-              }}>
-              <Text category="s1">{profe.name}</Text>
-            </TouchableOpacity>
-            <Divider />
-          </View>
+          <Button
+            appearance="ghost"
+            onPress={() => {
+              addProfeToList(profe);
+            }}
+            style={{
+              justifyContent: 'flex-start',
+              borderBottomColor: '#b0bec5',
+              borderBottomWidth: 1,
+              borderRadius: 0,
+            }}
+            accessoryLeft={subjectProfessors.includes(profe.id) && StatusIcon}>
+            <Text>{profe.name}</Text>
+          </Button>
         ))}
-      <Button appearance="primary" onPress={openGallery}>
-        Subir Foto
-      </Button>
-      <Button
-        appearance="primary"
-        onPress={addSubject}
-        style={styles.space}
-        disabled={disabled}>
-        Confirmar
-      </Button>
+      <View
+        style={{
+          marginTop: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+        <Button
+          appearance="outline"
+          onPress={openGallery}
+          accessoryRight={CameraIcon}>
+          Subir Foto
+        </Button>
+        <Button appearance="primary" onPress={addSubject} disabled={disabled}>
+          Confirmar
+        </Button>
+      </View>
     </Layout>
   );
+};
+
+const StatusIcon = (props) => {
+  const statusColor = '#00C853';
+  return <Icon {...props} name="checkmark-circle-outline" fill={statusColor} />;
+};
+const CameraIcon = (props) => {
+  return <Icon {...props} name="camera-outline" />;
 };
 
 const styles = StyleSheet.create({
@@ -122,8 +150,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
+  checkStyle: {
+    height: 20,
+    backgroundColor: 'red',
+    // alignSelf: 'flex-end',
+  },
 });
-
-const CalenderIcon = (props) => (
-  <Icon {...props} style={styles.pickerStyle} fill="#4169E1" name="calendar" />
-);
