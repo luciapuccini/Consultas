@@ -33,7 +33,7 @@ export const ClassesManager = ({ route }) => {
     fetchClasses();
   }, []);
   const filterClasses = (clases) => {
-    //FIXME: no me dev  "isRegular"
+    //FIXME: isRegular !!
     setRegularClasses(clases.filter((clase) => clase.isRegular));
     setSimpleClasses(clases.filter((clase) => !clase.isRegular));
   };

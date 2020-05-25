@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Platform, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import {
   Button,
-  Card,
-  Modal,
   Text,
   Input,
   Icon,
@@ -90,59 +88,64 @@ export const ClassForm = ({ route, navigation }) => {
   };
   return (
     <Layout level="1" style={styles.layout}>
-      <Text category="h5">
-        Selecione fecha: {'\n'}
-        {date ? `${moment(date).locale('es').format('lll a')}` : null}
-      </Text>
-      <View style={styles.dateRow}>
-        <Button
-          style={styles.pickerStyle}
-          appearance="ghost"
-          accessoryLeft={CalenderIcon}
-          onPress={openDatePicker}
-        />
-        <Button
-          style={styles.pickerStyle}
-          appearance="ghost"
-          onPress={openTimePicker}
-          accessoryLeft={ClockIcon}
-        />
-      </View>
-      <Input
-        label={hasSingleTurnos ? 'Duracion' : 'Duracion de cada turno'}
-        onChangeText={setDuration}
-        keyboardType="numeric"
-        caption="en minutos"
-      />
-      {!hasSingleTurnos && (
-        <Input
-          label="Cantidad de Turnos"
-          caption="Nosotros asignaremos una duracion a cada turno"
-          onChangeText={setCantidadTurnos}
-        />
-      )}
-      <CheckBox
-        checked={hasSingleTurnos}
-        onChange={(nextChecked) => setHasSingleTurnos(nextChecked)}>
-        Clase de un solo turno
-      </CheckBox>
-      <CheckBox
-        checked={isRegular}
-        onChange={(nextChecked) => setIsRegular(nextChecked)}>
-        Clase Regular
-      </CheckBox>
+      <ScrollView contentContainerStyle={styles.layout}>
+        <Text category="h5">
+          Selecione fecha: {'\n'}
+          {date ? `${moment(date).locale('es').format('lll a')}` : null}
+        </Text>
 
-      {show && (
-        <ModalPicker
-          mode={mode}
-          date={date}
-          setDate={setDate}
-          setShow={setShow}
+        <View style={styles.dateRow}>
+          <Button
+            style={styles.pickerStyle}
+            appearance="ghost"
+            accessoryLeft={CalenderIcon}
+            onPress={openDatePicker}
+          />
+          <Button
+            style={styles.pickerStyle}
+            appearance="ghost"
+            onPress={openTimePicker}
+            accessoryLeft={ClockIcon}
+          />
+        </View>
+
+        <Input
+          label={hasSingleTurnos ? 'Duracion' : 'Duracion de cada turno'}
+          onChangeText={setDuration}
+          keyboardType="numeric"
+          caption="en minutos"
         />
-      )}
-      <Button appearance="primary" onPress={addClase}>
-        Confirmar
-      </Button>
+        {!hasSingleTurnos && (
+          <Input
+            label="Cantidad de Turnos"
+            caption="Nosotros asignaremos una duracion a cada turno"
+            onChangeText={setCantidadTurnos}
+          />
+        )}
+        <CheckBox
+          checked={hasSingleTurnos}
+          onChange={(nextChecked) => setHasSingleTurnos(nextChecked)}>
+          Clase de un solo turno
+        </CheckBox>
+        <CheckBox
+          checked={isRegular}
+          onChange={(nextChecked) => setIsRegular(nextChecked)}>
+          Clase Regular
+        </CheckBox>
+
+        {show && (
+          <ModalPicker
+            mode={mode}
+            date={date}
+            setDate={setDate}
+            setShow={setShow}
+          />
+        )}
+
+        <Button appearance="primary" onPress={addClase}>
+          Confirmar
+        </Button>
+      </ScrollView>
     </Layout>
   );
 };

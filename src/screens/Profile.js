@@ -75,6 +75,8 @@ export const Profile = ({ navigation }) => {
   }, []);
 
   const isProfessor = user.role === 'ROLE_PROFESSOR';
+  const isStudent = user.role === 'ROLE_STUDENT';
+
   const renderBrushIcon = (props) => (
     <TouchableWithoutFeedback onPress={() => console.log('pueod hacer esto')}>
       <Icon {...props} name="edit-2-outline" />
@@ -289,13 +291,17 @@ export const Profile = ({ navigation }) => {
                 setVisible={setOnPasswordEdit}
               />
 
-              <Button
-                appearance="ghost"
-                onPress={() =>
-                  navigation.navigate('Classes', { studentSubscriptions: true })
-                }>
-                Mis Inscripciones
-              </Button>
+              {isStudent && (
+                <Button
+                  appearance="ghost"
+                  onPress={() =>
+                    navigation.navigate('Classes', {
+                      studentSubscriptions: true,
+                    })
+                  }>
+                  Mis Inscripciones
+                </Button>
+              )}
             </View>
           </ScrollView>
         </>

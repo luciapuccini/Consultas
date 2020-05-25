@@ -19,12 +19,22 @@ const placeHolder = require('../assets/placeholder.png');
 
 export const Professor = ({ route }) => {
   const { professor } = route.params;
-  const { id, name, mobile, legajo, surname, email, showMobile } = professor;
+  const {
+    id,
+    imagePath,
+    name,
+    mobile,
+    legajo,
+    surname,
+    email,
+    showMobile,
+  } = professor;
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
 
   const [professorSubjects, setProfessorSubjects] = useState([]);
   const [professorClases, setProfessorClases] = useState([]);
+  const professorAvatar = imagePath ? getUserImage(id) : placeHolder;
 
   //WARNING error con las clases de cada subject
   const fetchProfessorSubjets = async () => {
@@ -110,7 +120,7 @@ export const Professor = ({ route }) => {
             minHeight: 140,
           }}>
           <Avatar
-            source={getUserImage(id) || placeHolder}
+            source={professorAvatar}
             style={{
               height: 100,
               width: 100,

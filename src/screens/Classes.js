@@ -83,17 +83,17 @@ export const Classes = ({ navigation, route }) => {
       {!manager && (
         <SearchBox setSearchTerm={setSearchTerm} placeholder="Profesor" />
       )}
-      {!results ? (
-        <CustomSpinner />
-      ) : error ? (
-        <ErrorMessage message={error} />
-      ) : (
+      {results ? (
         <FlatList
           data={results}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
           keyExtractor={(item) => item.id}
         />
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : (
+        <CustomSpinner />
       )}
     </Layout>
   );
