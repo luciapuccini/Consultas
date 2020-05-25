@@ -16,7 +16,6 @@ export const ClassCard = ({ clase, manager }) => {
   const classCardImg = clase.professor.imagePath
     ? getUserImage(clase.professor.id)
     : placeHolder;
-  console.log('ClassCard -> getUserImage(clase.professor.id)', classCardImg);
   return (
     <Card style={styles.space}>
       <TouchableOpacity

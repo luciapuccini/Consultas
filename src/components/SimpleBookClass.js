@@ -45,8 +45,10 @@ export const SimpleBookClass = ({
       }}>
       {!manager ? (
         <>
-          <Text style={{ marginLeft: 10 }} category="s1">
-            Confirm: {getHora(hora)}
+          <Text
+            style={{ marginLeft: 10, fontWeight: 'bold', color: '#689f38' }}
+            category="h6">
+            Confirmar: {getHora(hora)}
           </Text>
           <Button
             disabled={disabled}

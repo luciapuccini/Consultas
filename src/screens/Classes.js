@@ -27,10 +27,8 @@ export const Classes = ({ navigation, route }) => {
         .then((response) => response.json())
         .then((json) => {
           if (json.error) {
-            console.log('Classes -> FetchClasses -> ERROR', json);
             setError(json.error);
           }
-          console.log('Classes -> json', json);
           setClasses(json);
         });
     };

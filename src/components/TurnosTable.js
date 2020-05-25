@@ -25,7 +25,8 @@ export const TurnosTable = ({
 
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   const getSelectedTurno = () => {
-    return turnos[selectedIndex].startTime;
+    console.log('getSelectedTurno -> turnos', turnos);
+    return turnos[selectedIndex].turnoTime;
   };
   const handleSelection = ({ index }) => {
     setSelectedIndex(index.row);
@@ -72,9 +73,18 @@ export const TurnosTable = ({
           margin: 10,
         }}>
         {!manager ? (
-          <View style={{ flex: 1 }}>
-            <Text style={{ marginLeft: 10 }}>
-              Confirm: {getHora(getSelectedTurno())}
+          <View
+            style={{
+              flex: 1,
+            }}>
+            <Text
+              category="h6"
+              style={{
+                marginLeft: 10,
+                fontWeight: 'bold',
+                color: '#689f38',
+              }}>
+              Confirmar: {getHora(getSelectedTurno())}
             </Text>
             <Button
               disabled={disabled}
