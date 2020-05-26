@@ -1,16 +1,48 @@
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
-import { Text, Card, Divider } from '@ui-kitten/components';
+import { Text, Card, Divider, Button, Icon } from '@ui-kitten/components';
 import _ from 'underscore';
 import { Thumbnail } from 'native-base';
 import { getUserImage, getFecha, getHora } from '../utils/functions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const placeHolder = require('../assets/placeholder.png');
 
-export const ClassSummary = ({ fecha, count, comments, professor }) => {
+// const handleDeleteComment = async (comment) => {
+//   console.log('handleDelete -> comments', comment);
+//   const {
+//     commentPK: { commentTime },
+//   } = comment;
+//   const body = { id: claseId, dateTime: commentTime };
+//   const token = await getToken();
+//   fetch(`http://181.164.121.14:25565/clases/addComment`, {
+//     method: 'post',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: JSON.stringify(body),
+//   })
+//     .then((response) => response.json())
+//     .then((json) => {
+//       if (json.message === 'Suceed') navigation.goBack();
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
+
+export const ClassSummary = ({
+  fecha,
+  count,
+  comments,
+  professor,
+  handleDeleteComment,
+}) => {
   const subjectImage = professor.imagePath
     ? getUserImage(professor.id)
     : placeHolder;
+
   return (
     <View>
       <ImageBackground
@@ -57,11 +89,46 @@ export const ClassSummary = ({ fecha, count, comments, professor }) => {
             </Text>
           )}>
           {comments.map((comment) => (
-            <Text>{comment.comment}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+                justifyContent: 'space-between',
+                borderBottomColor: '#CFD8DC',
+                borderBottomWidth: 1,
+                marginTop: 2,
+              }}>
+              <Text>{comment.comment}</Text>
+              <TouchableOpacity
+                style={{
+                  height: 30,
+                  width: 30,
+                  marginTop: 5,
+                  marginRight: 20,
+                }}>
+                {/* TODO: check que no se vea en alumnos */}
+                {professor && (
+                  <TrashIcon
+                    comment={comment}
+                    handleDeleteComment={handleDeleteComment}
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
           ))}
         </Card>
       )}
     </View>
+  );
+};
+const TrashIcon = ({ props, comment, handleDeleteComment }) => {
+  return (
+    <Icon
+      {...props}
+      name="close"
+      fill="#E53935"
+      onPress={() => handleDeleteComment(comment)}
+    />
   );
 };
 

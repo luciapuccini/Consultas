@@ -10,6 +10,7 @@ import {
 import { View } from 'react-native';
 import { getHora } from '../utils/functions';
 import { getToken } from '../utils/authHelper';
+import { useNavigation } from '@react-navigation/native';
 
 export const TurnosTable = ({
   turnos,
@@ -22,6 +23,7 @@ export const TurnosTable = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [comment, setComment] = React.useState('');
+  const navigation = useNavigation();
 
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   const getSelectedTurno = () => {
@@ -46,6 +48,8 @@ export const TurnosTable = ({
     })
       .then((response) => response.json())
       .then((json) => {
+        if (json.message === 'Suceed') navigation.goBack();
+
         console.log(json.message);
       })
       .catch((error) => {

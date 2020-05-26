@@ -91,6 +91,30 @@ export const ClassDetail = ({ route, navigation }) => {
     return moment(initTime).fromNow();
   };
 
+  const handleDeleteComment = async (comment) => {
+    console.log('handleDelete -> comments', comment);
+    const {
+      commentPK: { commentTime },
+    } = comment;
+    const body = { id, dateTime: commentTime };
+    const token = await getToken();
+    fetch(`http://181.164.121.14:25565/clases/deleteComment`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.message === 'Suceed') navigation.goBack();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
@@ -100,6 +124,7 @@ export const ClassDetail = ({ route, navigation }) => {
             count={getCount()}
             comments={comments}
             professor={professor}
+            handleDeleteComment={handleDeleteComment}
           />
           {canShowTurnos ? (
             <TurnosTable

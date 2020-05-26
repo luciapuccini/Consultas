@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Card, Icon, Text, CheckBox } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
 import 'moment/locale/es';
+import { getFechaHora } from '../utils/functions';
 
-const handleDate = (date) => {
-  return moment(date).locale('es').format('lll');
-};
 export const SimpleClassCard = ({
   clase,
   subject,
@@ -27,7 +24,7 @@ export const SimpleClassCard = ({
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={styles.cardStyle}>
             <Text category="h6">{subject.name}</Text>
-            <Text style={{ fontSize: 14 }}>{handleDate(clase.initTime)}</Text>
+            <Text style={{ fontSize: 14 }}>{getFechaHora(clase.initTime)}</Text>
           </View>
           {!cancel && (
             <CheckBox
