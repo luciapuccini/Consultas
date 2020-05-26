@@ -22,6 +22,7 @@ import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { getUserImage } from '../utils/functions';
 
 export const Profile = ({ navigation }) => {
   const [showMobile, setShowMobile] = React.useState(false);
@@ -49,12 +50,12 @@ export const Profile = ({ navigation }) => {
           name,
           email,
           legajo,
-          books,
           id,
           surname,
           mobile,
           showMobile,
           role,
+          profileImagePath,
         } = json;
         setUser({
           name,
@@ -64,6 +65,7 @@ export const Profile = ({ navigation }) => {
           surname,
           mobile,
           role,
+          profileImagePath,
         });
         setShowMobile(showMobile);
         setLoading(false);
@@ -160,6 +162,12 @@ export const Profile = ({ navigation }) => {
     return num.match(phoneRegex);
   };
   const profileBack = require('../assets/background-profile.png');
+  const profilePlaceholder = require('../assets/profile_placeholder.png');
+  const profileImage = user.profileImagePath
+    ? getUserImage(user.userId)
+    : profilePlaceholder;
+  console.log('Profile -> user', user);
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
@@ -173,9 +181,7 @@ export const Profile = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
               <Image
-                source={{
-                  uri: `http://181.164.121.14:25565/users/images/profileImages/${user.userId}`,
-                }}
+                source={profileImage}
                 style={{ height: 100, width: 100, borderRadius: 50 }}
               />
 

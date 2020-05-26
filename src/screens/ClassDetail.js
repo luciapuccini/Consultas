@@ -1,16 +1,11 @@
 import React from 'react';
-import { View, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
 
 import moment from 'moment';
 
 import { getToken } from '../utils/authHelper';
-import {
-  getHora,
-  timeToStart,
-  getUserLegajo,
-  getFecha,
-} from '../utils/functions';
+import { timeToStart, getUserLegajo } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -118,7 +113,7 @@ export const ClassDetail = ({ route, navigation }) => {
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
-        <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }}>
           <ClassSummary
             fecha={initTime}
             count={getCount()}
@@ -149,7 +144,7 @@ export const ClassDetail = ({ route, navigation }) => {
             />
           )}
           {canStart && manager && <StartClass id={id} />}
-        </View>
+        </ScrollView>
       ) : (
         <CustomSpinner />
       )}
@@ -241,7 +236,6 @@ const StartClass = ({ id }) => {
 
 const style = {
   touchableStartStyle: {
-    position: 'absolute',
     width: 50,
     height: 50,
     alignItems: 'center',

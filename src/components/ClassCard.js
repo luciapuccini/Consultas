@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Thumbnail } from 'native-base';
 import { Card, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
 import 'moment/locale/es';
 import { getUserImage, getFechaHora } from '../utils/functions';
 
@@ -11,7 +10,7 @@ const placeHolder = require('../assets/placeholder.png');
 
 export const ClassCard = ({ clase, manager }) => {
   const navigation = useNavigation();
-  const isLive = clase.status === 'En curso';
+  const isLive = clase.status === 'En Curso';
   const statusColor = isLive ? '#66BB6A' : '#64B5F6';
   const classCardImg = clase.professor.imagePath
     ? getUserImage(clase.professor.id)
