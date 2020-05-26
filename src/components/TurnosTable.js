@@ -62,7 +62,7 @@ export const TurnosTable = ({
       <Menu style={{ flex: 1, maxHeight: 400 }}>
         {turnos.map((turno) => (
           <MenuItem
-            title={getHora(turno.turnoTime)}
+            title={() => <StudentRow turno={turno} />}
             disabled={turno.hasUsers}
             onPress={handleSelection}
           />
@@ -127,7 +127,29 @@ export const TurnosTable = ({
     </>
   );
 };
+const StudentRow = ({ turno }) => {
+  const { students } = turno;
+  const names = students && students.map((s) => s.name.concat('  ', s.surname));
 
+  return (
+    <View
+      style={{
+        flex: 1,
+        marginLeft: 5,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        maxWidth: '80%',
+        alignItems: 'baseline',
+      }}>
+      <Text category="s1">{getHora(turno.turnoTime)}</Text>
+      {names && (
+        <Text category="label" appearance="hint" numberOfLines={1}>
+          {names.map((name) => name)}
+        </Text>
+      )}
+    </View>
+  );
+};
 const styles = {
   inscriptionBtn: {
     height: 20,

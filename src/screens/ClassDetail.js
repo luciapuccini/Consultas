@@ -52,7 +52,7 @@ export const ClassDetail = ({ route, navigation }) => {
       })
         .then((response) => response.json())
         .then((json) => {
-          setTurnos(json.turnos); //FIXME: starTime -> turnoTime
+          setTurnos(json.turnos);
           setComments(json.comments);
           setLoading(false);
           checkUserPresent(json.turnos);
@@ -175,7 +175,6 @@ const subscribeTurno = async (idClass, startTimeTurno) => {
 const unsubscribeTurno = async (idClass, startTimeTurno) => {
   const token = await getToken();
   const turno = { consultaId: idClass, initTime: startTimeTurno };
-  console.log('SUBSCRIBITEE', turno);
 
   fetch(`http://181.164.121.14:25565/clases/unsubscribe`, {
     method: 'post',
@@ -206,7 +205,6 @@ const onstartClass = async (id, setStarted) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setStarted(true);
         Alert.alert(
           'Empezando la clase',

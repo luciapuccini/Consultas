@@ -166,7 +166,6 @@ export const Profile = ({ navigation }) => {
   const profileImage = user.profileImagePath
     ? getUserImage(user.userId)
     : profilePlaceholder;
-  console.log('Profile -> user', user);
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
