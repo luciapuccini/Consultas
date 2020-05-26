@@ -125,6 +125,7 @@ export const ClassDetail = ({ route, navigation }) => {
             comments={comments}
             professor={professor}
             handleDeleteComment={handleDeleteComment}
+            manager={manager}
           />
           {canShowTurnos ? (
             <TurnosTable

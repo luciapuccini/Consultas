@@ -8,36 +8,13 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const placeHolder = require('../assets/placeholder.png');
 
-// const handleDeleteComment = async (comment) => {
-//   console.log('handleDelete -> comments', comment);
-//   const {
-//     commentPK: { commentTime },
-//   } = comment;
-//   const body = { id: claseId, dateTime: commentTime };
-//   const token = await getToken();
-//   fetch(`http://181.164.121.14:25565/clases/addComment`, {
-//     method: 'post',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       Authorization: `Bearer ${token}`,
-//     },
-//     body: JSON.stringify(body),
-//   })
-//     .then((response) => response.json())
-//     .then((json) => {
-//       if (json.message === 'Suceed') navigation.goBack();
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// };
-
 export const ClassSummary = ({
   fecha,
   count,
   comments,
   professor,
   handleDeleteComment,
+  manager,
 }) => {
   const subjectImage = professor.imagePath
     ? getUserImage(professor.id)
@@ -107,7 +84,7 @@ export const ClassSummary = ({
                   marginRight: 20,
                 }}>
                 {/* TODO: check que no se vea en alumnos */}
-                {professor && (
+                {manager && (
                   <TrashIcon
                     comment={comment}
                     handleDeleteComment={handleDeleteComment}
