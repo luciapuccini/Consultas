@@ -32,8 +32,8 @@ export const SignUpScreen = ({ navigation }) => {
       !_.isEmpty(password);
     if (hasUser) {
       const data = await signup(user);
-      console.log('a ver que pasa', data);
       setError(data);
+      navigation.goBack();
     } else {
       setError('Complete los campos');
     }

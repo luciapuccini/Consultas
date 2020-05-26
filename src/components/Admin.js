@@ -54,6 +54,7 @@ export const Admin = ({ user }) => {
         />
       )}
       <AddSubject professors={professors} />
+      <AddProfessor />
     </Layout>
   );
 };
@@ -65,6 +66,21 @@ const AddSubject = ({ professors }) => {
       onPress={() => navigation.navigate('Add Subject', { professors })}
       style={style.touchableStyle}>
       <Icon name="plus" fill="#fff" style={style.FloatingButtonStyle} />
+    </TouchableOpacity>
+  );
+};
+
+const AddProfessor = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Add Professor')}
+      style={style.touchable2Style}>
+      <Icon
+        name="person-add-outline"
+        fill="#fff"
+        style={style.FloatingButtonStyle}
+      />
     </TouchableOpacity>
   );
 };
@@ -81,6 +97,15 @@ const style = {
     alignItems: 'center',
     justifyContent: 'center',
     right: 30,
+    bottom: 30,
+  },
+  touchable2Style: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 100,
     bottom: 30,
   },
 

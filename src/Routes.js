@@ -15,6 +15,7 @@ import { ClassesManager } from './screens/ClassesManager';
 import { ClassForm } from './screens/ClassForm';
 import { SubjectForm } from './screens/SubjectForm';
 import { EditSubject } from './screens/EditSubject';
+import { AddProfessor } from './screens/AddProfessor';
 
 export const RootStack = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -86,6 +87,14 @@ export const RootStack = ({ navigation }) => {
         options={{
           ...darkHeaderConfig,
           title: 'Modificar',
+        }}
+      />
+      <Screen
+        name="Add Professor"
+        component={AddProfessor}
+        options={{
+          ...darkHeaderConfig,
+          title: 'Agregar Profesor',
         }}
       />
     </Navigator>

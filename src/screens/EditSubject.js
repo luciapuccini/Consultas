@@ -3,7 +3,7 @@ import { Text, Layout, Icon, Button } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
 import { View } from 'react-native';
 
-export const EditSubject = ({ route }) => {
+export const EditSubject = ({ route, navigation }) => {
   const { subjectId } = route.params.subject;
   const [professors, setProfessors] = useState([]);
   const [subjectProfessors, setSubjectProfessors] = useState([]); //TO ADD
@@ -73,6 +73,7 @@ export const EditSubject = ({ route }) => {
       .then((response) => response.json())
       .then((json) => {
         console.log(json.message);
+        navigation.goBack();
       });
   };
   return (
