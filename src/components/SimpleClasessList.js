@@ -9,7 +9,7 @@ import { isEmpty } from 'underscore';
 import { ErrorMessage } from './ErrorMessage';
 import { getToken } from '../utils/authHelper';
 
-const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
+const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [toDelete, setToDelete] = useState([]);
@@ -38,7 +38,6 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           navigation.goBack();
         });
     } catch (error) {
@@ -80,17 +79,18 @@ const SimpleClasessList = ({ simpleClasses, subject, manager }) => {
         </ScrollView>
       )}
 
-      <AddClass subjectId={subject.subjectId} />
-      <DeleteClass subjectId={subject.subjectId} />
+      <AddClass subjectId={subject.subjectId} refresh={refresh} />
+      <DeleteClass subjectId={subject.subjectId} refresh={refresh} />
     </Layout>
   );
 };
 
-const AddClass = ({ subjectId }) => {
+const AddClass = ({ subjectId, refresh }) => {
+  console.log('AddClass -> refresh', refresh);
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Add Class', { subjectId })}
+      onPress={() => navigation.navigate('Add Class', { subjectId, refresh })}
       style={style.touchableStyle}>
       <Icon name="plus" fill="#fff" style={style.FloatingButtonStyle} />
     </TouchableOpacity>

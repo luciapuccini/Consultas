@@ -72,7 +72,19 @@ export const SubjectCard = ({ subject, professor, admin }) => {
       return subjectPlaceholder;
     }
   };
-
+  const handleDeleteSubject = async () => {
+    const token = await getToken();
+    fetch('http://181.164.121.14:25565/subjects/deleteSubject', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ id: subjectId }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data.message));
+  };
   const Header = () => {
     return (
       <View style={[styles.subjectCardHeaderStyle, headerCardStyle]}>
@@ -93,7 +105,7 @@ export const SubjectCard = ({ subject, professor, admin }) => {
                 style={styles.bellSize}
                 name="trash"
                 fill="#8F9BB3"
-                onPress={() => console.log('TODO: DELETE SUBJECT')}
+                onPress={handleDeleteSubject}
               />
             )}
           </TouchableOpacity>

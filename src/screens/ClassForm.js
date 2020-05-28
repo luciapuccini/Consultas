@@ -35,6 +35,10 @@ export const ClassForm = ({ route, navigation }) => {
   const openTimePicker = () => {
     showMode('time');
   };
+  const onGoBack = () => {
+    navigation.goBack();
+    route.params.refresh();
+  };
 
   const addClase = async () => {
     console.log('addClase -> date', date);
@@ -74,14 +78,14 @@ export const ClassForm = ({ route, navigation }) => {
               {
                 text: 'OK',
                 onPress: () => {
-                  navigation.goBack();
+                  onGoBack();
                 },
               },
             ],
             { cancelable: false },
           );
         } else {
-          navigation.goBack();
+          onGoBack();
         }
       })
       .catch((error) => console.log(error));

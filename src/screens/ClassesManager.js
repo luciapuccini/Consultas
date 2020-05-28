@@ -14,24 +14,26 @@ export const ClassesManager = ({ route }) => {
   const [simpleClasses, setSimpleClasses] = useState([]);
   const [regularClasses, setRegularClasses] = useState([]);
 
-  useEffect(() => {
-    const fetchClasses = async () => {
-      const { subjectId } = subject;
-      const token = await getToken();
+  const fetchClasses = async () => {
+    const { subjectId } = subject;
+    const token = await getToken();
 
-      fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          filterClasses(json);
-        });
-    };
+    fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        filterClasses(json);
+      });
+  };
+
+  useEffect(() => {
     fetchClasses();
   }, []);
+
   const filterClasses = (clases) => {
     //FIXME: isRegular !!
     setRegularClasses(clases.filter((clase) => clase.isRegular));
@@ -49,6 +51,7 @@ export const ClassesManager = ({ route }) => {
             simpleClasses={simpleClasses}
             subject={subject}
             manager={manager}
+            refresh={fetchClasses}
           />
         </Tab>
         <Tab title="Regulares">
