@@ -12,10 +12,20 @@ export const Classes = ({ navigation, route }) => {
   const [classes, setClasses] = React.useState(null);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [error, setError] = React.useState(false);
+  const [loading, setloading] = React.useState(false);
+
   const { manager } = route.params;
 
   React.useEffect(() => {
+    if (route.params.subject) {
+      setError(isEmpty(classes) ? 'No hay clases' : false);
+    } else if (route.params.studentSubscriptions) {
+      setError(
+        isEmpty(classes) ? 'No tienes inscripciones a ninguna clase' : false,
+      );
+    }
     const fetchClasses = async () => {
+      setloading(true);
       const { subjectId } = route.params?.subject;
       const token = await getToken();
       fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
@@ -30,10 +40,12 @@ export const Classes = ({ navigation, route }) => {
             setError(json.error);
           }
           setClasses(json);
+          setloading(false);
         });
     };
 
     const fetchStudentSubscriptions = async () => {
+      setloading(true);
       const token = await getToken();
       fetch(`http://181.164.121.14:25565/users/getStudentInscriptions`, {
         headers: {
@@ -44,6 +56,7 @@ export const Classes = ({ navigation, route }) => {
         .then((json) => {
           console.log('fetchStudentSubscriptions -> json', json);
           setClasses(json);
+          setloading(false);
         });
     };
 
@@ -54,17 +67,6 @@ export const Classes = ({ navigation, route }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
-
-  React.useEffect(() => {
-    if (route.params.subject) {
-      setError(isEmpty(classes) ? 'No hay clases' : false);
-    } else if (route.params.studentSubscriptions) {
-      setError(
-        isEmpty(classes) ? 'No tienes inscripciones a ninguna clase' : false,
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classes]);
 
   const results = !searchTerm
     ? classes
@@ -83,17 +85,18 @@ export const Classes = ({ navigation, route }) => {
       {!manager && (
         <SearchBox setSearchTerm={setSearchTerm} placeholder="Profesor" />
       )}
-      {results ? (
+
+      {error && <ErrorMessage message={error} />}
+
+      {loading ? (
+        <CustomSpinner />
+      ) : (
         <FlatList
           data={results}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
           keyExtractor={(item) => item.id}
         />
-      ) : error ? (
-        <ErrorMessage message={error} />
-      ) : (
-        <CustomSpinner />
       )}
     </Layout>
   );

@@ -12,7 +12,7 @@ export const ClassCard = ({ clase, manager }) => {
   const navigation = useNavigation();
   const isLive = clase.status === 'En Curso';
   const statusColor = isLive ? '#66BB6A' : '#64B5F6';
-  const classCardImg = clase.professor.imagePath
+  const classCardImg = clase.professor?.imagePath
     ? getUserImage(clase.professor.id)
     : placeHolder;
   return (

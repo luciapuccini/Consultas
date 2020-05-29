@@ -10,7 +10,7 @@ import {
 } from '@ui-kitten/components';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
-import ErrorMessage from '../components/ErrorMessage';
+import { ErrorMessage } from '../components/ErrorMessage';
 import moment from 'moment';
 
 export const ClassForm = ({ route, navigation }) => {
@@ -23,7 +23,7 @@ export const ClassForm = ({ route, navigation }) => {
   const [hasSingleTurnos, setHasSingleTurnos] = React.useState(false);
   const [cantidadTurnos, setCantidadTurnos] = useState(1);
   const [isRegular, setIsRegular] = React.useState(false);
-  const [failed, setFailed] = React.useState(null);
+  // const [failed, setFailed] = React.useState(null);
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -57,7 +57,6 @@ export const ClassForm = ({ route, navigation }) => {
       ...duracion,
       ...turnos,
     };
-    console.log('CREO TURNO', body);
     const token = await getToken();
     fetch(`http://181.164.121.14:25565/clases/add`, {
       method: 'POST',
@@ -69,11 +68,11 @@ export const ClassForm = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log('ADD?', json);
-        if (json.lenght > 0) {
+        if (json.error || json.lenght > 0) {
+          const alertMessage = json.message ? json.message : json;
           Alert.alert(
-            'No pudimos crear las siguientes clases',
-            `${JSON.stringify(json)}`,
+            'No pudimos crear las clases',
+            `${JSON.stringify(alertMessage)}`,
             [
               {
                 text: 'OK',
@@ -145,7 +144,7 @@ export const ClassForm = ({ route, navigation }) => {
             setShow={setShow}
           />
         )}
-
+        {/* {failed && <ErrorMessage message={failed} />} */}
         <Button appearance="primary" onPress={addClase}>
           Confirmar
         </Button>
