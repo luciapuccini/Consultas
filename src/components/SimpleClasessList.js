@@ -25,7 +25,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
     }
   }, [simpleClasses]);
 
-  const deleteClasses = async (navigation) => {
+  const deleteClasses = async (refresh) => {
     const token = await getToken();
     try {
       fetch('http://181.164.121.14:25565/clases/cancelClass', {
@@ -38,20 +38,18 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          navigation.goBack();
+          refresh();
         });
     } catch (error) {
       console.log('Upss', error);
     }
   };
 
-  const DeleteClass = () => {
-    const navigation = useNavigation();
-
+  const DeleteClass = ({ refresh }) => {
     return (
       <TouchableOpacity
         style={style.touchableDeleteStyle}
-        onPress={() => deleteClasses(navigation)}>
+        onPress={() => deleteClasses(refresh)}>
         <Icon name="close" fill="#fff" style={style.FABDeleteStyle} />
       </TouchableOpacity>
     );
@@ -86,7 +84,6 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
 };
 
 const AddClass = ({ subjectId, refresh }) => {
-  console.log('AddClass -> refresh', refresh);
   const navigation = useNavigation();
   return (
     <TouchableOpacity
