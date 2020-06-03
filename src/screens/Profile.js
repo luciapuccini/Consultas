@@ -3,7 +3,6 @@ import {
   View,
   ImageBackground,
   TouchableWithoutFeedback,
-  TouchableOpacity,
   ScrollView,
   Image,
 } from 'react-native';
@@ -102,7 +101,11 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
-        console.log('response', json);
+        console.log('handleSave -> json', json);
+        if (json.error) {
+          setError(json.message);
+        }
+        navigation.goBack();
       } catch (error) {
         console.log(error);
       }
@@ -161,12 +164,13 @@ export const Profile = ({ navigation }) => {
     const phoneRegex = /\+549\d\+{9}/;
     return num.match(phoneRegex);
   };
+  //#region  IMAGES
   const profileBack = require('../assets/background-profile.png');
   const profilePlaceholder = require('../assets/profile_placeholder.png');
   const profileImage = user.profileImagePath
     ? getUserImage(user.userId)
     : profilePlaceholder;
-
+  //#endregion
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
