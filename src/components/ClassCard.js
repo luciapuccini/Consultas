@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Thumbnail } from 'native-base';
 import { Card, Icon, Text } from '@ui-kitten/components';
@@ -9,12 +9,22 @@ import { getUserImage, getFechaHora } from '../utils/functions';
 const placeHolder = require('../assets/placeholder.png');
 
 export const ClassCard = ({ clase, manager }) => {
+  const classData = clase.classe ? clase : clase.classe;
+  const { professor } = clase;
   const navigation = useNavigation();
   const isLive = clase.status === 'En Curso';
   const statusColor = isLive ? '#66BB6A' : '#64B5F6';
-  const classCardImg = clase.professor?.imagePath
-    ? getUserImage(clase.professor.id)
-    : placeHolder;
+
+  const classCardImg =
+    professor && professor.imagePath ? getUserImage(professor.id) : placeHolder;
+
+  const [initTime, setinitTime] = useState('');
+  const [status, setStatus] = useState('');
+  useEffect(() => {
+    setinitTime(clase.classe.initTime);
+    setStatus(clase.classe.status);
+  }, [clase]);
+
   return (
     <Card style={styles.space}>
       <TouchableOpacity
@@ -23,15 +33,16 @@ export const ClassCard = ({ clase, manager }) => {
           <Thumbnail source={classCardImg} />
           <View>
             <View style={styles.cardStyle}>
-              <Text category="h6">{clase.professor.name}</Text>
+              <Text category="h6">{professor.name}</Text>
+
               <Text appearance="hint" style={{ fontSize: 14 }}>
-                {getFechaHora(clase.initTime)}
+                {getFechaHora(initTime)}
               </Text>
             </View>
           </View>
         </View>
         <View style={styles.textRowStyle}>
-          <Text style={{ color: statusColor }}>{clase.status} </Text>
+          <Text style={{ color: statusColor }}>{status} </Text>
           <Icon
             name="checkmark-circle-outline"
             style={styles.checkStyle}

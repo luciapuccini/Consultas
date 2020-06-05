@@ -20,6 +20,7 @@ export const SimpleBookClass = ({
   const addNote = async () => {
     const body = { id, comment };
     const token = await getToken();
+    console.log('addNote -> body', body);
     fetch(`http://181.164.121.14:25565/clases/addComment`, {
       method: 'post',
       headers: {

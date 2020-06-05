@@ -10,6 +10,7 @@ import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { ScrollView } from 'react-native-gesture-handler';
 const { loginFlowContainer } = Styles;
 
 export const SignUpScreen = ({ navigation }) => {
@@ -39,75 +40,77 @@ export const SignUpScreen = ({ navigation }) => {
     }
   };
   return (
-    <ImageBackground source={Background} style={loginFlowContainer}>
-      <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
-        Crear una Cuenta
-      </Text>
+    <ScrollView>
+      <ImageBackground source={Background} style={loginFlowContainer}>
+        <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
+          Crear una Cuenta
+        </Text>
 
-      <View style={[inputView]}>
-        <TextInput
-          style={inputText}
-          placeholder="Legajo..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setLegajo}
-          keyboardType="numeric"
-        />
-      </View>
+        <View style={[inputView]}>
+          <TextInput
+            style={inputText}
+            placeholder="Legajo..."
+            placeholderTextColor="#003f5c"
+            onChangeText={setLegajo}
+            keyboardType="numeric"
+          />
+        </View>
 
-      <View style={[inputView]}>
-        <TextInput
-          style={inputText}
-          placeholder="Nombre..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setName}
-        />
-      </View>
-      <View style={[inputView]}>
-        <TextInput
-          style={inputText}
-          placeholder="Apellido..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setSurname}
-        />
-      </View>
-      <View style={[inputView]}>
-        <TextInput
-          style={inputText}
-          placeholder="Mail..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setEmail}
-        />
-      </View>
-      {/* TODO: passwords match */}
-      <View style={inputView}>
-        <TextInput
-          secureTextEntry
-          style={inputText}
-          placeholder="Contraseña..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setPassword}
-        />
-      </View>
-      <View style={inputView}>
-        <TextInput
-          secureTextEntry
-          style={inputText}
-          placeholder="Confirme Contraseña..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setPassword}
-        />
-      </View>
+        <View style={[inputView]}>
+          <TextInput
+            style={inputText}
+            placeholder="Nombre..."
+            placeholderTextColor="#003f5c"
+            onChangeText={setName}
+          />
+        </View>
+        <View style={[inputView]}>
+          <TextInput
+            style={inputText}
+            placeholder="Apellido..."
+            placeholderTextColor="#003f5c"
+            onChangeText={setSurname}
+          />
+        </View>
+        <View style={[inputView]}>
+          <TextInput
+            style={inputText}
+            placeholder="Mail..."
+            placeholderTextColor="#003f5c"
+            onChangeText={setEmail}
+          />
+        </View>
+        {/* TODO: passwords match */}
+        <View style={inputView}>
+          <TextInput
+            secureTextEntry
+            style={inputText}
+            placeholder="Contraseña..."
+            placeholderTextColor="#003f5c"
+            onChangeText={setPassword}
+          />
+        </View>
+        <View style={inputView}>
+          <TextInput
+            secureTextEntry
+            style={inputText}
+            placeholder="Confirme Contraseña..."
+            placeholderTextColor="#003f5c"
+            onChangeText={setPassword}
+          />
+        </View>
 
-      {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
+        {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
 
-      <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
-        <Text style={loginText}>Registrarse</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
+          <Text style={loginText}>Registrarse</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-        <Text style={loginText}>Ya esta registrado?</Text>
-      </TouchableOpacity>
-    </ImageBackground>
+        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+          <Text style={loginText}>Ya esta registrado?</Text>
+        </TouchableOpacity>
+      </ImageBackground>
+    </ScrollView>
   );
 };
 

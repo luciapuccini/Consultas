@@ -129,6 +129,8 @@ export const Profile = ({ navigation }) => {
     const token = await getToken();
     const options = {
       title: 'Subir Foto',
+      takePhotoButtonTitle: 'Usar camara...',
+      chooseFromLibraryButtonTitle: 'Elegir foto de galeria...',
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -137,11 +139,9 @@ export const Profile = ({ navigation }) => {
     let imageFile;
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log('[ CANCELED ]');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
       } else {
         const { type, data, fileName } = response;
         imageFile = { imageType: type, base64Image: data, fileName };
@@ -154,7 +154,7 @@ export const Profile = ({ navigation }) => {
           body: JSON.stringify(imageFile),
         })
           .then((resp) => resp.json())
-          .then((val) => console.log('response', val))
+          .then((val) => console.log('lnln', val))
           .catch((err) => console.log('catch', err));
       }
     });

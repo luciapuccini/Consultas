@@ -15,6 +15,7 @@ export const getFecha = (fecha) => {
   return moment(fixFecha).tz(ARG).locale('es').format('ll');
 };
 export const getFechaHora = (fecha) => {
+  console.log('getFechaHora -> fecha', fecha);
   const fixFecha = fecha.concat('Z');
   return moment(fixFecha).tz(ARG).locale('es').format('lll a');
 };
