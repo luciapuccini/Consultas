@@ -1,37 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Layout, Icon, Button } from '@ui-kitten/components';
+import { Text, Layout, Icon, Button, Spinner } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
-import { View } from 'react-native';
+import { isEmpty } from 'underscore';
 
 export const EditSubject = ({ route, navigation }) => {
   const { subjectId } = route.params.subject;
+  const [loading, setLoading] = useState(false);
   const [professors, setProfessors] = useState([]);
   const [subjectProfessors, setSubjectProfessors] = useState([]); //TO ADD
   const [subjectProfessorsToRemove, setSubjectProfessorsToRemove] = useState(
     [],
   ); //TO REMOVE
-
-  useEffect(() => {
-    const fetchProfessors = async () => {
-      const token = await getToken();
-      fetch(
-        `http://181.164.121.14:25565/subjects/modifySubjectInfo/${subjectId}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+  const fetchProfessors = async () => {
+    setLoading(true);
+    const token = await getToken();
+    fetch(
+      `http://181.164.121.14:25565/subjects/modifySubjectInfo/${subjectId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-      )
-        .then((response) => response.json())
-        .then((json) => {
-          console.log('fetchProfessors -> json', json.subjectProfessors);
-          setProfessors(json.subjectProfessors);
-          professors.forEach((p) => {
-            setSubjectProfessors([...subjectProfessors, p.id]);
-          });
+      },
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        console.log('fetchProfessors -> json', json);
+        console.log(
+          'fetchProfessors -> todos los habilitados',
+          json.subjectProfessors,
+        );
+        setProfessors(json.allProfessors);
+        json.subjectProfessors.forEach((p) => {
+          setSubjectProfessors([...subjectProfessors, p.id]);
         });
-    };
+      });
+    setLoading(false);
+  };
+  useEffect(() => {
     fetchProfessors();
   }, []);
 
@@ -61,8 +67,7 @@ export const EditSubject = ({ route, navigation }) => {
       subjectProfessors,
       subjectProfessorsToRemove,
     };
-    console.log('handleConfirm -> body', body);
-    fetch(`http://181.164.121.14:25565/subjects/modify`, {
+    fetch('http://181.164.121.14:25565/subjects/modify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,36 +81,70 @@ export const EditSubject = ({ route, navigation }) => {
         navigation.goBack();
       });
   };
+
   return (
     <Layout level="1" style={style.layout}>
-      <Text category="h5">Profesores Habilitados</Text>
+      <>
+        <Text category="h5">TODOS Profesores</Text>
 
-      {professors.map((profe) => {
-        return (
-          <Button
-            appearance="ghost"
-            onPress={() => handleProfessors(profe)}
-            style={{
-              justifyContent: 'flex-start',
-              borderBottomColor: '#b0bec5',
-              borderBottomWidth: 1,
-              borderRadius: 0,
-            }}
-            accessoryLeft={
-              subjectProfessors.length > 0 &&
-              subjectProfessors.includes(profe.id)
-                ? StatusIcon
-                : RemoveIcon
-            }>
-            <Text>{profe.name}</Text>
-          </Button>
-        );
-      })}
-      <Button
-        style={{ alignSelf: 'flex-end', marginTop: 10 }}
-        onPress={handleConfirm}>
-        Confirmar
-      </Button>
+        {!loading &&
+          professors.map((profe) => {
+            return (
+              <Button
+                appearance="ghost"
+                onPress={() => handleProfessors(profe)}
+                style={{
+                  justifyContent: 'flex-start',
+                  borderBottomColor: '#b0bec5',
+                  borderBottomWidth: 1,
+                  borderRadius: 0,
+                }}
+                // accessoryLeft={
+                //   subjectProfessors.length > 0 &&
+                //   subjectProfessors.includes(profe.id)
+                //     ? StatusIcon
+                //     : RemoveIcon
+                // }
+              >
+                <Text>
+                  {profe.name} {profe.surname}
+                </Text>
+              </Button>
+            );
+          })}
+
+        <Text category="h5">AGREGADOS Profesores</Text>
+        {subjectProfessors.map((profe) => {
+          return (
+            <Button
+              appearance="ghost"
+              onPress={() => handleProfessors(profe)}
+              style={{
+                justifyContent: 'flex-start',
+                borderBottomColor: '#b0bec5',
+                borderBottomWidth: 1,
+                borderRadius: 0,
+              }}
+              // accessoryLeft={
+              //   subjectProfessors.length > 0 &&
+              //   subjectProfessors.includes(profe.id)
+              //     ? StatusIcon
+              //     : RemoveIcon
+              // }
+            >
+              <Text>
+                {profe.name} {profe.surname}
+              </Text>
+            </Button>
+          );
+        })}
+
+        <Button
+          style={{ alignSelf: 'flex-end', marginTop: 10 }}
+          onPress={handleConfirm}>
+          Confirmar
+        </Button>
+      </>
     </Layout>
   );
 };

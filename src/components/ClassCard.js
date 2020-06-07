@@ -9,7 +9,6 @@ import { getUserImage, getFechaHora } from '../utils/functions';
 const placeHolder = require('../assets/placeholder.png');
 
 export const ClassCard = ({ clase, manager }) => {
-  const classData = clase.classe ? clase : clase.classe;
   const { professor } = clase;
   const navigation = useNavigation();
   const isLive = clase.status === 'En Curso';
@@ -21,8 +20,13 @@ export const ClassCard = ({ clase, manager }) => {
   const [initTime, setinitTime] = useState('');
   const [status, setStatus] = useState('');
   useEffect(() => {
-    setinitTime(clase.classe.initTime);
-    setStatus(clase.classe.status);
+    if (clase.classe) {
+      setinitTime(clase.classe.initTime);
+      setStatus(clase.classe.status);
+    } else {
+      setinitTime(clase.initTime);
+      setStatus(clase.status);
+    }
   }, [clase]);
 
   return (

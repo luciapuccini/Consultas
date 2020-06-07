@@ -65,6 +65,8 @@ export const SubjectForm = ({ route }) => {
   const openGallery = () => {
     const options = {
       title: 'Buscar Foto',
+      takePhotoButtonTitle: 'Usar camara...',
+      chooseFromLibraryButtonTitle: 'Elegir foto de galeria...',
       storageOptions: {
         skipBackup: true,
         path: 'images',

@@ -17,15 +17,19 @@ export const ClassesManager = ({ route }) => {
   const fetchClasses = async () => {
     const { subjectId } = subject;
     const token = await getToken();
-
-    fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+    console.log('cosas');
+    fetch(
+      `http://181.164.121.14:25565/subjects/professorClasses/${subjectId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
       .then((response) => response.json())
       .then((json) => {
+        console.log('fetchClasses -> json', json);
         filterClasses(json);
       });
   };

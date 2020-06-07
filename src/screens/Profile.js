@@ -78,12 +78,6 @@ export const Profile = ({ navigation }) => {
   const isProfessor = user.role === 'ROLE_PROFESSOR';
   const isStudent = user.role === 'ROLE_STUDENT';
 
-  const renderBrushIcon = (props) => (
-    <TouchableWithoutFeedback onPress={() => console.log('pueod hacer esto')}>
-      <Icon {...props} name="edit-2-outline" />
-    </TouchableWithoutFeedback>
-  );
-
   const save = () => {
     const handleSave = async () => {
       const token = await getToken();
@@ -258,27 +252,12 @@ export const Profile = ({ navigation }) => {
             />
             {isProfessor && (
               <>
-                <Input
-                  style={styles.inputStyle}
-                  label="Telefono"
-                  placeholder={user.mobile}
-                  onChangeText={(text) => setUser({ ...user, mobile: text })}
-                  value={user.mobile}
-                  accessoryRight={renderBrushIcon}
-                  keyboardType="phone-pad"
-                  caption="+ 54 9 111 1111111"
+                <PhoneRow
+                  user={user}
+                  setUser={setUser}
+                  showMobile={showMobile}
+                  setShowMobile={setShowMobile}
                 />
-                {error && (
-                  <View style={{ marginLeft: 10 }}>
-                    <ErrorMessage message={error} />
-                  </View>
-                )}
-                <CheckBox
-                  style={{ marginLeft: 10, marginTop: 10 }}
-                  checked={showMobile}
-                  onChange={() => setShowMobile(!showMobile)}>
-                  Mostar mi telefono publicamente
-                </CheckBox>
               </>
             )}
             <ConfirmButton save={save} />
@@ -320,7 +299,11 @@ export const Profile = ({ navigation }) => {
     </Layout>
   );
 };
-
+const renderBrushIcon = (props) => (
+  <TouchableWithoutFeedback onPress={() => console.log('pueod hacer esto')}>
+    <Icon {...props} name="edit-2-outline" />
+  </TouchableWithoutFeedback>
+);
 const ConfirmButton = ({ save }) => {
   return (
     <View
@@ -335,6 +318,29 @@ const ConfirmButton = ({ save }) => {
     </View>
   );
 };
+const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => (
+  <>
+    <View style={[styles.inputStyle, styles.phoneRow]}>
+      <Input disabled label="prefijo" value="+ 54 9" />
+      <Input
+        style={styles.inputStyle}
+        label="Telefono"
+        placeholder={user.mobile}
+        onChangeText={(text) => setUser({ ...user, mobile: text })}
+        value={user.mobile}
+        accessoryRight={renderBrushIcon}
+        keyboardType="phone-pad"
+        caption="341 1111111"
+      />
+    </View>
+    <CheckBox
+      style={{ marginLeft: 10, marginTop: 10 }}
+      checked={showMobile}
+      onChange={() => setShowMobile(!showMobile)}>
+      Mostar mi telefono publicamente
+    </CheckBox>
+  </>
+);
 
 const styles = {
   inputStyle: {
@@ -345,5 +351,9 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     maxHeight: 150,
+  },
+  phoneRow: {
+    flex: 1,
+    flexDirection: 'row',
   },
 };

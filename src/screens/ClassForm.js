@@ -14,6 +14,8 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import moment from 'moment';
 
 export const ClassForm = ({ route, navigation }) => {
+  console.log('ClassForm -> route', route);
+
   const { subjectId } = route.params;
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -121,6 +123,7 @@ export const ClassForm = ({ route, navigation }) => {
         {!hasSingleTurnos && (
           <Input
             label="Cantidad de Turnos"
+            keyboardType="numeric"
             caption="Nosotros asignaremos una duracion a cada turno"
             onChangeText={setCantidadTurnos}
           />
