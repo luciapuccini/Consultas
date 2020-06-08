@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Text, Layout, Icon, Button, Spinner } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
-import { isEmpty } from 'underscore';
+import { find } from 'underscore';
+import { View, Alert } from 'react-native';
 
 export const EditSubject = ({ route, navigation }) => {
-  const { subjectId } = route.params.subject;
+  const { subjectId, name } = route.params.subject;
   const [loading, setLoading] = useState(false);
   const [professors, setProfessors] = useState([]);
   const [subjectProfessors, setSubjectProfessors] = useState([]); //TO ADD
@@ -25,15 +26,11 @@ export const EditSubject = ({ route, navigation }) => {
     )
       .then((response) => response.json())
       .then((json) => {
-        console.log('fetchProfessors -> json', json);
-        console.log(
-          'fetchProfessors -> todos los habilitados',
-          json.subjectProfessors,
-        );
+        console.log('fetchProfessors -> json', json.subjectProfessors);
+        //SET LIST OF PROFES
         setProfessors(json.allProfessors);
-        json.subjectProfessors.forEach((p) => {
-          setSubjectProfessors([...subjectProfessors, p.id]);
-        });
+        // SET PROFES ENABLED FOR THIS SUBJECT
+        setSubjectProfessors(json.subjectProfessors);
       });
     setLoading(false);
   };
@@ -42,31 +39,36 @@ export const EditSubject = ({ route, navigation }) => {
   }, []);
 
   const handleProfessors = (profe) => {
-    if (subjectProfessors.includes(profe.id)) {
-      //pertenece a add
-      const removedSubject = subjectProfessors.filter((p) => profe.id !== p);
-      //saco de add
-      setSubjectProfessors([...removedSubject]);
-      // agrego en toRemove
-      setSubjectProfessorsToRemove([...subjectProfessorsToRemove, profe.id]);
-    } else {
-      //no estaba para add
-      // lo agrego
-      setSubjectProfessors([...subjectProfessors, profe.id]);
-      // no puede estar en toRemove
+    console.log('handleProfessors -> profe', profe);
+
+    if (!find(subjectProfessors, (p) => p.id == profe.id)) {
+      setSubjectProfessors([...subjectProfessors, profe]);
       const removedSubject = subjectProfessorsToRemove.filter(
-        (p) => profe.id != p,
+        (p) => profe.id !== p.id,
       );
       setSubjectProfessorsToRemove([...removedSubject]);
+    } else {
+      Alert.alert('Ya esta habilitado');
     }
   };
+
+  const handleRemoveProfessors = (profe) => {
+    console.log('handleRemoveProfessors -> profe', profe);
+
+    const removedSubject = subjectProfessors.filter((p) => profe.id !== p.id);
+    setSubjectProfessors([...removedSubject]);
+    setSubjectProfessorsToRemove([...subjectProfessorsToRemove, profe]);
+  };
+
   const handleConfirm = async () => {
     const token = await getToken();
     const body = {
       id: subjectId,
-      subjectProfessors,
-      subjectProfessorsToRemove,
+      subjectProfessors: getIds(subjectProfessors), //solo IDS
+      subjectProfessorsToRemove: getIds(subjectProfessorsToRemove), //solo IDS
     };
+    console.log('handleConfirm -> body', body);
+
     fetch('http://181.164.121.14:25565/subjects/modify', {
       method: 'POST',
       headers: {
@@ -84,83 +86,68 @@ export const EditSubject = ({ route, navigation }) => {
 
   return (
     <Layout level="1" style={style.layout}>
-      <>
-        <Text category="h5">TODOS Profesores</Text>
-
-        {!loading &&
-          professors.map((profe) => {
-            return (
-              <Button
-                appearance="ghost"
-                onPress={() => handleProfessors(profe)}
-                style={{
-                  justifyContent: 'flex-start',
-                  borderBottomColor: '#b0bec5',
-                  borderBottomWidth: 1,
-                  borderRadius: 0,
-                }}
-                // accessoryLeft={
-                //   subjectProfessors.length > 0 &&
-                //   subjectProfessors.includes(profe.id)
-                //     ? StatusIcon
-                //     : RemoveIcon
-                // }
-              >
-                <Text>
-                  {profe.name} {profe.surname}
-                </Text>
-              </Button>
-            );
-          })}
-
-        <Text category="h5">AGREGADOS Profesores</Text>
-        {subjectProfessors.map((profe) => {
-          return (
+      {!loading ? (
+        <View>
+          <Text category="h5">Habilitados en {name}</Text>
+          {subjectProfessors.map((profe) => (
             <Button
               appearance="ghost"
-              onPress={() => handleProfessors(profe)}
-              style={{
-                justifyContent: 'flex-start',
-                borderBottomColor: '#b0bec5',
-                borderBottomWidth: 1,
-                borderRadius: 0,
-              }}
-              // accessoryLeft={
-              //   subjectProfessors.length > 0 &&
-              //   subjectProfessors.includes(profe.id)
-              //     ? StatusIcon
-              //     : RemoveIcon
-              // }
-            >
+              style={style.profeRowStyle}
+              onPress={() => handleRemoveProfessors(profe)}
+              accessoryLeft={RemoveIcon}>
               <Text>
                 {profe.name} {profe.surname}
               </Text>
             </Button>
-          );
-        })}
-
-        <Button
-          style={{ alignSelf: 'flex-end', marginTop: 10 }}
-          onPress={handleConfirm}>
-          Confirmar
-        </Button>
-      </>
+          ))}
+          <View style={{ marginTop: 10, marginBottom: 10 }} />
+          <Text category="h5">Lista de Profesores</Text>
+          {professors.map((profe) => (
+            <Button
+              appearance="ghost"
+              style={style.profeRowStyle}
+              onPress={() => handleProfessors(profe)}>
+              <Text>
+                {profe.name} {profe.surname}
+              </Text>
+            </Button>
+          ))}
+          <Button
+            style={{ alignSelf: 'flex-end', marginTop: 10 }}
+            onPress={handleConfirm}>
+            Confirmar
+          </Button>
+        </View>
+      ) : (
+        <Spinner />
+      )}
     </Layout>
   );
 };
 
-const StatusIcon = (props) => {
-  const statusColor = '#00C853';
-  return <Icon {...props} name="checkmark-circle-outline" fill={statusColor} />;
-};
 const RemoveIcon = (props) => {
   const statusColor = '#C62828';
   return <Icon {...props} name="close" fill={statusColor} />;
+};
+
+const getIds = (profes) => {
+  console.log('getIds -> profes', profes);
+  console.log(
+    'getIds -> profes.map((p) => p.id);',
+    profes.map((p) => p.id),
+  );
+  return profes.map((p) => p.id);
 };
 
 const style = {
   layout: {
     flex: 1,
     padding: 15,
+  },
+  profeRowStyle: {
+    justifyContent: 'flex-start',
+    borderBottomColor: '#90CAF9',
+    borderBottomWidth: 1,
+    borderRadius: 0,
   },
 };

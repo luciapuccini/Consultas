@@ -40,6 +40,10 @@ export const ClassesManager = ({ route }) => {
 
   const filterClasses = (clases) => {
     //FIXME: isRegular !!
+    /* {
+      'fecha' : 'sss',
+      clases: [ ... ]  > 1 -> regulares
+    }*/
     setRegularClasses(clases.filter((clase) => clase.isRegular));
     setSimpleClasses(clases.filter((clase) => !clase.isRegular));
   };
