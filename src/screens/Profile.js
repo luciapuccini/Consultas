@@ -107,16 +107,15 @@ export const Profile = ({ navigation }) => {
 
     if (isProfessor && user.mobile) {
       const isValid = validatePhone(user.mobile);
-      //FIXME: si no es valido solo aviso
       if (!isValid) {
         setError('Error de formato de telefono');
         setTimeout(() => {
           setError(false);
         }, 3000);
+      } else {
+        handleSave();
       }
     }
-
-    handleSave();
   };
 
   const handleImage = async () => {
@@ -155,8 +154,8 @@ export const Profile = ({ navigation }) => {
   };
 
   const validatePhone = (num) => {
-    const phoneRegex = /\+549\d\+{9}/;
-    return num.match(phoneRegex);
+    const enable = Number.isInteger(parseInt(num)) && num.length >= 7;
+    return enable;
   };
   //#region  IMAGES
   const profileBack = require('../assets/background-profile.png');
@@ -251,15 +250,14 @@ export const Profile = ({ navigation }) => {
               accessoryRight={renderBrushIcon}
             />
             {isProfessor && (
-              <>
-                <PhoneRow
-                  user={user}
-                  setUser={setUser}
-                  showMobile={showMobile}
-                  setShowMobile={setShowMobile}
-                />
-              </>
+              <PhoneRow
+                user={user}
+                setUser={setUser}
+                showMobile={showMobile}
+                setShowMobile={setShowMobile}
+              />
             )}
+            {error && <ErrorMessage message={error} />}
             <ConfirmButton save={save} />
             <View
               style={{
@@ -319,27 +317,27 @@ const ConfirmButton = ({ save }) => {
   );
 };
 const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => (
-  <>
+  <View style={{ flex: 1 }}>
     <View style={[styles.inputStyle, styles.phoneRow]}>
-      <Input disabled label="prefijo" value="+ 54 9" />
+      <Input disabled label="Prefijo" value="+ 54 9" />
       <Input
-        style={styles.inputStyle}
+        style={styles.phoneStyle}
         label="Telefono"
         placeholder={user.mobile}
         onChangeText={(text) => setUser({ ...user, mobile: text })}
         value={user.mobile}
         accessoryRight={renderBrushIcon}
         keyboardType="phone-pad"
-        caption="341 1111111"
+        caption="341 1234567"
       />
     </View>
     <CheckBox
       style={{ marginLeft: 10, marginTop: 10 }}
       checked={showMobile}
       onChange={() => setShowMobile(!showMobile)}>
-      Mostar mi telefono publicamente
+      Mostrar mi telefono publicamente
     </CheckBox>
-  </>
+  </View>
 );
 
 const styles = {
@@ -353,7 +351,12 @@ const styles = {
     maxHeight: 150,
   },
   phoneRow: {
-    flex: 1,
+    width: '100%',
     flexDirection: 'row',
+  },
+  phoneStyle: {
+    flex: 1,
+    marginRight: 20,
+    marginLeft: 10,
   },
 };
