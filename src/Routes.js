@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ThemeContext } from './context/ThemeContext';
 import { Toggle, Icon } from '@ui-kitten/components';
@@ -16,6 +16,7 @@ import { ClassForm } from './screens/ClassForm';
 import { SubjectForm } from './screens/SubjectForm';
 import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
+import { View } from 'native-base';
 
 export const RootStack = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext);
@@ -37,7 +38,6 @@ export const RootStack = ({ navigation }) => {
         options={{
           title: 'Inicio',
           headerRight: () => <ProfileIcon />,
-          headerLeft: () => <ThemeSwitch />,
           ...darkHeaderConfig,
         }}
       />
@@ -76,7 +76,19 @@ export const RootStack = ({ navigation }) => {
         name="Profile"
         component={Profile}
         options={{
-          headerRight: () => <LogOutIcon />,
+          headerRight: () => {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  margin: 5,
+                }}>
+                <ThemeSwitch />
+                <View style={{ marginLeft: 20 }} />
+                <LogOutIcon />
+              </View>
+            );
+          },
           ...darkHeaderConfig,
           title: 'Perfil',
         }}
@@ -160,6 +172,6 @@ const ThemeSwitch = () => {
 const Styles = {
   profileIconStyle: { height: 30, width: 30, marginRight: 20 },
   toggleStyle: {
-    marginLeft: 15,
+    marginLeft: 10,
   },
 };
