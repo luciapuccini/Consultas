@@ -4,7 +4,7 @@ import _ from 'underscore';
 
 import { SubjectCard } from './SubjectCard';
 
-export const SubjectList = ({ allSubjects, followed }) => {
+export const SubjectList = ({ allSubjects, followed, refresh }) => {
   const [subjects, setSubjects] = useState([]);
   React.useEffect(() => {
     const checkFollowed = () => {
@@ -29,7 +29,7 @@ export const SubjectList = ({ allSubjects, followed }) => {
   }, [allSubjects, followed]);
 
   const renderItem = ({ item, index }) => {
-    return <SubjectCard subject={item} />;
+    return <SubjectCard subject={item} refresh={refresh} />;
   };
   return (
     <FlatList

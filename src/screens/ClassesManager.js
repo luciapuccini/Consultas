@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { mapObject } from 'underscore';
 
 import { Layout, Tab, TabView, Icon, Text } from '@ui-kitten/components';
 import SimpleClassesList from '../components/SimpleClasessList';
@@ -39,13 +40,13 @@ export const ClassesManager = ({ route }) => {
   }, []);
 
   const filterClasses = (clases) => {
-    //FIXME: isRegular !!
-    /* {
-      'fecha' : 'sss',
-      clases: [ ... ]  > 1 -> regulares
-    }*/
-    setRegularClasses(clases.filter((clase) => clase.isRegular));
-    setSimpleClasses(clases.filter((clase) => !clase.isRegular));
+    mapObject(clases, (val, key) => {
+      if (val.length > 1) {
+        setRegularClasses(val);
+      } else {
+        setSimpleClasses(val);
+      }
+    });
   };
 
   return (

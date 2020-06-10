@@ -1,55 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
-import {
-  Button,
-  Text,
-  Input,
-  Icon,
-  Layout,
-  CheckBox,
-  Divider,
-} from '@ui-kitten/components';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Button, Text, Input, Icon, Layout } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
-import ErrorMessage from '../components/ErrorMessage';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ErrorMessage } from '../components/ErrorMessage';
 import ImagePicker from 'react-native-image-picker';
 
 import { isEmpty } from 'underscore';
 
-export const SubjectForm = ({ route }) => {
+export const SubjectForm = ({ route, navigation, refresh }) => {
   const { professors } = route.params;
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
   const [disabled, setDisabled] = useState(false);
   const [subjectProfessors, setSubjectProfessors] = useState([]);
+  const [error, setError] = useState(null);
 
   const addSubject = async () => {
     setDisabled(true);
-    const body = {
-      name,
-      subjectProfessors,
-    };
+    console.log(isEmpty(name));
+    console.log(
+      'addSubject -> name && subjectProfessors.length > 0',
+      isEmpty(name) && subjectProfessors.length > 0,
+    );
+    if (!isEmpty(name) && subjectProfessors.length > 0) {
+      const body = {
+        name,
+        subjectProfessors,
+      };
+      const formData = new FormData();
+      formData.append('subject', JSON.stringify(body));
+      formData.append('imageFile', JSON.stringify(image));
 
-    const formData = new FormData();
-    formData.append('subject', JSON.stringify(body));
-    formData.append('imageFile', JSON.stringify(image));
-
-    const token = await getToken();
-    fetch(`http://181.164.121.14:25565/subjects/add`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log('ADD?', json);
-        setDisabled(false);
+      const token = await getToken();
+      fetch(`http://181.164.121.14:25565/subjects/add`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
       })
-      .catch((error) => console.log(error));
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.error) {
+            console.log('addSubject -> error!', json);
+            setError(json.message);
+            setTimeout(() => {
+              setError(false);
+            }, 3000);
+          } else {
+            navigation.goBack();
+            refresh();
+          }
+          console.log('ADD?', json);
+          setDisabled(false);
+        });
+    } else {
+      setDisabled(false);
+      setError('Completa todos los campos');
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
   };
 
   const addProfeToList = (profe) => {
@@ -125,6 +137,7 @@ export const SubjectForm = ({ route }) => {
           Confirmar
         </Button>
       </View>
+      {error && <ErrorMessage message={error} />}
     </Layout>
   );
 };

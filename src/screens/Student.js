@@ -20,40 +20,40 @@ export const Student = ({ user }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  React.useEffect(() => {
-    const fetchSubjects = async () => {
-      const token = await getToken();
-      try {
-        const response = await fetch(
-          'http://181.164.121.14:25565/subjects/findAll',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+  const fetchSubjects = async () => {
+    const token = await getToken();
+    try {
+      const response = await fetch(
+        'http://181.164.121.14:25565/subjects/findAll',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-        );
-        const json = await response.json();
-        setSubjects(json);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const fetchProffesors = async () => {
-      const token = await getToken();
-      fetch('http://181.164.121.14:25565/users/getAllProfessors', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          setProfessors(json);
-        });
-    };
+      );
+      const json = await response.json();
+      setSubjects(json);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchProffesors = async () => {
+    const token = await getToken();
+    fetch('http://181.164.121.14:25565/users/getAllProfessors', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setProfessors(json);
+      });
+  };
+  React.useEffect(() => {
     fetchProffesors();
     fetchSubjects();
   }, [searchTerm]);
@@ -82,6 +82,7 @@ export const Student = ({ user }) => {
               <SubjectList
                 allSubjects={resultSubjects}
                 followed={user.followedSubjects}
+                refresh={fetchSubjects}
               />
             ) : loading ? (
               <CustomSpinner />
