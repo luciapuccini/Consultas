@@ -10,18 +10,20 @@ import { ErrorMessage } from './ErrorMessage';
 import { getToken } from '../utils/authHelper';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
+  console.log('SimpleClasessList -> simpleClasses', simpleClasses);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
-    if (simpleClasses) {
-      if (isEmpty(simpleClasses)) {
-        setError('No Hay clases para mostrar');
-      } else {
-        setLoading(false);
-        setError(false);
-      }
+    setLoading(true);
+
+    console.log(
+      'SimpleClasessList -> simpleClasses.lenght > 0',
+      simpleClasses.length,
+    );
+    if (simpleClasses.length > 0) {
+      setLoading(false);
     }
   }, [simpleClasses]);
 
@@ -57,9 +59,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {error ? (
-        <ErrorMessage message={error} />
-      ) : loading ? (
+      {loading ? (
         <CustomSpinner />
       ) : (
         <ScrollView>

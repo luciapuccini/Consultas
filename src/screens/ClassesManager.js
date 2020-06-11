@@ -18,7 +18,6 @@ export const ClassesManager = ({ route }) => {
   const fetchClasses = async () => {
     const { subjectId } = subject;
     const token = await getToken();
-    console.log('cosas');
     fetch(
       `http://181.164.121.14:25565/subjects/professorClasses/${subjectId}`,
       {
@@ -30,7 +29,6 @@ export const ClassesManager = ({ route }) => {
     )
       .then((response) => response.json())
       .then((json) => {
-        console.log('fetchClasses -> json', json);
         filterClasses(json);
       });
   };
@@ -40,13 +38,18 @@ export const ClassesManager = ({ route }) => {
   }, []);
 
   const filterClasses = (clases) => {
+    console.log('filterClasses -> clases', clases);
+    const reg = [];
+    const simp = [];
     mapObject(clases, (val, key) => {
       if (val.length > 1) {
-        setRegularClasses(val);
+        reg.push(val[0]);
       } else {
-        setSimpleClasses(val);
+        simp.push(val[0]);
       }
     });
+    setRegularClasses(reg);
+    setSimpleClasses(simp);
   };
 
   return (

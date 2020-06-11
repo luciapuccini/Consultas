@@ -43,13 +43,13 @@ export const ClassForm = ({ route, navigation }) => {
   };
 
   const addClase = async () => {
-    console.log('addClase -> date', date);
     const basicClass = {
       subjectId,
       initTime: date,
       hasSingleTurnos,
       isRegular,
     };
+    console.log('addClase -> basicClass', basicClass);
     const duracion = hasSingleTurnos
       ? { durationInMinutes: duration }
       : { turnoDuration: duration };
@@ -59,6 +59,7 @@ export const ClassForm = ({ route, navigation }) => {
       ...duracion,
       ...turnos,
     };
+    console.log('addClase -> body', body);
     const token = await getToken();
     fetch(`http://181.164.121.14:25565/clases/add`, {
       method: 'POST',
@@ -133,9 +134,7 @@ export const ClassForm = ({ route, navigation }) => {
           onChange={(nextChecked) => setHasSingleTurnos(nextChecked)}>
           Clase de un solo turno
         </CheckBox>
-        <CheckBox
-          checked={isRegular}
-          onChange={(nextChecked) => setIsRegular(nextChecked)}>
+        <CheckBox checked={isRegular} onChange={() => setIsRegular(!isRegular)}>
           Clase Regular
         </CheckBox>
 
