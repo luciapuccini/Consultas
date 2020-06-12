@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Card, Icon, Text, CheckBox } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import 'moment/locale/es';
-import { getFechaHora } from '../utils/functions';
+import { getFechaHora, getClassColor } from '../utils/functions';
 
 export const SimpleClassCard = ({
   clase,
@@ -13,9 +13,8 @@ export const SimpleClassCard = ({
   setToDelete,
 }) => {
   const navigation = useNavigation();
-  const isLive = clase.status === 'En Curso';
   const cancel = clase.status === 'Cancelada';
-  const statusColor = isLive ? '#66BB6A' : cancel ? '#E53935' : '#64B5F6';
+  const statusColor = getClassColor(clase.status);
 
   return (
     <Card style={styles.space}>

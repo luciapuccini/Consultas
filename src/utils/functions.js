@@ -67,3 +67,13 @@ export const getUserImage = (id) =>
 
 export const getSubjectImage = (subjectId) =>
   `http://181.164.121.14:25565/subjects/images/${subjectId}`;
+
+export const green1 = '#66BB6A';
+export const red1 = '#E53935';
+export const blue1 = '#64B5F6';
+
+export const getClassColor = (status) => {
+  const color =
+    status === 'En Curso' ? green1 : status === 'Cancelada' ? red1 : blue1;
+  return color;
+};

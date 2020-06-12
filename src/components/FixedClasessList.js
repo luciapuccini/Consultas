@@ -5,7 +5,7 @@ import { Text, Layout, Icon, CheckBox } from '@ui-kitten/components';
 import { isEmpty } from 'underscore';
 import { CustomSpinner } from './CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
-import { getHora, getDia, getFecha } from '../utils/functions';
+import { getHora, getDia, getFecha, getClassColor } from '../utils/functions';
 import { useNavigation } from '@react-navigation/native';
 
 const FixedClasessList = ({ regularClasses, manager, subject }) => {
@@ -44,11 +44,7 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
               <ScrollView>
                 {c.map((cl) => (
                   <TouchableOpacity
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
+                    style={styles.rowContainer}
                     onPress={() =>
                       navigation.navigate('Class Detail', {
                         clase: cl,
@@ -56,23 +52,17 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
                         subject,
                       })
                     }>
-                    <Text
-                      style={{
-                        marginVertical: 10,
-                        marginLeft: 20,
-                      }}>
-                      {getFecha(cl.initTime)}
-                    </Text>
-
-                    {/* <CheckBox
-                      checked={!!toDelete.includes(cl.id)}
-                      onChange={() =>
-                        toDelete.includes(cl.id)
-                          ? setToDelete(toDelete.filter((cla) => cla !== cl.id))
-                          : setToDelete([...toDelete, cl.id])
-                      }
-                    /> */}
-
+                    <View style={styles.classRowStyle}>
+                      <CheckIcon color={getClassColor(cl.status)} />
+                      <Text
+                        style={{
+                          marginVertical: 10,
+                          marginLeft: 20,
+                          color: getClassColor(cl.status),
+                        }}>
+                        {getFecha(cl.initTime)}
+                      </Text>
+                    </View>
                     <Arrow direction={false} />
                   </TouchableOpacity>
                 ))}
@@ -85,12 +75,40 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
   );
 };
 
-const Arrow = ({ direction }) => (
+const Arrow = ({ direction, style }) => (
   <Icon
-    style={{ height: 20, width: 20, marginRight: 10 }}
+    style={[styles.arrowStyle, style]}
     fill="#4169E1"
     name={direction ? 'arrow-down-outline' : 'arrow-right-outline'}
   />
 );
+const CheckIcon = ({ color }) => (
+  <Icon
+    name="checkmark-circle-outline"
+    style={styles.checkStyle}
+    fill={color}
+  />
+);
+
+const styles = {
+  checkStyle: { width: 15, height: 15, marginTop: 2 },
+  arrowStyle: {
+    height: 20,
+    width: 20,
+    marginRight: 10,
+  },
+  classRowStyle: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 20,
+  },
+  rowContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+};
 
 export default FixedClasessList;
