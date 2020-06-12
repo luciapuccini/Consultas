@@ -3,21 +3,31 @@ import { ImageBackground, View } from 'react-native';
 import { Text, Card, Divider, Button, Icon } from '@ui-kitten/components';
 import _ from 'underscore';
 import { Thumbnail } from 'native-base';
-import { getUserImage, getFecha, getHora } from '../utils/functions';
+import {
+  getUserImage,
+  getFecha,
+  getHora,
+  getSubjectImage,
+} from '../utils/functions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const placeHolder = require('../assets/placeholder.png');
 
 export const ClassSummary = ({
   fecha,
+  subjectId,
   count,
   comments,
   professor,
   handleDeleteComment,
   manager,
 }) => {
-  const subjectImage = professor.imagePath
-    ? getUserImage(professor.id)
+  const subjectImage = subjectId
+    ? { uri: getSubjectImage(subjectId) }
+    : placeHolder;
+
+  const professorImage = professor.profileImagePath
+    ? { uri: getUserImage(professor.id) }
     : placeHolder;
 
   return (
@@ -46,7 +56,7 @@ export const ClassSummary = ({
           </View>
           <View style={{ margin: 10, alignItems: 'center' }}>
             <Thumbnail
-              source={subjectImage}
+              source={professorImage}
               style={{ height: 80, width: 80, borderRadius: 4 }}
             />
             <Text appearance="hint">

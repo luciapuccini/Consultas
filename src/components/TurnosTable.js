@@ -27,7 +27,6 @@ export const TurnosTable = ({
 
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   const getSelectedTurno = () => {
-    console.log('getSelectedTurno -> turnos', turnos);
     return turnos[selectedIndex].turnoTime;
   };
   const handleSelection = ({ index }) => {

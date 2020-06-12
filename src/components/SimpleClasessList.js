@@ -5,23 +5,16 @@ import { CustomSpinner } from './CustomSpinner';
 import { SimpleClassCard } from './SimpleClassCard';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { isEmpty } from 'underscore';
 import { ErrorMessage } from './ErrorMessage';
 import { getToken } from '../utils/authHelper';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
-  console.log('SimpleClasessList -> simpleClasses', simpleClasses);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
     setLoading(true);
-
-    console.log(
-      'SimpleClasessList -> simpleClasses.lenght > 0',
-      simpleClasses.length,
-    );
     if (simpleClasses.length > 0) {
       setLoading(false);
     }

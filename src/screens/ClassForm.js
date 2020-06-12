@@ -49,7 +49,6 @@ export const ClassForm = ({ route, navigation }) => {
       hasSingleTurnos,
       isRegular,
     };
-    console.log('addClase -> basicClass', basicClass);
     const duracion = hasSingleTurnos
       ? { durationInMinutes: duration }
       : { turnoDuration: duration };

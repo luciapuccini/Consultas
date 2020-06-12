@@ -161,7 +161,7 @@ export const Profile = ({ navigation }) => {
   const profileBack = require('../assets/background-profile.png');
   const profilePlaceholder = require('../assets/profile_placeholder.png');
   const profileImage = user.profileImagePath
-    ? getUserImage(user.userId)
+    ? { uri: getUserImage(user.userId) }
     : profilePlaceholder;
   //#endregion
   return (

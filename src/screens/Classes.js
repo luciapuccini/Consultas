@@ -14,7 +14,7 @@ export const Classes = ({ navigation, route }) => {
   const [error, setError] = React.useState(false);
   const [loading, setloading] = React.useState(false);
 
-  const { manager } = route.params;
+  const { manager, subject } = route.params;
 
   React.useEffect(() => {
     const fetchClasses = async () => {
@@ -77,7 +77,7 @@ export const Classes = ({ navigation, route }) => {
       );
 
   const renderItem = ({ item }) => {
-    return <ClassCard clase={item} manager={manager} />;
+    return <ClassCard clase={item} manager={manager} subject={subject} />;
   };
 
   return (

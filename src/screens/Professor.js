@@ -21,7 +21,7 @@ export const Professor = ({ route }) => {
   const { professor } = route.params;
   const {
     id,
-    imagePath,
+    profileImagePath,
     name,
     mobile,
     legajo,
@@ -34,7 +34,9 @@ export const Professor = ({ route }) => {
 
   const [professorSubjects, setProfessorSubjects] = useState([]);
   const [professorClases, setProfessorClases] = useState([]);
-  const professorAvatar = imagePath ? getUserImage(id) : placeHolder;
+  const professorAvatar = profileImagePath
+    ? { uri: getUserImage(id) }
+    : placeHolder;
 
   //WARNING error con las clases de cada subject
   const fetchProfessorSubjets = async () => {

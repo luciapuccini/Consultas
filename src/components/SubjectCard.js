@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ThemeContext } from '../context/ThemeContext';
 import { getToken } from '../utils/authHelper';
 import { isEmpty } from 'underscore';
+import { getSubjectImage } from '../utils/functions';
 
 export const SubjectCard = ({ subject, professor, admin, refresh }) => {
   const [notification, setNotification] = React.useState(subject.follows);
@@ -65,7 +66,7 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
 
   const getImage = () => {
     const subjectPlaceholder = require('../assets/placeholder.png');
-    const image = `http://181.164.121.14:25565/subjects/images/${subjectId}`;
+    const image = getSubjectImage(subjectId);
     if (!isEmpty(imagePath)) {
       return { uri: image };
     } else {

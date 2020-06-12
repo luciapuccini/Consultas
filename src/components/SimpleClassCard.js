@@ -20,7 +20,9 @@ export const SimpleClassCard = ({
   return (
     <Card style={styles.space}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Class Detail', { clase, manager })}>
+        onPress={() =>
+          navigation.navigate('Class Detail', { clase, manager, subject })
+        }>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={styles.cardStyle}>
             <Text category="h6">{subject.name}</Text>
@@ -28,10 +30,10 @@ export const SimpleClassCard = ({
           </View>
           {!cancel && (
             <CheckBox
-              checked={toDelete.includes(clase.id)}
+              checked={!!toDelete.includes(clase.id)}
               onChange={() =>
                 toDelete.includes(clase.id)
-                  ? setToDelete(toDelete.splice(clase.id))
+                  ? setToDelete(toDelete.filter((cl) => cl !== clase.id))
                   : setToDelete([...toDelete, clase.id])
               }
             />

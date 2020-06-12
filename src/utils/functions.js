@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const ARG = 'America/Argentina/Buenos_Aires';
 export const getHora = (fecha) => {
-  console.log('getHora -> fecha', fecha);
   const fixFecha = fecha.concat('Z');
   return moment
     .tz(fixFecha, 'America/Argentina/Buenos_Aires')
@@ -14,8 +13,11 @@ export const getFecha = (fecha) => {
   const fixFecha = fecha.concat('Z');
   return moment(fixFecha).tz(ARG).locale('es').format('ll');
 };
+export const getDia = (fecha) => {
+  const fixFecha = fecha.concat('Z');
+  return moment(fixFecha).tz(ARG).locale('es').format('dddd');
+};
 export const getFechaHora = (fecha) => {
-  console.log('getFechaHora -> fecha', fecha);
   const fixFecha = fecha.concat('Z');
   return moment(fixFecha).tz(ARG).locale('es').format('lll a');
 };
@@ -60,8 +62,8 @@ export const removeUser = async () => {
   }
 };
 
-export const getUserImage = (id) => {
-  return {
-    uri: `http://181.164.121.14:25565/users/images/profileImages/${id}`,
-  };
-};
+export const getUserImage = (id) =>
+  `http://181.164.121.14:25565/users/images/profileImages/${id}`;
+
+export const getSubjectImage = (subjectId) =>
+  `http://181.164.121.14:25565/subjects/images/${subjectId}`;

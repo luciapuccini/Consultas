@@ -38,12 +38,11 @@ export const ClassesManager = ({ route }) => {
   }, []);
 
   const filterClasses = (clases) => {
-    console.log('filterClasses -> clases', clases);
     const reg = [];
     const simp = [];
     mapObject(clases, (val, key) => {
       if (val.length > 1) {
-        reg.push(val[0]);
+        reg.push(val);
       } else {
         simp.push(val[0]);
       }
@@ -67,7 +66,12 @@ export const ClassesManager = ({ route }) => {
           />
         </Tab>
         <Tab title="Regulares">
-          <FixedClassesList regularClasses={regularClasses} />
+          <FixedClassesList
+            regularClasses={regularClasses}
+            manager={manager}
+            subject={subject}
+            refresh={fetchClasses}
+          />
         </Tab>
       </TabView>
     </Layout>

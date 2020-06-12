@@ -8,14 +8,16 @@ import { getUserImage, getFechaHora } from '../utils/functions';
 
 const placeHolder = require('../assets/placeholder.png');
 
-export const ClassCard = ({ clase, manager }) => {
+export const ClassCard = ({ clase, manager, subject }) => {
   const { professor } = clase;
   const navigation = useNavigation();
   const isLive = clase.status === 'En Curso';
   const statusColor = isLive ? '#66BB6A' : '#64B5F6';
 
   const classCardImg =
-    professor && professor.imagePath ? getUserImage(professor.id) : placeHolder;
+    professor && professor.profileImagePath
+      ? { uri: getUserImage(professor.id) }
+      : placeHolder;
 
   const [initTime, setinitTime] = useState('');
   const [status, setStatus] = useState('');
@@ -32,7 +34,9 @@ export const ClassCard = ({ clase, manager }) => {
   return (
     <Card style={styles.space}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Class Detail', { clase, manager })}>
+        onPress={() =>
+          navigation.navigate('Class Detail', { clase, manager, subject })
+        }>
         <View style={styles.row}>
           <Thumbnail source={classCardImg} />
           <View>

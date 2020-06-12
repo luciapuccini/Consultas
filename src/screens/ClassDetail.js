@@ -20,6 +20,7 @@ export const ClassDetail = ({ route, navigation }) => {
     status,
   } = route.params.clase;
   const manager = route.params?.manager;
+  const subject = route.params?.subject;
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
   const [index, setIndex] = React.useState(null);
@@ -42,7 +43,6 @@ export const ClassDetail = ({ route, navigation }) => {
   React.useEffect(() => {
     const fetchClassData = async () => {
       const token = await getToken();
-      //FIXME:  cambiar --> student en cada turno
       fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
         method: 'GET',
         headers: {
@@ -73,10 +73,8 @@ export const ClassDetail = ({ route, navigation }) => {
     const sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
 
     if (bookingFlag) {
-      console.log('dessubscribe', sendTurno);
       unsubscribeTurno(id, sendTurno.turnoTime);
     } else {
-      console.log('subscribe', sendTurno);
       subscribeTurno(id, sendTurno.turnoTime);
     }
     navigation.goBack();
@@ -87,7 +85,6 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const handleDeleteComment = async (comment) => {
-    console.log('handleDelete -> comments', comment);
     const {
       commentPK: { commentTime },
     } = comment;
@@ -115,6 +112,7 @@ export const ClassDetail = ({ route, navigation }) => {
       {!loading ? (
         <ScrollView style={{ flex: 1 }}>
           <ClassSummary
+            subjectId={subject.subjectId}
             fecha={initTime}
             count={getCount()}
             comments={comments}
