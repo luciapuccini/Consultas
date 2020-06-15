@@ -35,7 +35,7 @@ export const Profile = ({ navigation }) => {
       const token = await getToken();
       try {
         const response = await fetch(
-          `http://181.164.121.14:25565/users/getUser`,
+          'http://181.164.121.14:25565/users/getUser',
           {
             method: 'GET',
             headers: {
@@ -81,7 +81,14 @@ export const Profile = ({ navigation }) => {
   const save = () => {
     const handleSave = async () => {
       const token = await getToken();
-      const userBody = { ...user, showMobile };
+      const prefix = '+549';
+
+      const userBody = {
+        ...user,
+        mobile: prefix.concat(user.mobile),
+        showMobile,
+      };
+      console.log(userBody);
       try {
         const response = await fetch(
           'http://181.164.121.14:25565/users/modify',
@@ -157,6 +164,7 @@ export const Profile = ({ navigation }) => {
     const enable = Number.isInteger(parseInt(num)) && num.length >= 7;
     return enable;
   };
+
   //#region  IMAGES
   const profileBack = require('../assets/background-profile.png');
   const profilePlaceholder = require('../assets/profile_placeholder.png');
@@ -316,29 +324,34 @@ const ConfirmButton = ({ save }) => {
     </View>
   );
 };
-const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => (
-  <View style={{ flex: 1 }}>
-    <View style={[styles.inputStyle, styles.phoneRow]}>
-      <Input disabled label="Prefijo" value="+ 54 9" />
-      <Input
-        style={styles.phoneStyle}
-        label="Telefono"
-        placeholder={user.mobile}
-        onChangeText={(text) => setUser({ ...user, mobile: text })}
-        value={user.mobile}
-        accessoryRight={renderBrushIcon}
-        keyboardType="phone-pad"
-        caption="341 1234567"
-      />
+const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => {
+  const phone = user.mobile.startsWith('+')
+    ? user.mobile.slice(4)
+    : user.mobile;
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={[styles.inputStyle, styles.phoneRow]}>
+        <Input disabled label="Prefijo" value="+ 54 9" />
+        <Input
+          style={styles.phoneStyle}
+          label="Telefono"
+          placeholder={user.mobile}
+          onChangeText={(text) => setUser({ ...user, mobile: text })}
+          value={phone}
+          accessoryRight={renderBrushIcon}
+          keyboardType="phone-pad"
+          caption="341 1234567"
+        />
+      </View>
+      <CheckBox
+        style={{ marginLeft: 10, marginTop: 10 }}
+        checked={showMobile}
+        onChange={() => setShowMobile(!showMobile)}>
+        Mostrar mi telefono publicamente
+      </CheckBox>
     </View>
-    <CheckBox
-      style={{ marginLeft: 10, marginTop: 10 }}
-      checked={showMobile}
-      onChange={() => setShowMobile(!showMobile)}>
-      Mostrar mi telefono publicamente
-    </CheckBox>
-  </View>
-);
+  );
+};
 
 const styles = {
   inputStyle: {
