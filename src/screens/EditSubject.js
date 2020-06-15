@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, Layout, Icon, Button, Spinner } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
 import { find } from 'underscore';
-import { View, Alert } from 'react-native';
+import { ScrollView, View, Alert } from 'react-native';
 
 export const EditSubject = ({ route, navigation }) => {
   const { subjectId, name } = route.params.subject;
@@ -27,12 +27,18 @@ export const EditSubject = ({ route, navigation }) => {
       .then((response) => response.json())
       .then((json) => {
         console.log('fetchProfessors -> json', json.subjectProfessors);
+        console.log(
+          'fetchProfessors -> json.allProfessors',
+          json.allProfessors,
+        );
+
+        console.log(loading);
         //SET LIST OF PROFES
         setProfessors(json.allProfessors);
         // SET PROFES ENABLED FOR THIS SUBJECT
         setSubjectProfessors(json.subjectProfessors);
+        setLoading(false);
       });
-    setLoading(false);
   };
   useEffect(() => {
     fetchProfessors();
@@ -87,7 +93,7 @@ export const EditSubject = ({ route, navigation }) => {
   return (
     <Layout level="1" style={style.layout}>
       {!loading ? (
-        <View>
+        <ScrollView>
           <Text category="h5">Habilitados en {name}</Text>
           {subjectProfessors.map((profe) => (
             <Button
@@ -117,7 +123,7 @@ export const EditSubject = ({ route, navigation }) => {
             onPress={handleConfirm}>
             Confirmar
           </Button>
-        </View>
+        </ScrollView>
       ) : (
         <Spinner />
       )}
