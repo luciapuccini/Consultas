@@ -9,21 +9,21 @@ import { useNavigation } from '@react-navigation/native';
 export const Admin = ({ user }) => {
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      const token = await getToken();
-      fetch(`http://181.164.121.14:25565/subjects/findAll`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  const fetchSubjects = async () => {
+    const token = await getToken();
+    fetch(`http://181.164.121.14:25565/subjects/findAll`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSubjects(data);
       })
-        .then((res) => res.json())
-        .then((data) => {
-          setSubjects(data);
-        })
-        .catch((error) => console.log(error));
-    };
+      .catch((error) => console.log(error));
+  };
+  useEffect(() => {
     fetchSubjects();
     const fetchProffesors = async () => {
       const token = await getToken();
@@ -53,17 +53,22 @@ export const Admin = ({ user }) => {
           keyExtractor={(item) => item.id}
         />
       )}
-      <AddSubject professors={professors} />
+      <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
       <AddProfessor />
     </Layout>
   );
 };
 
-const AddSubject = ({ professors }) => {
+const AddSubject = ({ professors, fetchSubjects }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Add Subject', { professors })}
+      onPress={() =>
+        navigation.navigate('Add Subject', {
+          professors,
+          refresh: fetchSubjects,
+        })
+      }
       style={style.touchableStyle}>
       <Icon name="plus" fill="#fff" style={style.FloatingButtonStyle} />
     </TouchableOpacity>

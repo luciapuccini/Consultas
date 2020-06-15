@@ -6,6 +6,7 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import ImagePicker from 'react-native-image-picker';
 
 import { isEmpty } from 'underscore';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const SubjectForm = ({ route, navigation, refresh }) => {
   const { professors } = route.params;
@@ -104,23 +105,30 @@ export const SubjectForm = ({ route, navigation, refresh }) => {
       <Text style={styles.space} category="h5">
         Habilitar Profesores
       </Text>
-      {!isEmpty(professors) &&
-        professors.map((profe) => (
-          <Button
-            appearance="ghost"
-            onPress={() => {
-              addProfeToList(profe);
-            }}
-            style={{
-              justifyContent: 'flex-start',
-              borderBottomColor: '#b0bec5',
-              borderBottomWidth: 1,
-              borderRadius: 0,
-            }}
-            accessoryLeft={subjectProfessors.includes(profe.id) && StatusIcon}>
-            <Text>{profe.name}</Text>
-          </Button>
-        ))}
+      <ScrollView>
+        {!isEmpty(professors) &&
+          professors.map((profe) => (
+            <Button
+              appearance="ghost"
+              onPress={() => {
+                addProfeToList(profe);
+              }}
+              style={{
+                justifyContent: 'flex-start',
+                borderBottomColor: '#b0bec5',
+                borderBottomWidth: 1,
+                borderRadius: 0,
+              }}
+              accessoryLeft={
+                subjectProfessors.includes(profe.id) && StatusIcon
+              }>
+              <Text>
+                {profe.name} {profe.surname}
+              </Text>
+            </Button>
+          ))}
+      </ScrollView>
+
       <View
         style={{
           marginTop: 10,
@@ -137,6 +145,7 @@ export const SubjectForm = ({ route, navigation, refresh }) => {
           Confirmar
         </Button>
       </View>
+
       {error && <ErrorMessage message={error} />}
     </Layout>
   );
