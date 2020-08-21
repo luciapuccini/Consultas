@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ImageBackground,
@@ -24,13 +24,15 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import { getUserImage } from '../utils/functions';
 
 export const Profile = ({ navigation }) => {
-  const [showMobile, setShowMobile] = React.useState(false);
-  const [user, setUser] = React.useState({});
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(false);
-  const [onPasswordEdit, setOnPasswordEdit] = React.useState(false);
-
-  React.useEffect(() => {
+  const [showMobile, setShowMobile] = useState(false);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [onPasswordEdit, setOnPasswordEdit] = useState(false);
+  const profileImage = user.profileImagePath
+    ? { uri: getUserImage(user.userId) }
+    : profilePlaceholder;
+  useEffect(() => {
     const fetchUser = async () => {
       const token = await getToken();
       try {
@@ -154,7 +156,7 @@ export const Profile = ({ navigation }) => {
           body: JSON.stringify(imageFile),
         })
           .then((resp) => resp.json())
-          .then((val) => console.log('lnln', val))
+          .then((val) => {})
           .catch((err) => console.log('catch', err));
       }
     });
@@ -164,14 +166,9 @@ export const Profile = ({ navigation }) => {
     const enable = Number.isInteger(parseInt(num)) && num.length >= 7;
     return enable;
   };
-
-  //#region  IMAGES
   const profileBack = require('../assets/background-profile.png');
   const profilePlaceholder = require('../assets/profile_placeholder.png');
-  const profileImage = user.profileImagePath
-    ? { uri: getUserImage(user.userId) }
-    : profilePlaceholder;
-  //#endregion
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
@@ -185,7 +182,7 @@ export const Profile = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
               <Image
-                source={profileImage}
+                source={profileImage || profilePlaceholder}
                 style={{ height: 100, width: 100, borderRadius: 50 }}
               />
 
@@ -325,7 +322,7 @@ const ConfirmButton = ({ save }) => {
   );
 };
 const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => {
-  const phone = user.mobile.startsWith('+')
+  const phone = user.mobile?.startsWith('+')
     ? user.mobile.slice(4)
     : user.mobile;
   return (
