@@ -59,8 +59,8 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
     const path = professor
       ? 'Classes Manager'
       : admin
-      ? 'Edit Subject'
-      : 'Classes';
+        ? 'Edit Subject'
+        : 'Classes';
     navigation.navigate(path, { subject, manager: professor, refresh });
   };
 
@@ -74,6 +74,7 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
     }
   };
   const handleDeleteSubject = async () => {
+    //TODO: SI borra -> refresh!
     const token = await getToken();
     fetch('http://181.164.121.14:25565/subjects/deleteSubject', {
       method: 'POST',
@@ -84,7 +85,8 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
       body: JSON.stringify({ id: subjectId }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data.message));
+      .then((data) => console.log(data.message))
+      .catch((error) => console.log(error));
   };
   const Header = () => {
     return (

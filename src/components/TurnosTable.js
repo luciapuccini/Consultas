@@ -37,7 +37,7 @@ export const TurnosTable = ({
     const body = { id, comment };
     const token = await getToken();
 
-    fetch(`http://181.164.121.14:25565/clases/addComment`, {
+    fetch('http://181.164.121.14:25565/clases/addComment', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +47,9 @@ export const TurnosTable = ({
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.message === 'Suceed') navigation.goBack();
+        if (json.message === 'Suceed') {
+          navigation.goBack();
+        }
 
         console.log(json.message);
       })
@@ -99,29 +101,29 @@ export const TurnosTable = ({
             </Button>
           </View>
         ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              width: '100%',
-            }}>
-            <Input
-              textStyle={{ minHeight: 64 }}
-              label="Notas"
-              placeholder={comment}
-              onChangeText={setComment}
-              value={comment}
-              multiline={true}
-            />
-            <Button
-              appearance="outline"
-              status="primary"
-              style={styles.inscriptionBtn}
-              onPress={addNote}>
-              Add notes
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                width: '100%',
+              }}>
+              <Input
+                textStyle={{ minHeight: 64 }}
+                label="Notas"
+                placeholder={comment}
+                onChangeText={setComment}
+                value={comment}
+                multiline={true}
+              />
+              <Button
+                appearance="outline"
+                status="primary"
+                style={styles.inscriptionBtn}
+                onPress={addNote}>
+                Add notes
             </Button>
-          </View>
-        )}
+            </View>
+          )}
       </View>
     </>
   );
@@ -142,6 +144,7 @@ const StudentRow = ({ turno }) => {
       }}>
       <Text category="s1">{getHora(turno.turnoTime)}</Text>
       {names && (
+        //FIXME: Que hago con muchos inscriptos? number of lines == que names.length?
         <Text category="label" appearance="hint" numberOfLines={1}>
           {names.map((name) => name)}
         </Text>

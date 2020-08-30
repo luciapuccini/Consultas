@@ -35,7 +35,9 @@ export const ClassDetail = ({ route, navigation }) => {
     const legajo = await getUserLegajo();
     turnitos.forEach((turnito) => {
       turnito.students.forEach((student) => {
-        if (student.legajo == legajo) setBookingFlag(true);
+        if (student.legajo == legajo) {
+          setBookingFlag(true);
+        }
       });
     });
   };
@@ -69,8 +71,20 @@ export const ClassDetail = ({ route, navigation }) => {
     // onSubmit();
   };
 
-  const onSubmit = () => {
-    const sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
+  const onSubmit = async () => {
+    let sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
+    const userLegajo = await getUserLegajo();
+    if (sendTurno === undefined) {
+      turnos.forEach((turno) => {
+        if (turno.students) {
+          turno.students.forEach((student) => {
+            if (student.legajo === userLegajo) {
+              sendTurno = turno;
+            }
+          });
+        }
+      });
+    }
 
     if (bookingFlag) {
       unsubscribeTurno(id, sendTurno.turnoTime);
@@ -90,7 +104,7 @@ export const ClassDetail = ({ route, navigation }) => {
     } = comment;
     const body = { id, dateTime: commentTime };
     const token = await getToken();
-    fetch(`http://181.164.121.14:25565/clases/deleteComment`, {
+    fetch('http://181.164.121.14:25565/clases/deleteComment', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -100,7 +114,9 @@ export const ClassDetail = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.message === 'Suceed') navigation.goBack();
+        if (json.message === 'Suceed') {
+          navigation.goBack();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -131,21 +147,21 @@ export const ClassDetail = ({ route, navigation }) => {
               id={id}
             />
           ) : (
-            <SimpleBookClass
-              bookingFlag={bookingFlag}
-              onSubmit={onSubmit}
-              hora={initTime}
-              handleConfirm={handleConfirm}
-              disabled={isLive}
-              manager={manager}
-              id={id}
-            />
-          )}
+              <SimpleBookClass
+                bookingFlag={bookingFlag}
+                onSubmit={onSubmit}
+                hora={initTime}
+                handleConfirm={handleConfirm}
+                disabled={isLive}
+                manager={manager}
+                id={id}
+              />
+            )}
           {canStart && manager && <StartClass id={id} />}
         </ScrollView>
       ) : (
-        <CustomSpinner />
-      )}
+          <CustomSpinner />
+        )}
     </Layout>
   );
 };
@@ -153,7 +169,7 @@ export const ClassDetail = ({ route, navigation }) => {
 const subscribeTurno = async (idClass, startTimeTurno) => {
   const token = await getToken();
   const turno = { consultaId: idClass, initTime: startTimeTurno };
-  fetch(`http://181.164.121.14:25565/clases/subscribe`, {
+  fetch('http://181.164.121.14:25565/clases/subscribe', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -174,7 +190,7 @@ const unsubscribeTurno = async (idClass, startTimeTurno) => {
   const token = await getToken();
   const turno = { consultaId: idClass, initTime: startTimeTurno };
 
-  fetch(`http://181.164.121.14:25565/clases/unsubscribe`, {
+  fetch('http://181.164.121.14:25565/clases/unsubscribe', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
