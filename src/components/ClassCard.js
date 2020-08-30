@@ -40,7 +40,9 @@ export const ClassCard = ({ clase, manager, subject }) => {
           <Thumbnail source={classCardImg} />
           <View>
             <View style={styles.cardStyle}>
-              <Text category="h6">{professor.name}</Text>
+              <Text category="h6">
+                {professor.name + ' ' + professor.surname}
+              </Text>
 
               <Text appearance="hint" style={{ fontSize: 14 }}>
                 {getFechaHora(initTime)}
