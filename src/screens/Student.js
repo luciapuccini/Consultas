@@ -61,13 +61,14 @@ export const Student = ({ user }) => {
   const resultSubjects = !searchTerm
     ? subjects
     : subjects.filter((subject) =>
-        subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
-      );
+      subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
+    );
   const resultProfessors = !searchTerm
     ? professors
-    : professors.filter((profe) =>
-        profe.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
-      );
+    : professors.filter((profe) => {
+      const nombre = profe.name.toLowerCase() + profe.surname.toLowerCase();
+      return nombre.toLowerCase().includes(searchTerm.toLocaleLowerCase());
+    });
   return (
     <Layout level="1">
       <SearchBox setSearchTerm={setSearchTerm} placeholder="Busqueda" />
@@ -87,8 +88,8 @@ export const Student = ({ user }) => {
             ) : loading ? (
               <CustomSpinner />
             ) : (
-              <ErrorMessage message="No Data" />
-            )}
+                  <ErrorMessage message="No Data" />
+                )}
           </Layout>
         </Tab>
         <Tab title="PROFESORES">
