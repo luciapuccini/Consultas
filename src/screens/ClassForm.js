@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import {
+  Card,
   Button,
   Text,
   Input,
@@ -60,7 +61,7 @@ export const ClassForm = ({ route, navigation }) => {
     };
     console.log('addClase -> body', body);
     const token = await getToken();
-    fetch(`http://181.164.121.14:25565/clases/add`, {
+    fetch('http://181.164.121.14:25565/clases/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -94,25 +95,25 @@ export const ClassForm = ({ route, navigation }) => {
   return (
     <Layout level="1" style={styles.layout}>
       <ScrollView contentContainerStyle={styles.layout}>
-        <Text category="h5">
-          Selecione fecha: {'\n'}
-          {date ? `${moment(date).locale('es').format('lll a')}` : null}
-        </Text>
-
-        <View style={styles.dateRow}>
-          <Button
-            style={styles.pickerStyle}
-            appearance="ghost"
-            accessoryLeft={CalenderIcon}
-            onPress={openDatePicker}
-          />
-          <Button
-            style={styles.pickerStyle}
-            appearance="ghost"
-            onPress={openTimePicker}
-            accessoryLeft={ClockIcon}
-          />
-        </View>
+        <Card style={styles.card} header={Header}>
+          <View style={styles.dateRow}>
+            <Button
+              style={styles.pickerStyle}
+              appearance="ghost"
+              accessoryLeft={CalenderIcon}
+              onPress={openDatePicker}
+            />
+            <Button
+              style={styles.pickerStyle}
+              appearance="ghost"
+              onPress={openTimePicker}
+              accessoryLeft={ClockIcon}
+            />
+            <Text>
+              {date ? `${moment(date).locale('es').format('lll a')}` : null}
+            </Text>
+          </View>
+        </Card>
 
         <Input
           label={hasSingleTurnos ? 'Duracion' : 'Duracion de cada turno'}
@@ -188,7 +189,13 @@ const styles = StyleSheet.create({
   },
   dateRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    // flex: 1,
+    // margin: 2,
+    padding: 5
   },
 });
 
@@ -197,4 +204,10 @@ const CalenderIcon = (props) => (
 );
 const ClockIcon = (props) => (
   <Icon {...props} style={styles.pickerStyle} fill="#4169E1" name="clock" />
+);
+
+const Header = (props) => (
+  <View {...props}>
+    <Text category="h5">Selecione fecha</Text>
+  </View>
 );
