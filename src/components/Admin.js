@@ -11,7 +11,7 @@ export const Admin = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
   const fetchSubjects = async () => {
     const token = await getToken();
-    fetch(`http://181.164.121.14:25565/subjects/findAll`, {
+    fetch('http://181.164.121.14:25565/subjects/findAll', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,13 +46,13 @@ export const Admin = ({ user }) => {
       {!subjects ? (
         <CustomSpinner />
       ) : (
-        <FlatList
-          data={subjects}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 80 }}
-          keyExtractor={(item) => item.id}
-        />
-      )}
+          <FlatList
+            data={subjects}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 80 }}
+            keyExtractor={(item) => item.id}
+          />
+        )}
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
       <AddProfessor />
     </Layout>

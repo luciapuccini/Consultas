@@ -8,8 +8,10 @@ import ImagePicker from 'react-native-image-picker';
 import { isEmpty } from 'underscore';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export const SubjectForm = ({ route, navigation, refresh }) => {
-  const { professors } = route.params;
+export const SubjectForm = ({ route, navigation }) => {
+  const { professors, refresh } = route.params;
+  console.log("SubjectForm -> refresh", refresh)
+
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -50,8 +52,8 @@ export const SubjectForm = ({ route, navigation, refresh }) => {
               setError(false);
             }, 3000);
           } else {
-            navigation.goBack();
             refresh();
+            navigation.goBack();
           }
           console.log('ADD?', json);
           setDisabled(false);
