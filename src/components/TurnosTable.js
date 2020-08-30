@@ -81,6 +81,9 @@ export const TurnosTable = ({
           <View
             style={{
               flex: 1,
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              justifyContent: 'space-around',
             }}>
             <Text
               category="h6"
