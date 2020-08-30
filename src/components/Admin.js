@@ -48,7 +48,7 @@ export const Admin = ({ user }) => {
       ) : (
           <FlatList
             data={subjects}
-            renderItem={renderItem}
+            renderItem={({ item }) => renderItem(item, fetchSubjects)}
             contentContainerStyle={{ paddingBottom: 80 }}
             keyExtractor={(item) => item.id}
           />
@@ -90,9 +90,9 @@ const AddProfessor = () => {
   );
 };
 
-const renderItem = ({ item }) => {
-  return <SubjectCard subject={item} admin />;
-};
+const renderItem = (item, fetchSubjects) => (
+  <SubjectCard subject={item} admin refresh={fetchSubjects} />
+);
 
 const style = {
   touchableStyle: {

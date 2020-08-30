@@ -4,7 +4,7 @@ import { Text, Button, Input, Icon, Layout } from '@ui-kitten/components';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { getToken } from '../utils/authHelper';
 
-export const AddProfessor = () => {
+export const AddProfessor = ({ navigation }) => {
   const [legajo, setLegajo] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -27,7 +27,9 @@ export const AddProfessor = () => {
       },
     );
     const json = await response.json();
-    console.log('save -> json', json);
+    if (json.message) {
+      navigation.goBack();
+    }
     if (json.error) {
       setError(json.error);
     }

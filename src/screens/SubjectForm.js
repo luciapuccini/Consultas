@@ -10,7 +10,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 export const SubjectForm = ({ route, navigation }) => {
   const { professors, refresh } = route.params;
-  console.log("SubjectForm -> refresh", refresh)
 
   const [name, setName] = useState(null);
   const [image, setImage] = useState('');
@@ -20,11 +19,7 @@ export const SubjectForm = ({ route, navigation }) => {
 
   const addSubject = async () => {
     setDisabled(true);
-    console.log(isEmpty(name));
-    console.log(
-      'addSubject -> name && subjectProfessors.length > 0',
-      isEmpty(name) && subjectProfessors.length > 0,
-    );
+
     if (!isEmpty(name) && subjectProfessors.length > 0) {
       const body = {
         name,
@@ -35,7 +30,7 @@ export const SubjectForm = ({ route, navigation }) => {
       formData.append('imageFile', JSON.stringify(image));
 
       const token = await getToken();
-      fetch(`http://181.164.121.14:25565/subjects/add`, {
+      fetch('http://181.164.121.14:25565/subjects/add', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -46,7 +41,6 @@ export const SubjectForm = ({ route, navigation }) => {
         .then((response) => response.json())
         .then((json) => {
           if (json.error) {
-            console.log('addSubject -> error!', json);
             setError(json.message);
             setTimeout(() => {
               setError(false);
@@ -55,7 +49,6 @@ export const SubjectForm = ({ route, navigation }) => {
             refresh();
             navigation.goBack();
           }
-          console.log('ADD?', json);
           setDisabled(false);
         });
     } else {

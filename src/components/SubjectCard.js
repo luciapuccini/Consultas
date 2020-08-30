@@ -74,7 +74,6 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
     }
   };
   const handleDeleteSubject = async () => {
-    //TODO: SI borra -> refresh!
     const token = await getToken();
     fetch('http://181.164.121.14:25565/subjects/deleteSubject', {
       method: 'POST',
@@ -85,7 +84,11 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
       body: JSON.stringify({ id: subjectId }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data.message))
+      .then((data) => {
+        if (data.message == 'OK') {
+          refresh();
+        }
+      })
       .catch((error) => console.log(error));
   };
   const Header = () => {
