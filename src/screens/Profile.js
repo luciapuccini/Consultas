@@ -29,9 +29,15 @@ export const Profile = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [onPasswordEdit, setOnPasswordEdit] = useState(false);
-  const profileImage = user.profileImagePath
-    ? { uri: getUserImage(user.userId) }
-    : profilePlaceholder;
+  const [imageSrc, setImageSrc] = useState(profilePlaceholder);
+
+  useEffect(() => {
+    const profileImage = user.profileImagePath
+      ? { uri: getUserImage(user.userId) }
+      : profilePlaceholder;
+    setImageSrc(profileImage);
+  }, [user.profileImagePath]);
+
   useEffect(() => {
     const fetchUser = async () => {
       const token = await getToken();
@@ -147,6 +153,8 @@ export const Profile = ({ navigation }) => {
       } else {
         const { type, data, fileName } = response;
         imageFile = { imageType: type, base64Image: data, fileName };
+        console.log('handleImage -> imageFile', imageFile);
+
         fetch('http://181.164.121.14:25565/users/images/upload', {
           method: 'POST',
           headers: {
@@ -156,7 +164,9 @@ export const Profile = ({ navigation }) => {
           body: JSON.stringify(imageFile),
         })
           .then((resp) => resp.json())
-          .then((val) => {})
+          .then((val) => {
+            console.log('aca', val);
+          })
           .catch((err) => console.log('catch', err));
       }
     });
@@ -182,7 +192,7 @@ export const Profile = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
               <Image
-                source={profileImage || profilePlaceholder}
+                source={imageSrc}
                 style={{ height: 100, width: 100, borderRadius: 50 }}
               />
 

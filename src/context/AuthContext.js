@@ -2,6 +2,7 @@ import createDataContext from './createDataContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { getToken } from '../utils/authHelper';
+import { Alert } from 'react-native';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -53,6 +54,7 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     });
+
     const data = await res.json();
     if (data.error) {
       return data.message;
@@ -63,13 +65,17 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     dispatch({ type: 'SIGN_IN', payload: token });
   } catch (error) {
     console.log(error);
+    Alert.alert(
+      '⚠️ Los servicios no estan funcionando',
+      'Vuelva a intentar mas tarde',
+    );
   }
 };
 
 const signout = (dispatch) => async () => {
   const token = await getToken();
   try {
-    fetch(`http://181.164.121.14:25565/users/logout`, {
+    fetch('http://181.164.121.14:25565/users/logout', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
