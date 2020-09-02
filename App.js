@@ -35,7 +35,7 @@ const App = () => {
       const res = await response.json();
       if (res) {
         navigate('Class Detail', {
-          clase: res,
+          clase: { ...res, id: classId },
           manager: false,
           subject: res.subject,
         });

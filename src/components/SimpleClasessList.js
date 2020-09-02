@@ -14,10 +14,10 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
-    console.log('clases', simpleClasses);
     setLoading(true);
     if (simpleClasses.length > 0) {
       setLoading(false);
+      setError(false);
     }
     if (simpleClasses.length === 0) {
       setLoading(false);
