@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ThemeContext } from './context/ThemeContext';
 import { Toggle, Icon } from '@ui-kitten/components';
@@ -18,18 +18,26 @@ import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
 import { View } from 'native-base';
 
-export const RootStack = ({ navigation }) => {
+export const navigationRef = React.createRef();
+
+export function navigate(name, params) {
+  navigationRef.current?.navigate(name, params);
+}
+
+export const RootStack = () => {
   const themeContext = React.useContext(ThemeContext);
   const isDark = themeContext.theme !== 'light' ? true : false;
   const darkHeaderConfig = isDark
     ? {
-        headerStyle: {
-          backgroundColor: '#222b44',
-        },
-        headerTintColor: '#fff',
-      }
+      headerStyle: {
+        backgroundColor: '#222b44',
+      },
+      headerTintColor: '#fff',
+    }
     : null;
   const { Navigator, Screen } = createStackNavigator();
+
+
   return (
     <Navigator initialRouteName="Home">
       <Screen

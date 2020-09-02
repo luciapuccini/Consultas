@@ -8,52 +8,36 @@ import messaging from '@react-native-firebase/messaging';
 import _ from 'underscore';
 
 import { RootStack, AuthStack } from './src/Routes';
+import { navigationRef, navigate } from './src/Routes';
 import { Context, Provider } from './src/context/AuthContext';
 import { ThemeContext } from './/src/context/ThemeContext';
 import { getToken } from './src/utils/authHelper';
 const { Navigator, Screen } = createStackNavigator();
 
-const App = ({ navigation }) => {
+const App = () => {
   const { state, restore } = React.useContext(Context);
-  const [clase, setClase] = React.useState(null);
-  const [subject, setSubject] = React.useState(null);
-
   React.useEffect(() => {
     // 1. handle app running in bgr
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
       const { classId } = remoteMessage.data;
-      const fetchClassData = async () => {
-        const token = await getToken();
-        return fetch(
-          `http://181.164.121.14:25565/clases/findClassData/${classId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+      const token = await getToken();
+
+      const response = await fetch(
+        `http://181.164.121.14:25565/clases/findClassData/${classId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-        )
-          .then((response) => response.json())
-          .then((json) => {
-            if (json) {
-              setClase(json);
-              setSubject(json.subject);
-              return 'ok';
-            }
-          })
-          .catch((error) => {
-            console.log('[ FAILED ]', error);
-          });
-      };
-      const response = await fetchClassData();
-      console.log('App -> response', response, clase, subject);
-      if (response) {
-        console.log('algo existe', response, clase, subject);
-        navigation.navigate('Class Detail', {
-          clase,
+        },
+      );
+      const res = await response.json();
+      if (res) {
+        navigate('Class Detail', {
+          clase: res,
           manager: false,
-          subject,
+          subject: res.subject,
         });
       }
     });
@@ -77,7 +61,7 @@ const App = ({ navigation }) => {
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Navigator initialRouteName="SingIn">
         {_.isEmpty(state.userToken) ? (
           <Screen

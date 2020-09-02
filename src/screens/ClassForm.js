@@ -46,7 +46,7 @@ export const ClassForm = ({ route, navigation }) => {
   const addClase = async () => {
     const basicClass = {
       subjectId,
-      initTime: date,
+      initTime: moment(date),
       hasSingleTurnos,
       isRegular,
     };
@@ -110,7 +110,7 @@ export const ClassForm = ({ route, navigation }) => {
               accessoryLeft={ClockIcon}
             />
             <Text>
-              {date ? `${moment(date).locale('es').format('lll a')}` : null}
+              {date && `${moment(date).locale('es').format('lll a')}`}
             </Text>
           </View>
         </Card>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   card: {
     // flex: 1,
     // margin: 2,
-    padding: 5
+    padding: 5,
   },
 });
 
