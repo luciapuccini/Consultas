@@ -13,6 +13,7 @@ import { Context } from '../context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
 
 import { ErrorMessage } from '../components/ErrorMessage';
+import { Spinner } from '@ui-kitten/components';
 
 async function registerAppWithFCM(setDeviceToken) {
   await messaging().registerDeviceForRemoteMessages();
@@ -27,6 +28,7 @@ export const SignInScreen = ({ navigation }) => {
   const { signin } = useContext(Context);
   const [legajo, setLegajo] = useState(0);
   const [password, setPassword] = useState('');
+  const [loading, setloading] = useState(false);
   const [error, setError] = useState('');
   const [deviceToken, setDeviceToken] = useState('');
 
@@ -35,15 +37,18 @@ export const SignInScreen = ({ navigation }) => {
   }, []);
 
   const handleSingIn = async () => {
+    setloading(true);
     if (!_.isEmpty(legajo) && !_.isEmpty(password)) {
       const data = await signin({ legajo, password, deviceToken });
       if (data !== '') {
         setError(data);
+        setloading(false);
       }
     } else {
       setError('Complete the fields');
       setTimeout(() => {
         setError(false);
+        setloading(false);
       }, 3000);
     }
   };
@@ -77,7 +82,11 @@ export const SignInScreen = ({ navigation }) => {
       </View>
       {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
       <TouchableOpacity style={loginBtn} onPress={handleSingIn}>
-        <Text style={loginText}>Entrar</Text>
+        {loading ? (
+          <Spinner status="basic" />
+        ) : (
+            <Text style={loginText}>Entrar</Text>
+          )}
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
