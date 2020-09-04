@@ -2,10 +2,10 @@ import React from 'react';
 import { ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { getToken } from '../utils/authHelper';
-import { timeToStart, getUserLegajo } from '../utils/functions';
+import { timeToStart, getUserLegajo, getTime } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
@@ -96,8 +96,13 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const getCount = () => {
-    console.log(initTime)
-    return moment(initTime).fromNow();
+    const eventTime = getTime(initTime);
+    const currentTime = moment();
+    const leftTime = eventTime - currentTime;
+    var duration = moment.duration(leftTime, 'milliseconds');
+    duration = moment.duration(duration - 1000, 'milliseconds');
+    const countDown = `${duration.days()} Dias, ${duration.hours()} Horas, ${duration.minutes()} Minutos`;
+    return countDown;
   };
 
   const handleDeleteComment = async (comment) => {

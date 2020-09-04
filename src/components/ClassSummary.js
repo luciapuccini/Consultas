@@ -51,7 +51,7 @@ export const ClassSummary = ({
               Hora: {getHora(fecha)}
             </Text>
             <Text category="s1" style={{ padding: 4 }}>
-              Empieza {count}
+              {count}
             </Text>
           </View>
           <View style={{ margin: 10, alignItems: 'center' }}>

@@ -3,6 +3,11 @@ import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const ARG = 'America/Argentina/Buenos_Aires';
+
+//TODO: ESTO !!!
+export const getTime = (fecha) => {
+  return moment.utc(fecha);
+};
 export const getHora = (fecha) => {
   const fixFecha = fecha.concat('Z');
   return moment

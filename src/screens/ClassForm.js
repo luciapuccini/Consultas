@@ -12,11 +12,9 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import { ErrorMessage } from '../components/ErrorMessage';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 export const ClassForm = ({ route, navigation }) => {
-  console.log('ClassForm -> route', route);
-
   const { subjectId } = route.params;
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -158,8 +156,9 @@ export const ClassForm = ({ route, navigation }) => {
 const ModalPicker = ({ mode, date, setDate, setShow }) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+    console.log('onChange -> currentDate', currentDate);
     setShow(false);
-    setDate(currentDate);
+    setDate(moment(currentDate).tz('America/Argentina/Buenos_Aires'));
     console.log('onChange -> currentDate', currentDate);
   };
 
