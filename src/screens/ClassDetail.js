@@ -19,12 +19,11 @@ export const ClassDetail = ({ route, navigation }) => {
     professor,
     status,
   } = route.params.clase;
-  console.log('ClassDetail -> id', id);
 
   const manager = route.params?.manager;
   const subject = route.params?.subject;
   const [comments, setComments] = React.useState([]);
-  const [turnos, setTurnos] = React.useState(route.params.clase || []);
+  const [turnos, setTurnos] = React.useState([]); //route.params.clase ||
   const [index, setIndex] = React.useState(null);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
@@ -97,6 +96,7 @@ export const ClassDetail = ({ route, navigation }) => {
   };
 
   const getCount = () => {
+    console.log(initTime)
     return moment(initTime).fromNow();
   };
 
