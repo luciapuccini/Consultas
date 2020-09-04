@@ -35,8 +35,9 @@ export const Profile = ({ navigation }) => {
     const profileImage = user.profileImagePath
       ? { uri: getUserImage(user.userId) }
       : profilePlaceholder;
+    console.log('cambio img', profileImage);
     setImageSrc(profileImage);
-  }, [user.profileImagePath]);
+  }, [error]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -153,7 +154,6 @@ export const Profile = ({ navigation }) => {
       } else {
         const { type, data, fileName } = response;
         imageFile = { imageType: type, base64Image: data, fileName };
-        console.log('handleImage -> imageFile', imageFile);
 
         fetch('http://181.164.121.14:25565/users/images/upload', {
           method: 'POST',
@@ -165,7 +165,8 @@ export const Profile = ({ navigation }) => {
         })
           .then((resp) => resp.json())
           .then((val) => {
-            console.log('aca', val);
+            console.log('Actualizado', val);
+            setError(val.message);
           })
           .catch((err) => console.log('catch', err));
       }
@@ -272,7 +273,7 @@ export const Profile = ({ navigation }) => {
                 setShowMobile={setShowMobile}
               />
             )}
-            {error && <ErrorMessage message={error} />}
+            {error && error !== 'Succed' && <ErrorMessage message={error} />}
             <ConfirmButton save={save} />
             <View
               style={{
@@ -307,8 +308,8 @@ export const Profile = ({ navigation }) => {
           </ScrollView>
         </>
       ) : (
-        <CustomSpinner />
-      )}
+          <CustomSpinner />
+        )}
     </Layout>
   );
 };
