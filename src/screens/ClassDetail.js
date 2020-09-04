@@ -1,6 +1,12 @@
 import React from 'react';
-import { ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { Layout, Icon } from '@ui-kitten/components';
+import {
+  Animated,
+  ScrollView,
+  View,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import { Layout, Icon, Text } from '@ui-kitten/components';
 
 import moment from 'moment-timezone';
 
@@ -133,39 +139,43 @@ export const ClassDetail = ({ route, navigation }) => {
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
-        <ScrollView style={{ flex: 1 }}>
-          <ClassSummary
-            subjectId={subject.subjectId}
-            fecha={initTime}
-            count={getCount()}
-            comments={comments}
-            professor={professor}
-            handleDeleteComment={handleDeleteComment}
-            manager={manager}
-          />
-          {canShowTurnos ? (
-            <TurnosTable
-              turnos={turnos}
-              bookingFlag={bookingFlag}
-              handleConfirm={handleConfirm}
-              onSubmit={onSubmit}
-              disabled={isLive}
+        <>
+          <ScrollView style={{ flex: 1 }}>
+            <ClassSummary
+              subjectId={subject.subjectId}
+              fecha={initTime}
+              count={getCount()}
+              comments={comments}
+              professor={professor}
+              handleDeleteComment={handleDeleteComment}
               manager={manager}
-              id={id}
             />
-          ) : (
-              <SimpleBookClass
+            {canShowTurnos ? (
+              <TurnosTable
+                turnos={turnos}
                 bookingFlag={bookingFlag}
-                onSubmit={onSubmit}
-                hora={initTime}
                 handleConfirm={handleConfirm}
+                onSubmit={onSubmit}
                 disabled={isLive}
                 manager={manager}
                 id={id}
               />
-            )}
-          {canStart && manager && <StartClass id={id} />}
-        </ScrollView>
+            ) : (
+                <SimpleBookClass
+                  bookingFlag={bookingFlag}
+                  onSubmit={onSubmit}
+                  hora={initTime}
+                  handleConfirm={handleConfirm}
+                  disabled={isLive}
+                  manager={manager}
+                  id={id}
+                />
+              )}
+          </ScrollView>
+          <View style={{ alignItems: 'flex-start' }}>
+            {canStart && manager && <StartClass id={id} />}
+          </View>
+        </>
       ) : (
           <CustomSpinner />
         )}
@@ -216,7 +226,7 @@ const unsubscribeTurno = async (idClass, startTimeTurno) => {
 
 const onstartClass = async (id, setStarted) => {
   const token = await getToken();
-
+  heartbeatAnimation(10, 5, 15);
   try {
     fetch(`http://181.164.121.14:25565/clases/startClass/${id}`, {
       method: 'GET',
@@ -248,19 +258,45 @@ const StartClass = ({ id }) => {
     <TouchableOpacity
       style={style.touchableStartStyle}
       onPress={() => onstartClass(id, setStarted)}>
-      <Icon name={startIcon} fill="#4CAF50" style={idleStyle} />
+      <Text style={style.textStartStyle}>COMENZAR</Text>
     </TouchableOpacity>
   );
 };
+export const heartbeatAnimation = (value, minValue, maxValue) =>
+  Animated.loop(
+    Animated.sequence([
+      Animated.timing(value, {
+        toValue: maxValue,
+        duration: 100,
+      }),
+      Animated.timing(value, {
+        toValue: minValue,
+        duration: 100,
+      }),
+      Animated.timing(value, {
+        toValue: maxValue,
+        duration: 100,
+      }),
+      Animated.timing(value, {
+        toValue: minValue,
+        duration: 2000,
+      }),
+    ]),
+  );
 
 const style = {
   touchableStartStyle: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
     left: 30,
     bottom: 30,
+    borderRadius: 50,
+    backgroundColor: '#63b76c',
+  },
+  textStartStyle: {
+    color: 'white',
   },
   idleStyle: {
     resizeMode: 'contain',
