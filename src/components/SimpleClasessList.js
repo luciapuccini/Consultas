@@ -57,8 +57,6 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {error && <ErrorMessage message={error} />}
-
       {loading ? (
         <CustomSpinner />
       ) : (
@@ -76,6 +74,8 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
             })}
           </ScrollView>
         )}
+      {error && <ErrorMessage message={error} />}
+
       <AddClass subjectId={subject.subjectId} refresh={refresh} />
       <DeleteClass subjectId={subject.subjectId} refresh={refresh} />
     </Layout>

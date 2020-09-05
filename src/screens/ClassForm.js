@@ -156,10 +156,8 @@ export const ClassForm = ({ route, navigation }) => {
 const ModalPicker = ({ mode, date, setDate, setShow }) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    console.log('onChange -> currentDate', currentDate);
     setShow(false);
-    setDate(moment(currentDate).tz('America/Argentina/Buenos_Aires'));
-    console.log('onChange -> currentDate', currentDate);
+    setDate(currentDate);
   };
 
   return (
