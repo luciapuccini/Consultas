@@ -61,7 +61,6 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
       .then((response) => response.json())
       .then((json) => {
         setTurnos(json.turnos);
-        console.log('ClassDetail -> json.turnos', json.turnos);
         setComments(json.comments);
         setLoading(false);
         checkUserPresent(json.turnos);

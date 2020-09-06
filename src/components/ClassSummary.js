@@ -22,7 +22,6 @@ export const ClassSummary = ({
   handleDeleteComment,
   manager,
 }) => {
-  console.log('ClassSummary=>fecha', fecha);
 
   const subjectImage = subjectId
     ? { uri: getSubjectImage(subjectId) }

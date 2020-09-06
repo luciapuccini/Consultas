@@ -19,6 +19,7 @@ const App = () => {
   React.useEffect(() => {
     // 1. handle app running in bgr
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
+      console.log('App -> remoteMessage', remoteMessage);
       const { classId } = remoteMessage.data;
       const token = await getToken();
 
@@ -46,6 +47,7 @@ const App = () => {
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
+        console.log('App -> remoteMessage', remoteMessage);
         //WARNING este caso esta null
         console.log('remote', remoteMessage);
         if (remoteMessage) {

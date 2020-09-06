@@ -311,7 +311,7 @@ export const Profile = ({ navigation }) => {
   );
 };
 const renderBrushIcon = (props) => (
-  <TouchableWithoutFeedback onPress={() => console.log('pueod hacer esto')}>
+  <TouchableWithoutFeedback>
     <Icon {...props} name="edit-2-outline" />
   </TouchableWithoutFeedback>
 );
