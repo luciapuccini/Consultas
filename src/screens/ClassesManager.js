@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { mapObject } from 'underscore';
-
-import { Layout, Tab, TabView, Icon, Text } from '@ui-kitten/components';
+import { Layout, Tab, TabView } from '@ui-kitten/components';
 import SimpleClassesList from '../components/SimpleClasessList';
 import FixedClassesList from '../components/FixedClasessList';
 import { getToken } from '../utils/authHelper';
+import moment from 'moment';
 
 export const ClassesManager = ({ route }) => {
   const { subject, manager } = route.params;
@@ -48,7 +46,9 @@ export const ClassesManager = ({ route }) => {
       }
     });
     setRegularClasses(reg);
-    setSimpleClasses(simp);
+    setSimpleClasses(
+      simp.sort((objA, objB) => moment(objB.initTime) - moment(objA.initTime)),
+    );
   };
 
   return (
