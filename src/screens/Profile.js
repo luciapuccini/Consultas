@@ -79,8 +79,6 @@ export const Profile = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    console.log('Profile -> user', user);
-    console.log('Profile -> loading', loading);
     const profileImage = user.profileImagePath
       ? { uri: getUserImage(user.userId) }
       : profilePlaceholder;
@@ -167,7 +165,6 @@ export const Profile = ({ navigation }) => {
           .then((resp) => resp.json())
           .then((val) => {
             if (val.message == 'Succed') {
-              console.log('actualice con exito');
               setImgFlag(true);
             }
           })
@@ -340,8 +337,9 @@ const ConfirmButton = ({ save }) => {
 };
 const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => {
   const phone = user.mobile?.startsWith('+')
-    ? user.mobile.slice(4)
+    ? user.mobile.slice(8)
     : user.mobile;
+
   return (
     <View style={{ flex: 1 }}>
       <View style={[styles.inputStyle, styles.phoneRow]}>
