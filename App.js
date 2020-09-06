@@ -47,6 +47,7 @@ const App = () => {
     messaging()
       .getInitialNotification()
       .then(async (remoteMessage) => {
+        console.log("App -> remoteMessage", remoteMessage)
         const token = await getToken();
         if (remoteMessage) {
           const classId = remoteMessage.data.classId;

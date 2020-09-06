@@ -47,7 +47,7 @@ export const ClassesManager = ({ route }) => {
     });
     setRegularClasses(reg);
     setSimpleClasses(
-      simp.sort((objA, objB) => moment(objB.initTime) - moment(objA.initTime)),
+      simp.sort((objA, objB) => moment(objA.initTime) - moment(objB.initTime)),
     );
   };
 
