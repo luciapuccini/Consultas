@@ -17,7 +17,7 @@ const { Navigator, Screen } = createStackNavigator();
 const App = () => {
   const { state, restore } = React.useContext(Context);
   React.useEffect(() => {
-    // 1. handle app running in bgr
+    //BACKGROUND
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
       console.log('App -> remoteMessage', remoteMessage);
       const { classId } = remoteMessage.data;
@@ -43,19 +43,29 @@ const App = () => {
       }
     });
 
-    // 2. handle app open from quiet state
+    // KILLED
     messaging()
       .getInitialNotification()
-      .then((remoteMessage) => {
-        console.log('App -> remoteMessage', remoteMessage);
-        //WARNING este caso esta null
-        console.log('remote', remoteMessage);
+      .then(async (remoteMessage) => {
+        const token = await getToken();
         if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
+          const classId = remoteMessage.data.classId;
+          const response = await fetch(
+            `http://181.164.121.14:25565/clases/findClassData/${classId}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            },
           );
-          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+          const res = await response.json();
+          navigate('Class Detail', {
+            clase: { ...res, id: classId },
+            manager: false,
+            subject: res.subject,
+          });
         }
       });
     restore();
