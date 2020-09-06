@@ -72,6 +72,8 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   const canShowTurnos = !hasSingleTurnos; // doble innecesario  && turnos.length > 1
   const isLive = status === 'En curso';
   const canStart = timeToStart(initTime) < 5;
+  const expired = moment(initTime) < moment();
+  console.log('expired', expired);
 
   const checkUserPresent = async (turnitos) => {
     const legajo = await getUserLegajo();
@@ -118,8 +120,13 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
     const leftTime = eventTime - currentTime;
     var duration = moment.duration(leftTime, 'milliseconds');
     duration = moment.duration(duration - 1000, 'milliseconds');
-    const countDown = `${duration.days()} Dias, ${duration.hours()} Horas, ${duration.minutes()} Minutos`;
-    return countDown;
+    if (leftTime < 0) {
+      return `Hace: ${duration.days() * -1} Dias, ${
+        duration.hours() * -1
+        } Hs, ${duration.minutes() * -1} Min`;
+    }
+
+    return `Faltan: ${duration.days()} Dias, ${duration.hours()} Hs, ${duration.minutes()} Min`;
   };
 
   const handleDeleteComment = async (comment) => {
@@ -167,9 +174,10 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                 bookingFlag={bookingFlag}
                 handleConfirm={handleConfirm}
                 onSubmit={onSubmit}
-                disabled={isLive}
+                disabled={isLive || expired}
                 manager={manager}
                 id={id}
+                expired={expired}
               />
             ) : (
                 <SimpleBookClass
@@ -177,9 +185,10 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                   onSubmit={onSubmit}
                   hora={initTime}
                   handleConfirm={handleConfirm}
-                  disabled={isLive}
+                  disabled={isLive || expired}
                   manager={manager}
                   id={id}
+                  expired={expired}
                 />
               )}
           </ScrollView>

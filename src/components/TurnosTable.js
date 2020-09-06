@@ -20,6 +20,7 @@ export const TurnosTable = ({
   disabled,
   manager,
   id,
+  expired,
 }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [comment, setComment] = React.useState('');
@@ -92,7 +93,9 @@ export const TurnosTable = ({
                 fontWeight: 'bold',
                 color: '#689f38',
               }}>
-              Confirmar: {getHora(getSelectedTurno())}
+              {expired
+                ? 'FINALIZADA'
+                : `Confirmar: ${getHora(getSelectedTurno())}`}
             </Text>
             <Button
               disabled={disabled}

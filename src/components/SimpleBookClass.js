@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, Button, Modal, Card, Icon, Input } from '@ui-kitten/components';
-import { TouchableOpacity, View } from 'react-native';
+import { Text, Button, Input } from '@ui-kitten/components';
+import { View } from 'react-native';
 import { getHora } from '../utils/functions';
 import { getToken } from '../utils/authHelper';
 import { useNavigation } from '@react-navigation/native';
@@ -12,16 +12,15 @@ export const SimpleBookClass = ({
   disabled,
   manager,
   id,
+  expired,
 }) => {
   const [comment, setComment] = React.useState('');
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   const navigation = useNavigation();
-
   const addNote = async () => {
     const body = { id, comment };
     const token = await getToken();
-    console.log('addNote -> body', body);
-    fetch(`http://181.164.121.14:25565/clases/addComment`, {
+    fetch('http://181.164.121.14:25565/clases/addComment', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +30,9 @@ export const SimpleBookClass = ({
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.message === 'Suceed') navigation.goBack();
+        if (json.message === 'Suceed') {
+          navigation.goBack();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -48,11 +49,10 @@ export const SimpleBookClass = ({
       }}>
       {!manager ? (
         <>
-          <Text
-            style={{ marginLeft: 10, fontWeight: 'bold', color: '#689f38' }}
-            category="h6">
-            Confirmar: {getHora(hora)}
+          <Text style={expired ? styles.expired : styles.active} category="h6">
+            {expired ? 'FINALIZADA' : `Confirmar: ${getHora(hora)}`}
           </Text>
+
           <Button
             disabled={disabled}
             appearance="outline"
@@ -63,36 +63,42 @@ export const SimpleBookClass = ({
           </Button>
         </>
       ) : (
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            justifyContent: 'space-between',
-          }}>
-          <Input
-            label="Notas"
-            placeholder={comment}
-            onChangeText={setComment}
-            value={comment}
-            size="large"
-            multiline={true}
-            textStyle={{ minHeight: 64 }}
-          />
-          <Button
-            appearance="outline"
-            status="primary"
-            style={styles.inscriptionBtn}
-            onPress={addNote}>
-            Add notes
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              justifyContent: 'space-between',
+            }}>
+            <Input
+              label="Notas"
+              placeholder={comment}
+              onChangeText={setComment}
+              value={comment}
+              size="large"
+              multiline={true}
+              textStyle={{ minHeight: 64 }}
+            />
+            <Button
+              appearance="outline"
+              status="primary"
+              style={styles.inscriptionBtn}
+              onPress={addNote}>
+              Add notes
           </Button>
-        </View>
-      )}
+          </View>
+        )}
     </View>
   );
 };
 
 const styles = {
+  active: { marginLeft: 10, fontWeight: 'bold', color: '#689f38' },
+  expired: {
+    marginLeft: 10,
+    fontWeight: 'bold',
+    color: '#93ccea',
+  },
   inscriptionBtn: {
     height: 20,
     alignSelf: 'flex-end',
