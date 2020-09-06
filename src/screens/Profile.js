@@ -35,9 +35,8 @@ export const Profile = ({ navigation }) => {
     const profileImage = user.profileImagePath
       ? { uri: getUserImage(user.userId) }
       : profilePlaceholder;
-    console.log('cambio img', profileImage);
     setImageSrc(profileImage);
-  }, [error]);
+  }, [user.profileImagePath]);
 
   useEffect(() => {
     const fetchUser = async () => {
