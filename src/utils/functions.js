@@ -67,8 +67,10 @@ export const removeUser = async () => {
   }
 };
 
-export const getUserImage = (id) =>
-  `http://181.164.121.14:25565/users/images/profileImages/${id}`;
+export const getUserImage = (id) => {
+  console.log('refetch', id);
+  return `http://181.164.121.14:25565/users/images/profileImages/${id}`;
+};
 
 export const getSubjectImage = (subjectId) =>
   `http://181.164.121.14:25565/subjects/images/${subjectId}`;

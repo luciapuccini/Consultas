@@ -30,13 +30,7 @@ export const Profile = ({ navigation }) => {
   const [error, setError] = useState(false);
   const [onPasswordEdit, setOnPasswordEdit] = useState(false);
   const [imageSrc, setImageSrc] = useState(profilePlaceholder);
-
-  useEffect(() => {
-    const profileImage = user.profileImagePath
-      ? { uri: getUserImage(user.userId) }
-      : profilePlaceholder;
-    setImageSrc(profileImage);
-  }, [user.profileImagePath]);
+  const [imgFlag, setImgFlag] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -80,8 +74,18 @@ export const Profile = ({ navigation }) => {
         console.log(error);
       }
     };
+    setLoading(true);
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    console.log('Profile -> user', user);
+    console.log('Profile -> loading', loading);
+    const profileImage = user.profileImagePath
+      ? { uri: getUserImage(user.userId) }
+      : profilePlaceholder;
+    setImageSrc(profileImage);
+  }, [loading, imgFlag]);
 
   const isProfessor = user.role === 'ROLE_PROFESSOR';
   const isStudent = user.role === 'ROLE_STUDENT';
@@ -162,8 +166,10 @@ export const Profile = ({ navigation }) => {
         })
           .then((resp) => resp.json())
           .then((val) => {
-            console.log('Actualizado', val);
-            setError(val.message);
+            if (val.message == 'Succed') {
+              console.log('actualice con exito');
+              setImgFlag(true);
+            }
           })
           .catch((err) => console.log('catch', err));
       }
@@ -190,7 +196,10 @@ export const Profile = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
               <Image
-                source={imageSrc}
+                source={{
+                  //FIXME: RN BUG, ONLY WAY TO SOLVE FOR NOW
+                  uri: getUserImage(user.userId) + `?${Math.random()}`,
+                }}
                 style={{ height: 100, width: 100, borderRadius: 50 }}
               />
 
