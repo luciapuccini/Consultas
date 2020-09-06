@@ -16,6 +16,7 @@ import {
   Button,
   Layout,
   CheckBox,
+  Spinner,
 } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
@@ -80,7 +81,7 @@ export const Profile = ({ navigation }) => {
 
   useEffect(() => {
     const profileImage = user.profileImagePath
-      ? { uri: getUserImage(user.userId) }
+      ? { uri: getUserImage(user.userId) + `?${Math.random()}` } //FIXME: RN BUG, ONLY WAY TO SOLVE FOR NOW
       : profilePlaceholder;
     setImageSrc(profileImage);
   }, [loading, imgFlag]);
@@ -193,10 +194,7 @@ export const Profile = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
               <Image
-                source={{
-                  //FIXME: RN BUG, ONLY WAY TO SOLVE FOR NOW
-                  uri: getUserImage(user.userId) + `?${Math.random()}`,
-                }}
+                source={imageSrc}
                 style={{ height: 100, width: 100, borderRadius: 50 }}
               />
 
