@@ -96,7 +96,6 @@ export const Profile = ({ navigation }) => {
         mobile: prefix.concat(user.mobile),
         showMobile,
       };
-      console.log(userBody);
       try {
         const response = await fetch(
           'http://181.164.121.14:25565/users/modify',
@@ -110,7 +109,6 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
-        console.log('handleSave -> json', json);
         if (json.error) {
           setError(json.message);
         }

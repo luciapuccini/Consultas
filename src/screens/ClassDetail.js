@@ -17,24 +17,60 @@ import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
 import { TurnosTable } from '../components/TurnosTable';
 
-export const ClassDetail = ({ route, navigation }) => {
-  const {
-    hasSingleTurnos,
-    id,
-    initTime,
-    professor,
-    status,
-  } = route.params.clase;
+export const ClassDetail = ({ route: { params }, navigation }) => {
+  const claseProp = params?.clase;
+  console.log('ClassDetail -> claseProp', claseProp);
+  let hasSingleTurnos, id, initTime, professor, status;
 
-  const manager = route.params?.manager;
-  const subject = route.params?.subject;
+  if (claseProp?.classe) {
+    hasSingleTurnos = claseProp.classe.hasSingleTurnos;
+    id = claseProp.classe.id;
+    initTime = claseProp.classe.initTime;
+    professor = claseProp.professor;
+    status = claseProp.classe.status;
+  } else {
+    hasSingleTurnos = claseProp.hasSingleTurnos;
+    id = claseProp.id;
+    initTime = claseProp.initTime;
+    professor = claseProp.professor;
+    status = claseProp.status;
+  }
+
+  const manager = params?.manager;
+  const subject = params?.subject || claseProp.subject;
+
   const [comments, setComments] = React.useState([]);
-  const [turnos, setTurnos] = React.useState([]); //route.params.clase ||
+  const [turnos, setTurnos] = React.useState([]);
   const [index, setIndex] = React.useState(null);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
 
-  const canShowTurnos = !hasSingleTurnos && turnos.length > 1; // doble innecesario
+  React.useEffect(() => {
+    fetchClassData();
+  }, []);
+
+  const fetchClassData = async () => {
+    const token = await getToken();
+    fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setTurnos(json.turnos);
+        console.log('ClassDetail -> json.turnos', json.turnos);
+        setComments(json.comments);
+        setLoading(false);
+        checkUserPresent(json.turnos);
+      })
+      .catch((error) => {
+        console.log('[ FAILED ]', error);
+      });
+  };
+  const canShowTurnos = !hasSingleTurnos; // doble innecesario  && turnos.length > 1
   const isLive = status === 'En curso';
   const canStart = timeToStart(initTime) < 5;
 
@@ -48,30 +84,6 @@ export const ClassDetail = ({ route, navigation }) => {
       });
     });
   };
-
-  React.useEffect(() => {
-    const fetchClassData = async () => {
-      const token = await getToken();
-      fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          setTurnos(json.turnos);
-          setComments(json.comments);
-          setLoading(false);
-          checkUserPresent(json.turnos);
-        })
-        .catch((error) => {
-          console.log('[ FAILED ]', error);
-        });
-    };
-    fetchClassData();
-  }, []);
 
   const handleConfirm = (index) => {
     setIndex(index);
