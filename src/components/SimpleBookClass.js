@@ -97,7 +97,7 @@ const styles = {
   expired: {
     marginLeft: 10,
     fontWeight: 'bold',
-    color: '#93ccea',
+    color: '#93cceap',
   },
   inscriptionBtn: {
     height: 20,

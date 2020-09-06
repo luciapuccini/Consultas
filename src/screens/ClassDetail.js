@@ -19,7 +19,6 @@ import { TurnosTable } from '../components/TurnosTable';
 
 export const ClassDetail = ({ route: { params }, navigation }) => {
   const claseProp = params?.clase;
-  console.log('ClassDetail -> claseProp', claseProp);
   let hasSingleTurnos, id, initTime, professor, status;
 
   if (claseProp?.classe) {
@@ -73,7 +72,6 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   const isLive = status === 'En curso';
   const canStart = timeToStart(initTime) < 5;
   const expired = moment(initTime) < moment();
-  console.log('expired', expired);
 
   const checkUserPresent = async (turnitos) => {
     const legajo = await getUserLegajo();

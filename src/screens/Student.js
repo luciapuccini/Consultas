@@ -1,14 +1,13 @@
 import React from 'react';
 import _ from 'underscore';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SubjectList } from '../components/SubjectList';
 import { SearchBox } from '../components/SearchBox';
-import { Layout, Tab, TabView, Text } from '@ui-kitten/components';
+import { Layout, Tab, TabView } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { ProfessorList } from '../components/ProfessorList';
 import { getToken } from '../utils/authHelper';
-import { View } from 'native-base';
 
 // import AsyncStorage from '@react-native-community/async-storage';
 

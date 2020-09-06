@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ThemeContext } from './context/ThemeContext';
 import { Toggle, Icon } from '@ui-kitten/components';
@@ -16,7 +16,6 @@ import { ClassForm } from './screens/ClassForm';
 import { SubjectForm } from './screens/SubjectForm';
 import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
-import { View } from 'native-base';
 
 export const navigationRef = React.createRef();
 

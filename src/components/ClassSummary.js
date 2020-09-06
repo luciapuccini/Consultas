@@ -21,8 +21,8 @@ export const ClassSummary = ({
   professor,
   handleDeleteComment,
   manager,
+  expired,
 }) => {
-
   const subjectImage = subjectId
     ? { uri: getSubjectImage(subjectId) }
     : placeHolder;
