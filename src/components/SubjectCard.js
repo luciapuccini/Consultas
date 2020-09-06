@@ -74,22 +74,23 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
     }
   };
   const handleDeleteSubject = async () => {
-    const token = await getToken();
-    fetch('http://181.164.121.14:25565/subjects/deleteSubject', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ id: subjectId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message == 'OK') {
-          refresh();
-        }
-      })
-      .catch((error) => console.log(error));
+    // FIXME: Temp disabled until back fixes EP
+    // const token = await getToken();
+    // fetch('http://181.164.121.14:25565/subjects/deleteSubject', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    //   body: JSON.stringify({ id: subjectId }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (data.message == 'OK') {
+    //       refresh();
+    //     }
+    //   })
+    //   .catch((error) => console.log(error));
   };
   const Header = () => {
     return (
@@ -106,14 +107,14 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
                 fill="#8F9BB3"
               />
             )}
-            {admin && (
+            {/* {admin && (
               <Icon
                 style={styles.bellSize}
                 name="trash"
                 fill="#8F9BB3"
                 onPress={handleDeleteSubject}
               />
-            )}
+            )} */}
           </TouchableOpacity>
         </View>
       </View>
