@@ -5,12 +5,12 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import { ErrorMessage } from '../components/ErrorMessage';
-import { ScrollView } from 'react-native-gesture-handler';
 const { loginFlowContainer } = Styles;
 
 export const SignUpScreen = ({ navigation }) => {
@@ -40,7 +40,7 @@ export const SignUpScreen = ({ navigation }) => {
     }
   };
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ flex: 1 }}>
       <ImageBackground source={Background} style={loginFlowContainer}>
         <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
           Crear una Cuenta

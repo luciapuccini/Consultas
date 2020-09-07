@@ -12,9 +12,7 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
   const navigation = useNavigation();
   const [loading, setloading] = useState(true);
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [toDelete, setToDelete] = useState([]);
-
+  const [open, setOpen] = useState([]);
   useEffect(() => {
     setloading(false);
     if (regularClasses.leght > 0) {
@@ -22,7 +20,13 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
       setloading(false);
     }
   }, [regularClasses]);
-
+  const handleOpen = (id) => {
+    if (open.includes(id)) {
+      setOpen(open.filter((val) => !val === id));
+    } else {
+      setOpen([...open, id]);
+    }
+  };
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {loading ? (
@@ -30,47 +34,47 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
       ) : error ? (
         <ErrorMessage message={error} />
       ) : (
-        regularClasses.map((c) => (
-          <>
-            <ListItem onPress={() => setOpen(!open)}>
-              <View style={{ flexDirection: 'row' }}>
-                <Arrow direction={open} />
-                <Text>
-                  Clase de los {getDia(c[0].initTime)} {getHora(c[0].initTime)}
-                </Text>
-              </View>
-            </ListItem>
-            {open && (
-              <ScrollView>
-                {c.map((cl) => (
-                  <TouchableOpacity
-                    style={styles.rowContainer}
-                    onPress={() =>
-                      navigation.navigate('Class Detail', {
-                        clase: cl,
-                        manager,
-                        subject,
-                      })
-                    }>
-                    <View style={styles.classRowStyle}>
-                      <CheckIcon color={getClassColor(cl.status)} />
-                      <Text
-                        style={{
-                          marginVertical: 10,
-                          marginLeft: 20,
-                          color: getClassColor(cl.status),
-                        }}>
-                        {getFecha(cl.initTime)}
-                      </Text>
-                    </View>
-                    <Arrow direction={false} />
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            )}
-          </>
-        ))
-      )}
+            regularClasses.map((c, id) => (
+              <>
+                <ListItem onPress={() => handleOpen(id)}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Arrow direction={open.includes(id)} />
+                    <Text>
+                      Clase de los {getDia(c[0].initTime)} {getHora(c[0].initTime)}
+                    </Text>
+                  </View>
+                </ListItem>
+                {open.includes(id) && (
+                  <ScrollView>
+                    {c.map((cl) => (
+                      <TouchableOpacity
+                        style={styles.rowContainer}
+                        onPress={() =>
+                          navigation.navigate('Class Detail', {
+                            clase: cl,
+                            manager,
+                            subject,
+                          })
+                        }>
+                        <View style={styles.classRowStyle}>
+                          <CheckIcon color={getClassColor(cl.status)} />
+                          <Text
+                            style={{
+                              marginVertical: 10,
+                              marginLeft: 20,
+                              color: getClassColor(cl.status),
+                            }}>
+                            {getFecha(cl.initTime)}
+                          </Text>
+                        </View>
+                        <Arrow direction={false} />
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
+              </>
+            ))
+          )}
     </Layout>
   );
 };
