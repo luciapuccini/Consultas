@@ -20,8 +20,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
       setError(false);
     }
     if (simpleClasses.length === 0) {
-      setLoading(false);
-      setError('No hay clases');
+      setLoading(true);
     }
   }, [simpleClasses]);
 
