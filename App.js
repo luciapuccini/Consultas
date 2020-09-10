@@ -12,6 +12,7 @@ import { navigationRef, navigate } from './src/Routes';
 import { Context, Provider } from './src/context/AuthContext';
 import { ThemeContext } from './/src/context/ThemeContext';
 import { getToken } from './src/utils/authHelper';
+import { getUserRole } from './src/utils/functions';
 const { Navigator, Screen } = createStackNavigator();
 
 const App = () => {
@@ -19,10 +20,9 @@ const App = () => {
   React.useEffect(() => {
     //BACKGROUND
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
-      console.log('App -> remoteMessage', remoteMessage);
       const { classId } = remoteMessage.data;
       const token = await getToken();
-
+      const role = await getUserRole();
       const response = await fetch(
         `http://181.164.121.14:25565/clases/findClassData/${classId}`,
         {
@@ -37,7 +37,7 @@ const App = () => {
       if (res) {
         navigate('Class Detail', {
           clase: { ...res, id: classId },
-          manager: false,
+          manager: role === 'ROLE_PROFESSOR',
           subject: res.subject,
         });
       }
@@ -47,8 +47,9 @@ const App = () => {
     messaging()
       .getInitialNotification()
       .then(async (remoteMessage) => {
-        console.log("App -> remoteMessage", remoteMessage)
         const token = await getToken();
+        const role = await getUserRole();
+
         if (remoteMessage) {
           const classId = remoteMessage.data.classId;
           const response = await fetch(
@@ -64,7 +65,7 @@ const App = () => {
           const res = await response.json();
           navigate('Class Detail', {
             clase: { ...res, id: classId },
-            manager: false,
+            manager: role === 'ROLE_PROFESSOR',
             subject: res.subject,
           });
         }

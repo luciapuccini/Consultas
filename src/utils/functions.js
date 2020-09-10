@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const ARG = 'America/Argentina/Buenos_Aires';
 
-//TODO: ESTO !!!
 export const getTime = (fecha) => {
   return moment.utc(fecha);
 };
@@ -49,14 +48,16 @@ export const asArray = (obj) => {
 export const storeUser = async (user) => {
   try {
     await AsyncStorage.setItem('LEGAJO', user.legajo);
+    await AsyncStorage.setItem('USER_TYPE', user.role);
   } catch (e) {
     console.log(e);
     // saving error
   }
 };
 
-export const getUserLegajo = async (user) =>
-  await AsyncStorage.getItem('LEGAJO');
+export const getUserRole = async () => await AsyncStorage.getItem('USER_TYPE');
+
+export const getUserLegajo = async () => await AsyncStorage.getItem('LEGAJO');
 
 export const removeUser = async () => {
   try {
