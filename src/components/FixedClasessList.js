@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { ListItem } from 'native-base';
-import { Text, Layout, Icon, CheckBox } from '@ui-kitten/components';
-import { isEmpty } from 'underscore';
+import { Text, Layout, Icon } from '@ui-kitten/components';
 import { CustomSpinner } from './CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { getHora, getDia, getFecha, getClassColor } from '../utils/functions';
@@ -22,7 +21,13 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
   }, [regularClasses]);
   const handleOpen = (id) => {
     if (open.includes(id)) {
-      setOpen(open.filter((val) => !val === id));
+      console.log(
+        'remove',
+        open.filter((val) => {
+          return val !== id;
+        }),
+      );
+      setOpen(open.filter((val) => val !== id));
     } else {
       setOpen([...open, id]);
     }
