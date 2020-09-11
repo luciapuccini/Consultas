@@ -31,7 +31,7 @@ export const Profile = ({ navigation }) => {
   const [error, setError] = useState(false);
   const [onPasswordEdit, setOnPasswordEdit] = useState(false);
   const [imageSrc, setImageSrc] = useState(profilePlaceholder);
-  const [imgFlag, setImgFlag] = useState(false);
+  const [imgFlag, setImgFlag] = useState(user.profileImagePath);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -80,11 +80,16 @@ export const Profile = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const profileImage = user.profileImagePath
+    console.log('la 1er vex', imgFlag);
+    const profileImage = imgFlag
       ? { uri: getUserImage(user.userId) + `?${Math.random()}` } //FIXME: RN BUG, ONLY WAY TO SOLVE FOR NOW
       : profilePlaceholder;
     setImageSrc(profileImage);
   }, [loading, imgFlag]);
+
+  useEffect(() => {
+    setImgFlag(user.profileImagePath);
+  }, [user]);
 
   const isProfessor = user.role === 'ROLE_PROFESSOR';
   const isStudent = user.role === 'ROLE_STUDENT';
@@ -166,7 +171,8 @@ export const Profile = ({ navigation }) => {
           .then((resp) => resp.json())
           .then((val) => {
             if (val.message == 'Succed') {
-              setImgFlag(true);
+              console.log('exito')
+              setImgFlag(fileName);
             }
           })
           .catch((err) => console.log('catch', err));
