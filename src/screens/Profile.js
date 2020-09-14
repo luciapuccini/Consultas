@@ -48,6 +48,7 @@ export const Profile = ({ navigation }) => {
           },
         );
         const json = await response.json();
+        console.log('fetchUser -> json', json);
         const {
           name,
           email,
@@ -120,7 +121,6 @@ export const Profile = ({ navigation }) => {
         if (json.error) {
           setError(json.message);
         }
-        navigation.goBack();
       } catch (error) {
         console.log(error);
       }
@@ -135,7 +135,11 @@ export const Profile = ({ navigation }) => {
         }, 3000);
       } else {
         handleSave();
+        navigation.navigate('Home');
       }
+    } else {
+      handleSave();
+      navigation.goBack();
     }
   };
 
@@ -171,7 +175,7 @@ export const Profile = ({ navigation }) => {
           .then((resp) => resp.json())
           .then((val) => {
             if (val.message == 'Succed') {
-              console.log('exito')
+              console.log('exito');
               setImgFlag(fileName);
             }
           })
