@@ -7,7 +7,7 @@ import { SearchBox } from '../components/SearchBox';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { ErrorMessage } from '../components/ErrorMessage';
-
+import { SERVER_URL } from '../utils/config';
 export const Classes = ({ navigation, route }) => {
   const [classes, setClasses] = React.useState(null);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -20,7 +20,7 @@ export const Classes = ({ navigation, route }) => {
     const fetchClasses = async () => {
       const { subjectId } = route.params?.subject;
       const token = await getToken();
-      fetch(`http://181.164.121.14:25565/subjects/findClasses/${subjectId}`, {
+      fetch(`${SERVER_URL}/subjects/findClasses/${subjectId}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ export const Classes = ({ navigation, route }) => {
 
     const fetchStudentSubscriptions = async () => {
       const token = await getToken();
-      fetch('http://181.164.121.14:25565/users/getStudentInscriptions', {
+      fetch(`${SERVER_URL}/users/getStudentInscriptions`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

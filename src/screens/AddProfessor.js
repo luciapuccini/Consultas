@@ -3,6 +3,7 @@ import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import { Text, Button, Input, Icon, Layout } from '@ui-kitten/components';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { getToken } from '../utils/authHelper';
+import { SERVER_URL } from '../utils/config';
 
 export const AddProfessor = ({ navigation }) => {
   const [legajo, setLegajo] = useState('');
@@ -15,17 +16,14 @@ export const AddProfessor = ({ navigation }) => {
     const token = await getToken();
     const body = { legajo, name, surname, email };
 
-    const response = await fetch(
-      'http://181.164.121.14:25565/users/addProfessor',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
+    const response = await fetch(`${SERVER_URL}/users/addProfessor`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify(body),
+    });
     const json = await response.json();
     if (json.message) {
       navigation.goBack();

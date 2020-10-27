@@ -60,3 +60,6 @@ buck-out/
 
 #Firebase
 android/app/google-services.json
+
+#Settings
+src/utils/config.js

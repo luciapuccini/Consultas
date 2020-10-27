@@ -5,6 +5,7 @@ import SimpleClassesList from '../components/SimpleClasessList';
 import FixedClassesList from '../components/FixedClasessList';
 import { getToken } from '../utils/authHelper';
 import moment from 'moment';
+import { SERVER_URL } from '../utils/config';
 
 export const ClassesManager = ({ route }) => {
   const { subject, manager } = route.params;
@@ -16,15 +17,12 @@ export const ClassesManager = ({ route }) => {
   const fetchClasses = async () => {
     const { subjectId } = subject;
     const token = await getToken();
-    fetch(
-      `http://181.164.121.14:25565/subjects/professorClasses/${subjectId}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+    fetch(`${SERVER_URL}/subjects/professorClasses/${subjectId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
       .then((response) => response.json())
       .then((json) => {
         filterClasses(json);

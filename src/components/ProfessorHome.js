@@ -4,6 +4,7 @@ import { Layout } from '@ui-kitten/components';
 import { CustomSpinner } from './CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
+import { SERVER_URL } from '../utils/config';
 
 export const ProfessorHome = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
@@ -11,7 +12,7 @@ export const ProfessorHome = ({ user }) => {
     const fetchProfessorSubjects = async () => {
       const token = await getToken();
       const { id } = user;
-      fetch(`http://181.164.121.14:25565/users/getProfessorSubjects/${id}`, {
+      fetch(`${SERVER_URL}/users/getProfessorSubjects/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

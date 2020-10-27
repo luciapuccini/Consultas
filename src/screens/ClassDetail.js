@@ -16,6 +16,7 @@ import { CustomSpinner } from '../components/CustomSpinner';
 import { ClassSummary } from '../components/ClassSummary';
 import { SimpleBookClass } from '../components/SimpleBookClass';
 import { TurnosTable } from '../components/TurnosTable';
+import { SERVER_URL } from '../utils/config';
 
 export const ClassDetail = ({ route: { params }, navigation }) => {
   const claseProp = params?.clase;
@@ -50,7 +51,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
 
   const fetchClassData = async () => {
     const token = await getToken();
-    fetch(`http://181.164.121.14:25565/clases/findClassData/${id}`, {
+    fetch(`${SERVER_URL}/clases/findClassData/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
     if (leftTime < 0) {
       return `Hace: ${duration.days() * -1} Dias, ${
         duration.hours() * -1
-        } Hs, ${duration.minutes() * -1} Min`;
+      } Hs, ${duration.minutes() * -1} Min`;
     }
 
     return `Faltan: ${duration.days()} Dias, ${duration.hours()} Hs, ${duration.minutes()} Min`;
@@ -133,7 +134,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
     } = comment;
     const body = { id, dateTime: commentTime };
     const token = await getToken();
-    fetch('http://181.164.121.14:25565/clases/deleteComment', {
+    fetch(`${SERVER_URL}/clases/deleteComment`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -178,25 +179,25 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                 expired={expired}
               />
             ) : (
-                <SimpleBookClass
-                  bookingFlag={bookingFlag}
-                  onSubmit={onSubmit}
-                  hora={initTime}
-                  handleConfirm={handleConfirm}
-                  disabled={isLive || expired}
-                  manager={manager}
-                  id={id}
-                  expired={expired}
-                />
-              )}
+              <SimpleBookClass
+                bookingFlag={bookingFlag}
+                onSubmit={onSubmit}
+                hora={initTime}
+                handleConfirm={handleConfirm}
+                disabled={isLive || expired}
+                manager={manager}
+                id={id}
+                expired={expired}
+              />
+            )}
           </ScrollView>
           <View style={{ alignItems: 'flex-start' }}>
             {canStart && manager && <StartClass id={id} />}
           </View>
         </>
       ) : (
-          <CustomSpinner />
-        )}
+        <CustomSpinner />
+      )}
     </Layout>
   );
 };
@@ -204,7 +205,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
 const subscribeTurno = async (idClass, startTimeTurno) => {
   const token = await getToken();
   const turno = { consultaId: idClass, initTime: startTimeTurno };
-  fetch('http://181.164.121.14:25565/clases/subscribe', {
+  fetch(`${SERVER_URL}/clases/subscribe`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -225,7 +226,7 @@ const unsubscribeTurno = async (idClass, startTimeTurno) => {
   const token = await getToken();
   const turno = { consultaId: idClass, initTime: startTimeTurno };
 
-  fetch('http://181.164.121.14:25565/clases/unsubscribe', {
+  fetch(`${SERVER_URL}/clases/unsubscribe`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -246,7 +247,7 @@ const onstartClass = async (id, setStarted) => {
   const token = await getToken();
   heartbeatAnimation(10, 5, 15);
   try {
-    fetch(`http://181.164.121.14:25565/clases/startClass/${id}`, {
+    fetch(`${SERVER_URL}/clases/startClass/${id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,

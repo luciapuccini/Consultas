@@ -13,6 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
 import { ErrorMessage } from '../components/ErrorMessage';
 import moment from 'moment-timezone';
+import { SERVER_URL } from '../utils/config';
 
 export const ClassForm = ({ route, navigation }) => {
   const { subjectId } = route.params;
@@ -59,7 +60,7 @@ export const ClassForm = ({ route, navigation }) => {
     };
     console.log('addClase -> body', body);
     const token = await getToken();
-    fetch('http://181.164.121.14:25565/clases/add', {
+    fetch(`${SERVER_URL}/clases/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

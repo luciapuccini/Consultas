@@ -13,6 +13,7 @@ import { Context, Provider } from './src/context/AuthContext';
 import { ThemeContext } from './/src/context/ThemeContext';
 import { getToken } from './src/utils/authHelper';
 import { getUserRole } from './src/utils/functions';
+import { SERVER_URL } from './src/utils/config';
 const { Navigator, Screen } = createStackNavigator();
 
 const App = () => {
@@ -24,7 +25,7 @@ const App = () => {
       const token = await getToken();
       const role = await getUserRole();
       const response = await fetch(
-        `http://181.164.121.14:25565/clases/findClassData/${classId}`,
+        `${SERVER_URL}/clases/findClassData/${classId}`,
         {
           method: 'GET',
           headers: {
@@ -53,7 +54,7 @@ const App = () => {
         if (remoteMessage) {
           const classId = remoteMessage.data.classId;
           const response = await fetch(
-            `http://181.164.121.14:25565/clases/findClassData/${classId}`,
+            `${SERVER_URL}/clases/findClassData/${classId}`,
             {
               method: 'GET',
               headers: {
@@ -84,12 +85,12 @@ const App = () => {
             options={{ headerShown: false }}
           />
         ) : (
-            <Screen
-              name="Routes"
-              component={RootStack}
-              options={{ headerShown: false }}
-            />
-          )}
+          <Screen
+            name="Routes"
+            component={RootStack}
+            options={{ headerShown: false }}
+          />
+        )}
       </Navigator>
     </NavigationContainer>
   );

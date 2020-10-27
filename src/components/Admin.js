@@ -5,13 +5,14 @@ import { CustomSpinner } from './CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
 import { useNavigation } from '@react-navigation/native';
+import { SERVER_URL } from '../utils/config';
 
 export const Admin = ({ user }) => {
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const fetchSubjects = async () => {
     const token = await getToken();
-    fetch('http://181.164.121.14:25565/subjects/findAll', {
+    fetch(`${SERVER_URL}/subjects/findAll`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -27,7 +28,7 @@ export const Admin = ({ user }) => {
     fetchSubjects();
     const fetchProffesors = async () => {
       const token = await getToken();
-      fetch('http://181.164.121.14:25565/users/getAllProfessors', {
+      fetch(`${SERVER_URL}/users/getAllProfessors`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -46,13 +47,13 @@ export const Admin = ({ user }) => {
       {!subjects ? (
         <CustomSpinner />
       ) : (
-          <FlatList
-            data={subjects}
-            renderItem={({ item }) => renderItem(item, fetchSubjects)}
-            contentContainerStyle={{ paddingBottom: 80 }}
-            keyExtractor={(item) => item.id}
-          />
-        )}
+        <FlatList
+          data={subjects}
+          renderItem={({ item }) => renderItem(item, fetchSubjects)}
+          contentContainerStyle={{ paddingBottom: 80 }}
+          keyExtractor={(item) => item.id}
+        />
+      )}
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
       <AddProfessor />
     </Layout>

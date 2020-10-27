@@ -4,6 +4,7 @@ import { Button, Card, Modal, Text, Input, Icon } from '@ui-kitten/components';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { getToken } from '../utils/authHelper';
 import { Context } from '../context/AuthContext';
+import { SERVER_URL } from '../utils/config';
 
 export const EditPasswordModal = ({ setVisible, visible }) => {
   const { signout } = React.useContext(Context);
@@ -16,17 +17,14 @@ export const EditPasswordModal = ({ setVisible, visible }) => {
     const body = { password, newPassword };
     if (newPassword === confirmPassword) {
       const token = await getToken();
-      const response = await fetch(
-        'http://181.164.121.14:25565/users/modifyPassword',
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(body),
+      const response = await fetch(`${SERVER_URL}/users/modifyPassword`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify(body),
+      });
       const json = await response.json();
       if (json.message == 'Password updated') {
         signout();

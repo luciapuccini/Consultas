@@ -6,6 +6,7 @@ import { ProfessorHome } from '../components/ProfessorHome';
 import { Student } from './Student';
 import { storeUser } from '../utils/functions';
 import { Admin } from '../components/Admin';
+import { SERVER_URL } from '../utils/config';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState('ROLE_STUDENT');
@@ -13,7 +14,7 @@ export const Home = ({ navigation }) => {
   React.useEffect(() => {
     const fetchUser = async () => {
       const token = await AsyncStorage.getItem('TOKEN');
-      fetch(`http://181.164.121.14:25565/users/getUser`, {
+      fetch(`${SERVER_URL}/users/getUser`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

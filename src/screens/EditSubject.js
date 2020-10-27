@@ -3,6 +3,7 @@ import { Text, Layout, Icon, Button, Spinner } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
 import { find } from 'underscore';
 import { ScrollView, View, Alert } from 'react-native';
+import { SERVER_URL } from '../utils/config';
 
 export const EditSubject = ({ route, navigation }) => {
   const { subjectId, name } = route.params.subject;
@@ -15,15 +16,12 @@ export const EditSubject = ({ route, navigation }) => {
   const fetchProfessors = async () => {
     setLoading(true);
     const token = await getToken();
-    fetch(
-      `http://181.164.121.14:25565/subjects/modifySubjectInfo/${subjectId}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+    fetch(`${SERVER_URL}/subjects/modifySubjectInfo/${subjectId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
       .then((response) => response.json())
       .then((json) => {
         console.log('fetchProfessors -> json', json.subjectProfessors);
@@ -75,7 +73,7 @@ export const EditSubject = ({ route, navigation }) => {
     };
     console.log('handleConfirm -> body', body);
 
-    fetch('http://181.164.121.14:25565/subjects/modify', {
+    fetch(`${SERVER_URL}/subjects/modify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

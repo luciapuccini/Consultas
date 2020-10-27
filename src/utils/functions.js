@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
+import { SERVER_URL } from './config';
 
 const ARG = 'America/Argentina/Buenos_Aires';
 
@@ -69,10 +70,10 @@ export const removeUser = async () => {
 };
 
 export const getUserImage = (id) =>
-  `http://181.164.121.14:25565/users/images/profileImages/${id}`;
+  `${SERVER_URL}/users/images/profileImages/${id}`;
 
 export const getSubjectImage = (subjectId) =>
-  `http://181.164.121.14:25565/subjects/images/${subjectId}`;
+  `${SERVER_URL}/subjects/images/${subjectId}`;
 
 export const green1 = '#66BB6A';
 export const red1 = '#E53935';

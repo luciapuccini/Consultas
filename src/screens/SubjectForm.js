@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Button, Text, Input, Icon, Layout } from '@ui-kitten/components';
+import ImagePicker from 'react-native-image-picker';
+import { isEmpty } from 'underscore';
+
 import { getToken } from '../utils/authHelper';
 import { ErrorMessage } from '../components/ErrorMessage';
-import ImagePicker from 'react-native-image-picker';
-
-import { isEmpty } from 'underscore';
-import { ScrollView } from 'react-native-gesture-handler';
+import { SERVER_URL } from '../utils/config';
 
 export const SubjectForm = ({ route, navigation }) => {
   const { professors, refresh } = route.params;
@@ -30,7 +30,7 @@ export const SubjectForm = ({ route, navigation }) => {
       formData.append('imageFile', JSON.stringify(image));
 
       const token = await getToken();
-      fetch('http://181.164.121.14:25565/subjects/add', {
+      fetch(`${SERVER_URL}/subjects/add`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

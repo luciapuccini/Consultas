@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ErrorMessage } from './ErrorMessage';
 import { getToken } from '../utils/authHelper';
+import { SERVER_URL } from '../utils/config';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
   const deleteClasses = async (refresh) => {
     const token = await getToken();
     try {
-      fetch('http://181.164.121.14:25565/clases/cancelClass', {
+      fetch(`${SERVER_URL}/clases/cancelClass`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

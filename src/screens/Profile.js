@@ -16,13 +16,13 @@ import {
   Button,
   Layout,
   CheckBox,
-  Spinner,
 } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { getUserImage } from '../utils/functions';
+import { SERVER_URL } from '../utils/config';
 
 export const Profile = ({ navigation }) => {
   const [showMobile, setShowMobile] = useState(false);
@@ -37,16 +37,13 @@ export const Profile = ({ navigation }) => {
     const fetchUser = async () => {
       const token = await getToken();
       try {
-        const response = await fetch(
-          'http://181.164.121.14:25565/users/getUser',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(`${SERVER_URL}/users/getUser`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const json = await response.json();
         console.log('fetchUser -> json', json);
         const {
@@ -106,17 +103,14 @@ export const Profile = ({ navigation }) => {
         showMobile,
       };
       try {
-        const response = await fetch(
-          'http://181.164.121.14:25565/users/modify',
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(userBody),
+        const response = await fetch(`${SERVER_URL}/users/modify`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-        );
+          body: JSON.stringify(userBody),
+        });
         const json = await response.json();
         if (json.error) {
           setError(json.message);
@@ -164,7 +158,7 @@ export const Profile = ({ navigation }) => {
         const { type, data, fileName } = response;
         imageFile = { imageType: type, base64Image: data, fileName };
 
-        fetch('http://181.164.121.14:25565/users/images/upload', {
+        fetch(`${SERVER_URL}/users/images/upload`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -319,8 +313,8 @@ export const Profile = ({ navigation }) => {
           </ScrollView>
         </>
       ) : (
-          <CustomSpinner />
-        )}
+        <CustomSpinner />
+      )}
     </Layout>
   );
 };

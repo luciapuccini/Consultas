@@ -6,6 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { getToken } from '../utils/authHelper';
 import { isEmpty } from 'underscore';
 import { getSubjectImage } from '../utils/functions';
+import { SERVER_URL } from '../utils/config';
 
 export const SubjectCard = ({ subject, professor, admin, refresh }) => {
   const [notification, setNotification] = React.useState(subject.follows);
@@ -24,7 +25,7 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
     };
     if (notification !== true) {
       try {
-        fetch('http://181.164.121.14:25565/subjects/followSubject', {
+        fetch(`${SERVER_URL}/subjects/followSubject`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
       }
     } else {
       try {
-        fetch('http://181.164.121.14:25565/subjects/unfollowSubject', {
+        fetch(`${SERVER_URL}/subjects/unfollowSubject`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -59,8 +60,8 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
     const path = professor
       ? 'Classes Manager'
       : admin
-        ? 'Edit Subject'
-        : 'Classes';
+      ? 'Edit Subject'
+      : 'Classes';
     navigation.navigate(path, { subject, manager: professor, refresh });
   };
 
@@ -76,7 +77,7 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
   const handleDeleteSubject = async () => {
     // FIXME: Temp disabled until back fixes EP
     // const token = await getToken();
-    // fetch('http://181.164.121.14:25565/subjects/deleteSubject', {
+    // fetch(`${SERVER_URL}/subjects/deleteSubject`, {
     //   method: 'POST',
     //   headers: {
     //     'Content-Type': 'application/json',

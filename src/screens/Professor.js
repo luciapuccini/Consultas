@@ -13,6 +13,7 @@ import {
 } from '@ui-kitten/components';
 import { getToken } from '../utils/authHelper';
 import { getHora, getFecha, getUserImage } from '../utils/functions';
+import { SERVER_URL } from '../utils/config';
 
 const chatImage = require('../assets/chat.png');
 const placeHolder = require('../assets/placeholder.png');
@@ -41,7 +42,7 @@ export const Professor = ({ route }) => {
   //WARNING error con las clases de cada subject
   const fetchProfessorSubjets = async () => {
     const token = await getToken();
-    fetch(`http://181.164.121.14:25565/users/getProfessorSubjects/${id}`, {
+    fetch(`${SERVER_URL}/users/getProfessorSubjects/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ export const Professor = ({ route }) => {
   const fetchProfessorClases = async (subjectId) => {
     const token = await getToken();
     fetch(
-      `http://181.164.121.14:25565/clases/findProfessorClasses?professorId=${id}&subjectId=${subjectId}`,
+      `${SERVER_URL}/clases/findProfessorClasses?professorId=${id}&subjectId=${subjectId}`,
       {
         method: 'GET',
         headers: {
@@ -100,11 +101,11 @@ export const Professor = ({ route }) => {
 
   const openChat = () => {
     const temp = professor.mobile || '3364637796';
-    Linking.canOpenURL(`whatsapp://send?text=hola!`).then((res) => {
+    Linking.canOpenURL('whatsapp://send?text=hola!').then((res) => {
       if (res) {
         Linking.openURL(`whatsapp://send?text=hola!&phone=${temp}`);
       } else {
-        Alert.alert(`Can't open Whatsapp, please Install de App`);
+        Alert.alert("Can't open Whatsapp, please Install de App");
       }
     });
   };

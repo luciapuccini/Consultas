@@ -8,6 +8,7 @@ import { CustomSpinner } from '../components/CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { ProfessorList } from '../components/ProfessorList';
 import { getToken } from '../utils/authHelper';
+import { SERVER_URL } from '../utils/config';
 
 // import AsyncStorage from '@react-native-community/async-storage';
 
@@ -22,16 +23,13 @@ export const Student = ({ user }) => {
   const fetchSubjects = async () => {
     const token = await getToken();
     try {
-      const response = await fetch(
-        'http://181.164.121.14:25565/subjects/findAll',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${SERVER_URL}/subjects/findAll`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       const json = await response.json();
       setSubjects(json);
       setLoading(false);
@@ -41,7 +39,7 @@ export const Student = ({ user }) => {
   };
   const fetchProffesors = async () => {
     const token = await getToken();
-    fetch('http://181.164.121.14:25565/users/getAllProfessors', {
+    fetch(`${SERVER_URL}/users/getAllProfessors`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -60,14 +58,14 @@ export const Student = ({ user }) => {
   const resultSubjects = !searchTerm
     ? subjects
     : subjects.filter((subject) =>
-      subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
-    );
+        subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
+      );
   const resultProfessors = !searchTerm
     ? professors
     : professors.filter((profe) => {
-      const nombre = profe.name.toLowerCase() + profe.surname.toLowerCase();
-      return nombre.toLowerCase().includes(searchTerm.toLocaleLowerCase());
-    });
+        const nombre = profe.name.toLowerCase() + profe.surname.toLowerCase();
+        return nombre.toLowerCase().includes(searchTerm.toLocaleLowerCase());
+      });
   return (
     <Layout level="1">
       <SearchBox setSearchTerm={setSearchTerm} placeholder="Busqueda" />
@@ -87,8 +85,8 @@ export const Student = ({ user }) => {
             ) : loading ? (
               <CustomSpinner />
             ) : (
-                  <ErrorMessage message="No Data" />
-                )}
+              <ErrorMessage message="No Data" />
+            )}
           </Layout>
         </Tab>
         <Tab title="PROFESORES">

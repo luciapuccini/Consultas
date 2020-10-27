@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import { getHora } from '../utils/functions';
 import { getToken } from '../utils/authHelper';
 import { useNavigation } from '@react-navigation/native';
+import { SERVER_URL } from '../utils/config';
 
 export const TurnosTable = ({
   turnos,
@@ -38,7 +39,7 @@ export const TurnosTable = ({
     const body = { id, comment };
     const token = await getToken();
 
-    fetch('http://181.164.121.14:25565/clases/addComment', {
+    fetch(`${SERVER_URL}/clases/addComment`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

@@ -1,8 +1,8 @@
 import createDataContext from './createDataContext';
 import AsyncStorage from '@react-native-community/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import { getToken } from '../utils/authHelper';
 import { Alert } from 'react-native';
+import { SERVER_URL } from '../utils/config';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -49,7 +49,7 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
   const user = { legajo, password, deviceToken };
   try {
     let token;
-    const res = await fetch('http://181.164.121.14:25565/users/login', {
+    const res = await fetch(`${SERVER_URL}/users/login`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
@@ -75,7 +75,7 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
 const signout = (dispatch) => async () => {
   const token = await getToken();
   try {
-    fetch('http://181.164.121.14:25565/users/logout', {
+    fetch(`${SERVER_URL}/users/logout`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -93,9 +93,8 @@ const signup = (dispatch) => async (user) => {
   console.log('SINGUP', user);
   try {
     let token;
-    //http://181.164.121.14:25565/users/addStudent
     //http://www.mocky.io/v2/5e93a8953000009100156b76
-    const res = await fetch('http://181.164.121.14:25565/users/addStudent', {
+    const res = await fetch(`${SERVER_URL}/users/addStudent`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
