@@ -1,15 +1,25 @@
 import * as React from 'react';
+import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Layout } from '@ui-kitten/components';
 
 import { ProfessorHome } from '../components/ProfessorHome';
-import { Student } from './Student';
+import { StudentHome } from './Student';
+
 import { storeUser } from '../utils/functions';
 import { Admin } from '../components/Admin';
 import { SERVER_URL } from '../utils/config';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState('ROLE_STUDENT');
+  React.useEffect(() => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{ name: 'TutorialStack' }, { name: 'Home' }],
+      }),
+    );
+  });
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -34,7 +44,7 @@ export const Home = ({ navigation }) => {
       {user.role === 'ROLE_PROFESSOR' ? (
         <ProfessorHome user={user} />
       ) : user.role === 'ROLE_STUDENT' ? (
-        <Student user={user} />
+        <StudentHome user={user} />
       ) : (
         <Admin user={user} />
       )}

@@ -16,6 +16,9 @@ import { ClassForm } from './screens/ClassForm';
 import { SubjectForm } from './screens/SubjectForm';
 import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
+import { TutorialStack } from './screens/Tutorial';
+
+import { getIsFirstLogin } from './utils/authHelper';
 
 export const navigationRef = React.createRef();
 
@@ -25,20 +28,37 @@ export function navigate(name, params) {
 
 export const RootStack = () => {
   const themeContext = React.useContext(ThemeContext);
+  const [showTutorial, setShowTutorial] = React.useState(false);
+
+  React.useEffect(() => {
+    const isFirstLogin = async () => {
+      const firstLogin = await getIsFirstLogin();
+      console.log('isFirstLogin -> firstLogin', firstLogin);
+
+      setShowTutorial(firstLogin === 'true');
+    };
+    isFirstLogin();
+  }, []);
+
   const isDark = themeContext.theme !== 'light' ? true : false;
   const darkHeaderConfig = isDark
     ? {
-      headerStyle: {
-        backgroundColor: '#222b44',
-      },
-      headerTintColor: '#fff',
-    }
+        headerStyle: {
+          backgroundColor: '#222b44',
+        },
+        headerTintColor: '#fff',
+      }
     : null;
   const { Navigator, Screen } = createStackNavigator();
 
-
   return (
-    <Navigator initialRouteName="Home">
+    <Navigator initialRouteName={showTutorial ? 'TutorialStack' : 'Home'}>
+      <Screen
+        name="TutorialStack"
+        component={TutorialStack}
+        options={{ headerShown: false }}
+      />
+
       <Screen
         name="Home"
         component={Home}
@@ -48,6 +68,7 @@ export const RootStack = () => {
           ...darkHeaderConfig,
         }}
       />
+
       <Screen
         name="Classes"
         component={Classes}
@@ -78,7 +99,6 @@ export const RootStack = () => {
         component={SubjectForm}
         options={{ ...darkHeaderConfig, title: 'Nueva Materia' }}
       />
-
       <Screen
         name="Profile"
         component={Profile}

@@ -10,9 +10,7 @@ import { ProfessorList } from '../components/ProfessorList';
 import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
 
-// import AsyncStorage from '@react-native-community/async-storage';
-
-export const Student = ({ user }) => {
+export const StudentHome = ({ user }) => {
   const [subjects, setSubjects] = React.useState([]);
   const [professors, setProfessors] = React.useState([]);
 

@@ -1,6 +1,8 @@
 import moment from 'moment-timezone';
 import _ from 'underscore';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Dimensions } from 'react-native';
+
 import { SERVER_URL } from './config';
 
 const ARG = 'America/Argentina/Buenos_Aires';
@@ -84,3 +86,6 @@ export const getClassColor = (status) => {
     status === 'En Curso' ? green1 : status === 'Cancelada' ? red1 : blue1;
   return color;
 };
+
+export const windowWidth = Dimensions.get('window').width;
+export const windowHeight = Dimensions.get('window').height;

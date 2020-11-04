@@ -78,7 +78,7 @@ export const Profile = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    console.log('la 1er vex', imgFlag);
+    // console.log('la 1er vex', imgFlag);
     const profileImage = imgFlag
       ? { uri: getUserImage(user.userId) + `?${Math.random()}` } //FIXME: RN BUG, ONLY WAY TO SOLVE FOR NOW
       : profilePlaceholder;

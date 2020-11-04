@@ -100,7 +100,6 @@ const signup = (dispatch) => async (user) => {
       body: JSON.stringify(user),
     });
     const data = await res.json();
-    console.log('que es dataa', data);
     if (data.error) {
       return data.message;
     }
