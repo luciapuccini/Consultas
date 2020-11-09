@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button } from '@ui-kitten/components';
 import { ImageBackground, View } from 'react-native';
-import { getIsFirstLogin, setIsFirstLogin } from '../../utils/authHelper';
-import { windowWidth, windowHeight } from '../../utils/functions';
+import { setIsFirstLogin } from '../../utils/authHelper';
 import { useNavigation } from '@react-navigation/native';
 
 const endTutorialScreen = 3;
-const stepImg0 = require('../../assets/tutorial/A-Tutorial-0.png');
+const stepImgBase = require('../../assets/tutorial/Tutorial-Base.png');
 const stepImg1 = require('../../assets/tutorial/A-Tutorial-1.png');
 const stepImg2 = require('../../assets/tutorial/A-Tutorial-2.png');
 const stepImg3 = require('../../assets/tutorial/A-Tutorial-3.png');
@@ -18,7 +17,7 @@ export const StudentTutorialStack = () => {
   const getStepImage = () => {
     switch (step) {
       case 0:
-        return stepImg0;
+        return stepImgBase;
       case 1:
         return stepImg1;
       case 2:
@@ -26,13 +25,12 @@ export const StudentTutorialStack = () => {
       case 3:
         return stepImg3;
       default:
-        return stepImg0;
+        return stepImgBase;
     }
   };
 
   const handleEndTutorial = () => {
     setIsFirstLogin(false).then(() => {
-      console.log('handleEndTutorial -> ');
       navigator.navigate('Home');
     });
   };

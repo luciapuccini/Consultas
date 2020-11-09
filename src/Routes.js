@@ -18,8 +18,6 @@ import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
 import { TutorialStack } from './screens/Tutorial';
 
-import { getIsFirstLogin } from './utils/authHelper';
-
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
