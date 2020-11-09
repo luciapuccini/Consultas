@@ -27,19 +27,26 @@ export function navigate(name, params) {
 }
 
 export const RootStack = () => {
+  const { Navigator, Screen } = createStackNavigator();
+
+  return (
+    <Navigator mode="modal">
+      <Screen
+        name="Main"
+        component={MainStack}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name="TutorialStack"
+        component={TutorialStack}
+        options={{ headerShown: false }}
+      />
+    </Navigator>
+  );
+};
+const MainStack = () => {
   const themeContext = React.useContext(ThemeContext);
-  const [showTutorial, setShowTutorial] = React.useState(false);
-
-  React.useEffect(() => {
-    const isFirstLogin = async () => {
-      const firstLogin = await getIsFirstLogin();
-      console.log('isFirstLogin -> firstLogin', firstLogin);
-
-      setShowTutorial(firstLogin === 'true');
-    };
-    isFirstLogin();
-  }, []);
-
+  const { Navigator, Screen } = createStackNavigator();
   const isDark = themeContext.theme !== 'light' ? true : false;
   const darkHeaderConfig = isDark
     ? {
@@ -49,16 +56,8 @@ export const RootStack = () => {
         headerTintColor: '#fff',
       }
     : null;
-  const { Navigator, Screen } = createStackNavigator();
-
   return (
-    <Navigator initialRouteName={showTutorial ? 'TutorialStack' : 'Home'}>
-      <Screen
-        name="TutorialStack"
-        component={TutorialStack}
-        options={{ headerShown: false }}
-      />
-
+    <Navigator initialRouteName={'Home'}>
       <Screen
         name="Home"
         component={Home}

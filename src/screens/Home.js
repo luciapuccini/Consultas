@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Layout } from '@ui-kitten/components';
 
@@ -9,16 +8,19 @@ import { StudentHome } from './Student';
 import { storeUser } from '../utils/functions';
 import { Admin } from '../components/Admin';
 import { SERVER_URL } from '../utils/config';
+import { getIsFirstLogin } from '../utils/authHelper';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState('ROLE_STUDENT');
+
   React.useEffect(() => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [{ name: 'TutorialStack' }, { name: 'Home' }],
-      }),
-    );
+    const isFirstLogin = async () => {
+      const firstLogin = await getIsFirstLogin();
+      if (firstLogin === 'true') {
+        navigation.navigate('TutorialStack');
+      }
+    };
+    isFirstLogin();
   });
 
   React.useEffect(() => {

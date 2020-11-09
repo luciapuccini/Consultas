@@ -58,10 +58,7 @@ export const StudentTutorialStack = () => {
             Siguiente
           </Button>
         ) : (
-          <Button
-            appearance="outline"
-            status="info"
-            onPress={handleEndTutorial}>
+          <Button status="info" onPress={handleEndTutorial}>
             Terminar
           </Button>
         )}
