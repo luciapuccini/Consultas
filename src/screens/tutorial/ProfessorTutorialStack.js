@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 
 const endTutorialScreen = 2;
 const stepImgBase = require('../../assets/tutorial/Tutorial-Base.png');
-const stepImg1 = require('../../assets/tutorial/D-Tutorial-0.png');
-const stepImg2 = require('../../assets/tutorial/D-Tutorial-1.png');
+const stepImg1 = require('../../assets/tutorial/D-Tutorial-1.png');
+const stepImg2 = require('../../assets/tutorial/D-Tutorial-2.png');
 
 export const ProfessorTutorialStack = () => {
   const [step, setStep] = React.useState(0);
