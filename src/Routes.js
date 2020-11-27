@@ -17,6 +17,7 @@ import { SubjectForm } from './screens/SubjectForm';
 import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
 import { TutorialStack } from './screens/Tutorial';
+import InscriptionsList from './screens/InscriptionsList';
 
 export const navigationRef = React.createRef();
 
@@ -131,6 +132,14 @@ const MainStack = () => {
         options={{
           ...darkHeaderConfig,
           title: 'Agregar Profesor',
+        }}
+      />
+      <Screen
+        name="Inscriptions"
+        component={InscriptionsList}
+        options={{
+          ...darkHeaderConfig,
+          title: 'Inscriptos',
         }}
       />
     </Navigator>

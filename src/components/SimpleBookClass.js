@@ -85,7 +85,7 @@ export const SimpleBookClass = ({
               status="primary"
               style={styles.inscriptionBtn}
               onPress={addNote}>
-              Add notes
+              Agregar nota
           </Button>
           </View>
         )}

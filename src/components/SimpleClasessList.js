@@ -21,7 +21,8 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
       setError(false);
     }
     if (simpleClasses.length === 0) {
-      setLoading(true);
+      setLoading(false);
+      setError('No hay clases');
     }
   }, [simpleClasses]);
 
@@ -57,24 +58,25 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
+      {error && <ErrorMessage message={error} />}
+
       {loading ? (
         <CustomSpinner />
       ) : (
-          <ScrollView>
-            {simpleClasses.map((clase) => {
-              return (
-                <SimpleClassCard
-                  clase={clase}
-                  subject={subject}
-                  manager={manager}
-                  toDelete={toDelete}
-                  setToDelete={setToDelete}
-                />
-              );
-            })}
-          </ScrollView>
-        )}
-      {error && <ErrorMessage message={error} />}
+        <ScrollView>
+          {simpleClasses.map((clase) => {
+            return (
+              <SimpleClassCard
+                clase={clase}
+                subject={subject}
+                manager={manager}
+                toDelete={toDelete}
+                setToDelete={setToDelete}
+              />
+            );
+          })}
+        </ScrollView>
+      )}
 
       <AddClass subjectId={subject.subjectId} refresh={refresh} />
       <DeleteClass subjectId={subject.subjectId} refresh={refresh} />

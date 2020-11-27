@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Layout, Icon, Text } from '@ui-kitten/components';
+import { Layout, Icon, Text, Button } from '@ui-kitten/components';
 
 import moment from 'moment-timezone';
 
@@ -69,7 +69,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
         console.log('[ FAILED ]', error);
       });
   };
-  const canShowTurnos = !hasSingleTurnos; // doble innecesario  && turnos.length > 1
+  const canShowTurnos = !hasSingleTurnos;
   const isLive = status === 'En curso';
   const canStart = timeToStart(initTime) < 5;
   const expired = moment(initTime) < moment();
@@ -190,7 +190,16 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                 expired={expired}
               />
             )}
+            <View style={style.inscriptionsBtn}>
+              <Button
+                status="info"
+                appearance="outline"
+                onPress={() => navigation.navigate('Inscriptions')}>
+                Ver Inscriptos
+              </Button>
+            </View>
           </ScrollView>
+
           <View style={{ alignItems: 'flex-start' }}>
             {canStart && manager && <StartClass id={id} />}
           </View>
@@ -270,8 +279,6 @@ const onstartClass = async (id, setStarted) => {
 
 const StartClass = ({ id }) => {
   const [started, setStarted] = React.useState(false);
-  const { idleStyle, startedStyle } = style;
-  const startIcon = started ? 'play-circle' : 'play-circle-outline';
 
   return (
     <TouchableOpacity
@@ -322,5 +329,10 @@ const style = {
     width: 80,
     height: 80,
     borderRadius: 25,
+  },
+  inscriptionsBtn: {
+    alignItems: 'flex-end',
+    marginRight: 10,
+    marginTop: 20,
   },
 };

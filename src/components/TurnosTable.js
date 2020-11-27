@@ -108,29 +108,29 @@ export const TurnosTable = ({
             </Button>
           </View>
         ) : (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'column',
-                width: '100%',
-              }}>
-              <Input
-                textStyle={{ minHeight: 64 }}
-                label="Notas"
-                placeholder={comment}
-                onChangeText={setComment}
-                value={comment}
-                multiline={true}
-              />
-              <Button
-                appearance="outline"
-                status="primary"
-                style={styles.inscriptionBtn}
-                onPress={addNote}>
-                Add notes
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              width: '100%',
+            }}>
+            <Input
+              textStyle={{ minHeight: 64 }}
+              label="Notas"
+              placeholder={comment}
+              onChangeText={setComment}
+              value={comment}
+              multiline={true}
+            />
+            <Button
+              appearance="outline"
+              status="primary"
+              style={styles.inscriptionBtn}
+              onPress={addNote}>
+              Agregar nota
             </Button>
-            </View>
-          )}
+          </View>
+        )}
       </View>
     </>
   );

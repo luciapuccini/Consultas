@@ -1,5 +1,6 @@
 export * from './Input';
 export * from './InputBox';
+export * from './InscriptionCard';
 export * from './SearchBox';
 export * from './SubjectCard';
 export * from './SubjectList';
