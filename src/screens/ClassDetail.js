@@ -42,6 +42,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
   const [index, setIndex] = React.useState(null);
+  const [inscriptions, setInscriptions] = React.useState([]);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
 
@@ -61,6 +62,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
       .then((response) => response.json())
       .then((json) => {
         setTurnos(json.turnos);
+        mapInscriptions(json.turnos, json.hasSingleTurnos);
         setComments(json.comments);
         setLoading(false);
         checkUserPresent(json.turnos);
@@ -87,7 +89,15 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
 
   const handleConfirm = (index) => {
     setIndex(index);
-    // onSubmit();
+  };
+
+  const mapInscriptions = (turnosArg) => {
+    let inscriptionsArr = [];
+    turnosArg.map((turno) => {
+      inscriptionsArr.push(...turno.students);
+    });
+
+    setInscriptions(inscriptionsArr);
   };
 
   const onSubmit = async () => {
@@ -194,7 +204,9 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
               <Button
                 status="info"
                 appearance="outline"
-                onPress={() => navigation.navigate('Inscriptions')}>
+                onPress={() =>
+                  navigation.navigate('Inscriptions', { inscriptions })
+                }>
                 Ver Inscriptos
               </Button>
             </View>
