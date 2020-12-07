@@ -35,7 +35,8 @@ export const SignUpScreen = ({ navigation }) => {
     if (hasUser) {
       const data = await signup(user);
       setError(data);
-      setIsFirstLogin(true);
+      //TODO:
+      // setIsFirstLogin(true);
       navigation.goBack();
     } else {
       setError('Complete los campos');

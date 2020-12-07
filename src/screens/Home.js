@@ -11,17 +11,19 @@ import { SERVER_URL } from '../utils/config';
 import { getIsFirstLogin } from '../utils/authHelper';
 
 export const Home = ({ navigation }) => {
-  const [user, setUser] = React.useState('ROLE_STUDENT');
+  const [user, setUser] = React.useState({});
 
-  React.useEffect(() => {
-    const isFirstLogin = async () => {
-      const firstLogin = await getIsFirstLogin();
-      if (firstLogin === 'true') {
-        navigation.navigate('TutorialStack');
-      }
-    };
-    isFirstLogin();
-  });
+  //TODO:
+  // React.useEffect(() => {
+  //   const isFirstLogin = async () => {
+  //     const firstLogin = await getIsFirstLogin();
+  //     console.log('Home -> firstLogin', firstLogin);
+  //     if (firstLogin === 'true') {
+  //       navigation.navigate('TutorialStack');
+  //     }
+  //   };
+  //   isFirstLogin();
+  // });
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -37,10 +39,17 @@ export const Home = ({ navigation }) => {
         .then((data) => {
           setUser(data);
           storeUser(data);
+          // FIXME: will be a flag
+          if (data.user.firstLogin === 'true') {
+            console.log('[-- Is First! --]');
+            navigation.navigate('TutorialStack');
+          }
         });
     };
     fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {user.role === 'ROLE_PROFESSOR' ? (

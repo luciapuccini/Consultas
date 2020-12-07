@@ -90,7 +90,6 @@ const signout = (dispatch) => async () => {
 };
 
 const signup = (dispatch) => async (user) => {
-  console.log('SINGUP', user);
   try {
     let token;
     //http://www.mocky.io/v2/5e93a8953000009100156b76
