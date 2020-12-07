@@ -11,7 +11,6 @@ import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
-import { setIsFirstLogin } from '../utils/authHelper';
 
 import { ErrorMessage } from '../components/ErrorMessage';
 import { Spinner } from '@ui-kitten/components';

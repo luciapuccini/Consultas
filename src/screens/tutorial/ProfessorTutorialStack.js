@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from '@ui-kitten/components';
 import { ImageBackground, View } from 'react-native';
-import { setIsFirstLogin } from '../../utils/authHelper';
 import { useNavigation } from '@react-navigation/native';
 
 const endTutorialScreen = 2;
@@ -27,9 +26,7 @@ export const ProfessorTutorialStack = () => {
   };
 
   const handleEndTutorial = () => {
-    setIsFirstLogin(false).then(() => {
-      navigator.navigate('Home');
-    });
+    navigator.navigate('Home');
   };
   return (
     <ImageBackground
@@ -40,11 +37,6 @@ export const ProfessorTutorialStack = () => {
       }}>
       <View style={style.dummyContainer} />
       <View style={style.bottomRow}>
-        {step === 0 && (
-          <Button appearance="ghost" status="basic" onPress={handleEndTutorial}>
-            Saltear
-          </Button>
-        )}
         {endTutorialScreen !== step ? (
           <Button
             appearance="outline"
@@ -55,6 +47,11 @@ export const ProfessorTutorialStack = () => {
         ) : (
           <Button status="info" onPress={handleEndTutorial}>
             Terminar
+          </Button>
+        )}
+        {step === 0 && (
+          <Button appearance="ghost" status="basic" onPress={handleEndTutorial}>
+            Omitir
           </Button>
         )}
       </View>

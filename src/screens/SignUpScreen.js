@@ -11,7 +11,6 @@ import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import { ErrorMessage } from '../components/ErrorMessage';
-import { setIsFirstLogin } from '../utils/authHelper';
 const { loginFlowContainer } = Styles;
 
 export const SignUpScreen = ({ navigation }) => {
@@ -35,8 +34,6 @@ export const SignUpScreen = ({ navigation }) => {
     if (hasUser) {
       const data = await signup(user);
       setError(data);
-      //TODO:
-      // setIsFirstLogin(true);
       navigation.goBack();
     } else {
       setError('Complete los campos');

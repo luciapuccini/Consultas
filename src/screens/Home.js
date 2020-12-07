@@ -8,22 +8,9 @@ import { StudentHome } from './Student';
 import { storeUser } from '../utils/functions';
 import { Admin } from '../components/Admin';
 import { SERVER_URL } from '../utils/config';
-import { getIsFirstLogin } from '../utils/authHelper';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState({});
-
-  //TODO:
-  // React.useEffect(() => {
-  //   const isFirstLogin = async () => {
-  //     const firstLogin = await getIsFirstLogin();
-  //     console.log('Home -> firstLogin', firstLogin);
-  //     if (firstLogin === 'true') {
-  //       navigation.navigate('TutorialStack');
-  //     }
-  //   };
-  //   isFirstLogin();
-  // });
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -36,12 +23,10 @@ export const Home = ({ navigation }) => {
         },
       })
         .then((res) => res.json())
-        .then((data) => {
-          setUser(data);
-          storeUser(data);
-          // FIXME: will be a flag
-          if (data.user.firstLogin === 'true') {
-            console.log('[-- Is First! --]');
+        .then((userData) => {
+          setUser(userData);
+          storeUser(userData);
+          if (userData.firstLogin === true) {
             navigation.navigate('TutorialStack');
           }
         });
