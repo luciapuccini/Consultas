@@ -39,13 +39,9 @@ const InscriptionsList = ({ route: { params } }) => {
         <CustomSpinner />
       ) : (
         <ScrollView>
-          {inscriptions.map((student) => {
-            console.log(
-              '🚀: InscriptionsList.js ~ line 43 ~ {inscriptions.map ~ object',
-              student,
-            );
-            return <InscriptionCard student={student} />;
-          })}
+          {inscriptions.map((student) => (
+            <InscriptionCard student={student} />
+          ))}
         </ScrollView>
       )}
     </Layout>
