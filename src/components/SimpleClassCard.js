@@ -13,7 +13,7 @@ export const SimpleClassCard = ({
   setToDelete,
 }) => {
   const navigation = useNavigation();
-  const cancel = clase.status === 'Cancelada';
+  const cancel = clase.status === 'Cancelada' || clase.status === 'Finalizada';
   const statusColor = getClassColor(clase.status);
 
   return (

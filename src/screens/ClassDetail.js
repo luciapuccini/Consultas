@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  Linking,
 } from 'react-native';
 import { Layout, Icon, Text, Button } from '@ui-kitten/components';
 
@@ -45,6 +46,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   const [inscriptions, setInscriptions] = React.useState([]);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
+  const [link, setLink] = React.useState('');
 
   React.useEffect(() => {
     fetchClassData();
@@ -66,6 +68,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
         setComments(json.comments);
         setLoading(false);
         checkUserPresent(json.turnos);
+        setLink(json.link);
       })
       .catch((error) => {
         console.log('[ FAILED ]', error);
@@ -162,7 +165,20 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
         console.log(error);
       });
   };
+  const openVirtualClass = () => {
+    console.log('link', link);
+    const formattedLink = link.substr(1, link.length - 1);
 
+    Linking.canOpenURL(formattedLink).then((res) => {
+      if (res) {
+        Linking.openURL(formattedLink);
+      } else {
+        Alert.alert(
+          'Algo salio mal, revise si tiene la aplicacion correcta instalada',
+        );
+      }
+    });
+  };
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {!loading ? (
@@ -200,14 +216,22 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                 expired={expired}
               />
             )}
-            <View style={style.inscriptionsBtn}>
+            <View style={style.actions}>
+              {manager && (
+                <Button
+                  status="info"
+                  appearance="outline"
+                  onPress={() =>
+                    navigation.navigate('Inscriptions', { inscriptions })
+                  }>
+                  Ver Inscriptos
+                </Button>
+              )}
               <Button
                 status="info"
                 appearance="outline"
-                onPress={() =>
-                  navigation.navigate('Inscriptions', { inscriptions })
-                }>
-                Ver Inscriptos
+                onPress={openVirtualClass}>
+                Ir a la clase Virtual
               </Button>
             </View>
           </ScrollView>
@@ -264,9 +288,8 @@ const unsubscribeTurno = async (idClass, startTimeTurno) => {
     });
 };
 
-const onstartClass = async (id, setStarted) => {
+const onstartClass = async (id) => {
   const token = await getToken();
-  heartbeatAnimation(10, 5, 15);
   try {
     fetch(`${SERVER_URL}/clases/startClass/${id}`, {
       method: 'GET',
@@ -276,7 +299,6 @@ const onstartClass = async (id, setStarted) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setStarted(true);
         Alert.alert(
           'Empezando la clase',
           `${data.message}`,
@@ -290,37 +312,29 @@ const onstartClass = async (id, setStarted) => {
 };
 
 const StartClass = ({ id }) => {
-  const [started, setStarted] = React.useState(false);
-
   return (
-    <TouchableOpacity
-      style={style.touchableStartStyle}
-      onPress={() => onstartClass(id, setStarted)}>
-      <Text style={style.textStartStyle}>COMENZAR</Text>
-    </TouchableOpacity>
+    <View style={style.startBtn}>
+      <Button
+        status="success"
+        onPress={() => onstartClass(id)}
+        accessoryRight={StartIcon}>
+        COMENZAR
+      </Button>
+    </View>
   );
 };
-export const heartbeatAnimation = (value, minValue, maxValue) =>
-  Animated.loop(
-    Animated.sequence([
-      Animated.timing(value, {
-        toValue: maxValue,
-        duration: 100,
-      }),
-      Animated.timing(value, {
-        toValue: minValue,
-        duration: 100,
-      }),
-      Animated.timing(value, {
-        toValue: maxValue,
-        duration: 100,
-      }),
-      Animated.timing(value, {
-        toValue: minValue,
-        duration: 2000,
-      }),
-    ]),
+const StartIcon = (props) => {
+  const shakeIconRef = React.useRef();
+
+  return (
+    <Icon
+      {...props}
+      name="arrow-circle-right-outline"
+      ref={shakeIconRef}
+      animation="shake"
+    />
   );
+};
 
 const style = {
   touchableStartStyle: {
@@ -342,9 +356,15 @@ const style = {
     height: 80,
     borderRadius: 25,
   },
-  inscriptionsBtn: {
+  actions: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: 10,
-    marginTop: 20,
+    justifyContent: 'space-between',
+    margin: 10,
+  },
+  startBtn: {
+    alignSelf: 'flex-end',
+    margin: 10,
   },
 };

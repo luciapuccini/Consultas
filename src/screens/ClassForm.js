@@ -22,9 +22,12 @@ export const ClassForm = ({ route, navigation }) => {
 
   const [date, setDate] = useState(new Date());
   const [duration, setDuration] = useState(1);
-  const [hasSingleTurnos, setHasSingleTurnos] = React.useState(false);
+  const [hasSingleTurnos, setHasSingleTurnos] = useState(false);
   const [cantidadTurnos, setCantidadTurnos] = useState(1);
-  const [isRegular, setIsRegular] = React.useState(false);
+  const [isRegular, setIsRegular] = useState(false);
+  const [isVirtual, setIsVirtual] = useState(false);
+  const [link, setLink] = useState('');
+
   // const [failed, setFailed] = React.useState(null);
   const showMode = (currentMode) => {
     setShow(true);
@@ -48,6 +51,7 @@ export const ClassForm = ({ route, navigation }) => {
       initTime: moment(date),
       hasSingleTurnos,
       isRegular,
+      link: `\"${link}\"`,
     };
     const duracion = hasSingleTurnos
       ? { durationInMinutes: duration }
@@ -92,9 +96,9 @@ export const ClassForm = ({ route, navigation }) => {
       .catch((error) => console.log(error));
   };
   return (
-    <Layout level="1" style={styles.layout}>
-      <ScrollView contentContainerStyle={styles.layout}>
-        <Card style={styles.card} header={Header}>
+    <ScrollView>
+      <Layout level="1" style={styles.layout}>
+        <Card style={styles.space} header={Header}>
           <View style={styles.dateRow}>
             <Button
               style={styles.pickerStyle}
@@ -119,6 +123,7 @@ export const ClassForm = ({ route, navigation }) => {
           onChangeText={setDuration}
           keyboardType="numeric"
           caption="en minutos"
+          style={styles.space}
         />
         {!hasSingleTurnos && (
           <Input
@@ -126,17 +131,35 @@ export const ClassForm = ({ route, navigation }) => {
             keyboardType="numeric"
             caption="Nosotros asignaremos una duracion a cada turno"
             onChangeText={setCantidadTurnos}
+            style={styles.space}
           />
         )}
         <CheckBox
+          style={styles.space}
           checked={hasSingleTurnos}
           onChange={(nextChecked) => setHasSingleTurnos(nextChecked)}>
           Clase de un solo turno
         </CheckBox>
-        <CheckBox checked={isRegular} onChange={() => setIsRegular(!isRegular)}>
+        <CheckBox
+          style={styles.space}
+          checked={isRegular}
+          onChange={() => setIsRegular(!isRegular)}>
           Clase Regular
         </CheckBox>
-
+        <CheckBox
+          style={styles.space}
+          checked={isVirtual}
+          onChange={(nextChecked) => setIsVirtual(nextChecked)}>
+          Clase Virtual
+        </CheckBox>
+        {isVirtual && (
+          <Input
+            label="Link a la clase"
+            caption="Link de zoom o hangouts"
+            onChangeText={setLink}
+            style={styles.space}
+          />
+        )}
         {show && (
           <ModalPicker
             mode={mode}
@@ -149,8 +172,8 @@ export const ClassForm = ({ route, navigation }) => {
         <Button appearance="primary" onPress={addClase}>
           Confirmar
         </Button>
-      </ScrollView>
-    </Layout>
+      </Layout>
+    </ScrollView>
   );
 };
 
@@ -190,9 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    // flex: 1,
-    // margin: 2,
+  space: {
     padding: 5,
   },
 });

@@ -83,7 +83,11 @@ export const blue1 = '#64B5F6';
 
 export const getClassColor = (status) => {
   const color =
-    status === 'En Curso' ? green1 : status === 'Cancelada' ? red1 : blue1;
+    status === 'En Curso'
+      ? green1
+      : status === 'Cancelada' || status === 'Finalizada'
+      ? red1
+      : blue1;
   return color;
 };
 
