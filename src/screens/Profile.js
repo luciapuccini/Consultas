@@ -16,8 +16,10 @@ import {
   Button,
   Layout,
   CheckBox,
+  IndexPath,
 } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
+import { YearDropdown } from '../components/YearDropdown';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
 import { ErrorMessage } from '../components/ErrorMessage';
@@ -32,6 +34,7 @@ export const Profile = ({ navigation }) => {
   const [onPasswordEdit, setOnPasswordEdit] = useState(false);
   const [imageSrc, setImageSrc] = useState(profilePlaceholder);
   const [imgFlag, setImgFlag] = useState(user.profileImagePath);
+  const [year, setYear] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -45,7 +48,7 @@ export const Profile = ({ navigation }) => {
           },
         });
         const json = await response.json();
-        console.log('fetchUser -> json', json);
+
         const {
           name,
           email,
@@ -78,11 +81,11 @@ export const Profile = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    // console.log('la 1er vex', imgFlag);
     const profileImage = imgFlag
       ? { uri: getUserImage(user.userId) + `?${Math.random()}` } //FIXME: RN BUG, ONLY WAY TO SOLVE FOR NOW
       : profilePlaceholder;
     setImageSrc(profileImage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, imgFlag]);
 
   useEffect(() => {
@@ -169,7 +172,6 @@ export const Profile = ({ navigation }) => {
           .then((resp) => resp.json())
           .then((val) => {
             if (val.message == 'Succed') {
-              console.log('exito');
               setImgFlag(fileName);
             }
           })
@@ -270,6 +272,11 @@ export const Profile = ({ navigation }) => {
               value={user.email}
               accessoryRight={renderBrushIcon}
             />
+            {isStudent && (
+              <View style={styles.select}>
+                <YearDropdown selectedIndex={year} setSelectedIndex={setYear} />
+              </View>
+            )}
             {isProfessor && (
               <PhoneRow
                 user={user}
@@ -385,5 +392,9 @@ const styles = {
     flex: 1,
     marginRight: 20,
     marginLeft: 10,
+  },
+  select: {
+    height: 140,
+    margin: 10,
   },
 };

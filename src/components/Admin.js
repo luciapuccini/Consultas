@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
 import { Layout, Icon } from '@ui-kitten/components';
-import { CustomSpinner } from './CustomSpinner';
+import { ErrorMessage } from './ErrorMessage';
+
 import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
 import { useNavigation } from '@react-navigation/native';
@@ -44,16 +45,19 @@ export const Admin = ({ user }) => {
 
   return (
     <Layout level="1">
-      {!subjects ? (
-        <CustomSpinner />
-      ) : (
-        <FlatList
-          data={subjects}
-          renderItem={({ item }) => renderItem(item, fetchSubjects)}
-          contentContainerStyle={{ paddingBottom: 80 }}
-          keyExtractor={(item) => item.id}
-        />
-      )}
+      <Layout level="1" style={{ height: '95%' }}>
+        {subjects.length === 0 ? (
+          <ErrorMessage message="No hay materias, crea algunas" />
+        ) : (
+          <FlatList
+            data={subjects}
+            renderItem={({ item }) => renderItem(item, fetchSubjects)}
+            contentContainerStyle={{ paddingBottom: 80 }}
+            keyExtractor={(item) => item.id}
+          />
+        )}
+      </Layout>
+
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
       <AddProfessor />
     </Layout>
