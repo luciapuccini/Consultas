@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
-import { Layout, Icon } from '@ui-kitten/components';
+import { Layout, Icon, Tab, TabView } from '@ui-kitten/components';
+
 import { ErrorMessage } from './ErrorMessage';
 
 import { getToken } from '../utils/authHelper';
@@ -9,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SERVER_URL } from '../utils/config';
 
 export const Admin = ({ user }) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const fetchSubjects = async () => {
@@ -45,24 +47,51 @@ export const Admin = ({ user }) => {
 
   return (
     <Layout level="1">
-      <Layout level="1" style={{ height: '95%' }}>
-        {subjects.length === 0 ? (
-          <ErrorMessage message="No hay materias, crea algunas" />
-        ) : (
-          <FlatList
-            data={subjects}
-            renderItem={({ item }) => renderItem(item, fetchSubjects)}
-            contentContainerStyle={{ paddingBottom: 80 }}
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </Layout>
+      <TabView
+        style={{ marginTop: 10 }}
+        selectedIndex={selectedIndex}
+        onSelect={(index) => setSelectedIndex(index)}>
+        <Tab title="MATERIAS">
+          <SubjectList subjects={subjects} fetchSubjects={fetchSubjects} />
+        </Tab>
+        <Tab title="CARRERAS">
+          <CarrerList/>
+        </Tab>
+      </TabView>
 
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
       <AddProfessor />
     </Layout>
   );
 };
+
+const CarrerList = ({ }) => (
+  <Layout>
+    
+      <FlatList
+        data={subjects}
+        renderItem={({ item }) => renderItem(item, fetchSubjects)}
+        contentContainerStyle={{ paddingBottom: 80 }}
+        keyExtractor={(item) => item.id}
+      />
+  
+  </Layout>
+);
+
+const SubjectList = ({ subjects, fetchSubjects }) => (
+  <Layout>
+    {subjects && subjects.length === 0 ? (
+      <ErrorMessage message="No hay materias, crea algunas" />
+    ) : (
+      <FlatList
+        data={subjects}
+        renderItem={({ item }) => renderItem(item, fetchSubjects)}
+        contentContainerStyle={{ paddingBottom: 80 }}
+        keyExtractor={(item) => item.id}
+      />
+    )}
+  </Layout>
+);
 
 const AddSubject = ({ professors, fetchSubjects }) => {
   const navigation = useNavigation();
