@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { Button, Text, Input, Icon, Layout } from '@ui-kitten/components';
 import ImagePicker from 'react-native-image-picker';
 import { isEmpty } from 'underscore';
@@ -7,6 +7,7 @@ import { isEmpty } from 'underscore';
 import { getToken } from '../utils/authHelper';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { SERVER_URL } from '../utils/config';
+import { getEncodedImage } from '../utils/functions';
 
 export const SubjectForm = ({ route, navigation }) => {
   const { professors, refresh } = route.params;
@@ -96,6 +97,12 @@ export const SubjectForm = ({ route, navigation }) => {
   };
   return (
     <Layout level="1" style={styles.layout}>
+      {image !== '' && (
+        <Image
+          source={getEncodedImage(image.base64Image)}
+          style={styles.image}
+        />
+      )}
       <Input label="Nombre" onChangeText={setName} value={name} />
       <Text style={styles.space} category="h5">
         Habilitar Profesores
@@ -169,6 +176,13 @@ const styles = StyleSheet.create({
   checkStyle: {
     height: 20,
     backgroundColor: 'red',
-    // alignSelf: 'flex-end',
+  },
+  image: {
+    height: 150,
+    width: null,
+    borderColor: '#DCDCDC',
+    borderRadius: 10,
+    borderWidth: 4,
+    marginBottom: 10,
   },
 });

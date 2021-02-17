@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Layout, Icon, Tab, TabView } from '@ui-kitten/components';
 
 import { ErrorMessage } from './ErrorMessage';
@@ -54,9 +54,7 @@ export const Admin = ({ user }) => {
         <Tab title="MATERIAS">
           <SubjectList subjects={subjects} fetchSubjects={fetchSubjects} />
         </Tab>
-        <Tab title="CARRERAS">
-          <CarrerList/>
-        </Tab>
+        <Tab title="CARRERAS">{/* <CarrerList/> */}</Tab>
       </TabView>
 
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
@@ -65,21 +63,21 @@ export const Admin = ({ user }) => {
   );
 };
 
-const CarrerList = ({ }) => (
+const CarrerList = ({ things }) => (
   <Layout>
-    
-      <FlatList
-        data={subjects}
-        renderItem={({ item }) => renderItem(item, fetchSubjects)}
-        contentContainerStyle={{ paddingBottom: 80 }}
-        keyExtractor={(item) => item.id}
-      />
-  
+    {/*
+    TODO: add a list of careers
+    <FlatList
+      data={things}
+      renderItem={({ item }) => renderItem(item, fetchSubjects)}
+      contentContainerStyle={{ paddingBottom: 80 }}
+      keyExtractor={(item) => item.id}
+    /> */}
   </Layout>
 );
 
 const SubjectList = ({ subjects, fetchSubjects }) => (
-  <Layout>
+  <Layout style={{ height: '95%' }}>
     {subjects && subjects.length === 0 ? (
       <ErrorMessage message="No hay materias, crea algunas" />
     ) : (

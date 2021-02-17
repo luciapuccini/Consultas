@@ -93,3 +93,7 @@ export const getClassColor = (status) => {
 
 export const windowWidth = Dimensions.get('window').width;
 export const windowHeight = Dimensions.get('window').height;
+
+export const getEncodedImage = (base64Img) => ({
+  uri: 'data:image/png;base64,' + base64Img,
+});
