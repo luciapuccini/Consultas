@@ -62,7 +62,7 @@ export const SubjectCard = ({ subject, professor, admin, refresh }) => {
       : admin
       ? 'Edit Subject'
       : 'Classes';
-    navigation.navigate(path, { subject, manager: professor, refresh });
+    navigation.navigate(path, { subject, manager: professor });
   };
 
   const getImage = () => {

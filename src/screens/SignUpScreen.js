@@ -40,8 +40,9 @@ export const SignUpScreen = ({ navigation }) => {
     }
   };
   return (
-    <ScrollView contentContainerStyle={{ flex: 1 }}>
-      <ImageBackground source={Background} style={loginFlowContainer}>
+    <ImageBackground source={Background} style={{ flex: 1, width: '100%' }}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: 'center', height: '100%' }}>
         <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
           Crear una Cuenta
         </Text>
@@ -102,18 +103,22 @@ export const SignUpScreen = ({ navigation }) => {
 
         {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
 
-        <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
-          <Text style={loginText}>Registrarse</Text>
-        </TouchableOpacity>
+        <View style={styles.rowBox}>
+          <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
+            <Text style={loginText}>Registrarse</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-          <Text style={loginText}>Ya esta registrado?</Text>
-        </TouchableOpacity>
-      </ImageBackground>
-    </ScrollView>
+          <TouchableOpacity
+            style={styles.signInBtn}
+            onPress={() => navigation.navigate('SignIn')}>
+            <Text style={loginText}>Ingresar</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </ImageBackground>
   );
 };
-
+//FIXME: delete unused & merge inline stt
 const styles = {
   inputView: {
     width: '80%',
@@ -128,28 +133,27 @@ const styles = {
     height: 50,
     color: 'white',
   },
-  forgot: {
-    color: 'white',
-    fontSize: 18,
-  },
+  signInBtn: {},
   loginBtn: {
-    width: '80%',
+    width: '40%',
     backgroundColor: '#4570e6',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40,
     marginBottom: 10,
+    marginTop: 10,
   },
+
   loginText: {
     fontSize: 20,
     color: 'white',
   },
   rowBox: {
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    alignItems: 'baseline',
   },
   labelStyle: {
     color: 'white',

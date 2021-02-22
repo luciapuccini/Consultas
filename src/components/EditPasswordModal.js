@@ -50,9 +50,15 @@ export const EditPasswordModal = ({ setVisible, visible }) => {
             marginBottom: 15,
           }}>
           <Text category="s1">Edit Password</Text>
-          <Button appearance="ghost" onPress={() => setVisible(false)}>
-            X
-          </Button>
+          <Icon
+            onPress={() => setVisible(false)}
+            name="close"
+            fill="blue"
+            style={{
+              height: 25,
+              width: 25,
+            }}
+          />
         </View>
 
         <Input

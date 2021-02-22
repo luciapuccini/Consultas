@@ -5,6 +5,7 @@ import { Dimensions } from 'react-native';
 
 import { SERVER_URL } from './config';
 
+// Time related helpers
 const ARG = 'America/Argentina/Buenos_Aires';
 
 export const getTime = (fecha) => {
@@ -40,6 +41,8 @@ export const timeToStart = (initTime) => {
 
   return now.diff(future, 'minute');
 };
+
+// FUNCTIONS
 export const asArray = (obj) => {
   const turnitos = [];
   _.mapObject(obj, (value, key) => {
@@ -48,6 +51,13 @@ export const asArray = (obj) => {
   return turnitos;
 };
 
+const PROFESSOR_ROLE = 'ROLE_PROFESSOR';
+const STUDENT_ROLE = 'ROLE_STUDENT';
+const ADMIN_ROLE = 'ROLE_ADMIN';
+export const isProfessor = (value) => value === PROFESSOR_ROLE;
+export const isStudent = (value) => value === STUDENT_ROLE;
+export const isAdmin = (value) => value === ADMIN_ROLE;
+// STORAGE
 export const storeUser = async (user) => {
   try {
     await AsyncStorage.setItem('LEGAJO', user.legajo);

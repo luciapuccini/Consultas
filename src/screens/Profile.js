@@ -19,22 +19,23 @@ import {
   IndexPath,
 } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
-import { YearDropdown } from '../components/YearDropdown';
 import { getToken } from '../utils/authHelper';
 import { EditPasswordModal } from '../components/EditPasswordModal';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { getUserImage } from '../utils/functions';
 import { SERVER_URL } from '../utils/config';
 
+const profileBack = require('../assets/background-profile.png');
+const profilePlaceholder = require('../assets/profile_placeholder.png');
+
 export const Profile = ({ navigation }) => {
-  const [showMobile, setShowMobile] = useState(false);
+  // const [showMobile, setShowMobile] = useState(false);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [onPasswordEdit, setOnPasswordEdit] = useState(false);
   const [imageSrc, setImageSrc] = useState(profilePlaceholder);
   const [imgFlag, setImgFlag] = useState(user.profileImagePath);
-  const [year, setYear] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -56,7 +57,7 @@ export const Profile = ({ navigation }) => {
           id,
           surname,
           mobile,
-          showMobile,
+          // showMobile,
           role,
           profileImagePath,
         } = json;
@@ -70,7 +71,7 @@ export const Profile = ({ navigation }) => {
           role,
           profileImagePath,
         });
-        setShowMobile(showMobile);
+        // setShowMobile(showMobile);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -92,9 +93,6 @@ export const Profile = ({ navigation }) => {
     setImgFlag(user.profileImagePath);
   }, [user]);
 
-  const isProfessor = user.role === 'ROLE_PROFESSOR';
-  const isStudent = user.role === 'ROLE_STUDENT';
-
   const save = () => {
     const handleSave = async () => {
       const token = await getToken();
@@ -103,7 +101,7 @@ export const Profile = ({ navigation }) => {
       const userBody = {
         ...user,
         mobile: prefix.concat(user.mobile),
-        showMobile,
+        // showMobile,
       };
       try {
         const response = await fetch(`${SERVER_URL}/users/modify`, {
@@ -123,7 +121,7 @@ export const Profile = ({ navigation }) => {
       }
     };
 
-    if (isProfessor && user.mobile) {
+    if (user.mobile) {
       const isValid = validatePhone(user.mobile);
       if (!isValid) {
         setError('Error de formato de telefono');
@@ -181,11 +179,14 @@ export const Profile = ({ navigation }) => {
   };
 
   const validatePhone = (num) => {
-    const enable = Number.isInteger(parseInt(num)) && num.length >= 7;
+    console.log('🚀 ~ file: Profile.js ~ line 182 ~ validatePhone ~ num', num);
+    const enable = parseInt(num) && num.length >= 7;
+    console.log(
+      '🚀 ~ file: Profile.js ~ line 184 ~ validatePhone ~ enable',
+      enable,
+    );
     return enable;
   };
-  const profileBack = require('../assets/background-profile.png');
-  const profilePlaceholder = require('../assets/profile_placeholder.png');
 
   return (
     <Layout level="1" style={{ flex: 1 }}>
@@ -226,18 +227,6 @@ export const Profile = ({ navigation }) => {
           </ImageBackground>
 
           <ScrollView style={{ flex: 1 }}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'space-around',
-                marginVertical: 10,
-                flexDirection: 'row',
-              }}>
-              <Text category="h3">
-                {user.name} {user.surname}
-              </Text>
-            </View>
             <View style={{ margin: 10 }}>
               <Text
                 category="h6"
@@ -272,27 +261,15 @@ export const Profile = ({ navigation }) => {
               value={user.email}
               accessoryRight={renderBrushIcon}
             />
-            {isStudent && (
-              <View style={styles.select}>
-                <YearDropdown selectedIndex={year} setSelectedIndex={setYear} />
-              </View>
-            )}
-            {isProfessor && (
-              <PhoneRow
-                user={user}
-                setUser={setUser}
-                showMobile={showMobile}
-                setShowMobile={setShowMobile}
-              />
-            )}
+            <PhoneRow
+              user={user}
+              setUser={setUser}
+              // showMobile={showMobile}
+              // setShowMobile={setShowMobile}
+            />
             {error && error !== 'Succed' && <ErrorMessage message={error} />}
             <ConfirmButton save={save} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+            <View style={styles.editPassword}>
               <Button
                 style={styles.button}
                 appearance="ghost"
@@ -304,18 +281,6 @@ export const Profile = ({ navigation }) => {
                 visible={onPasswordEdit}
                 setVisible={setOnPasswordEdit}
               />
-
-              {isStudent && (
-                <Button
-                  appearance="ghost"
-                  onPress={() =>
-                    navigation.navigate('Classes', {
-                      studentSubscriptions: true,
-                    })
-                  }>
-                  Mis Inscripciones
-                </Button>
-              )}
             </View>
           </ScrollView>
         </>
@@ -325,51 +290,40 @@ export const Profile = ({ navigation }) => {
     </Layout>
   );
 };
+
 const renderBrushIcon = (props) => (
   <TouchableWithoutFeedback>
     <Icon {...props} name="edit-2-outline" />
   </TouchableWithoutFeedback>
 );
+
 const ConfirmButton = ({ save }) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'flex-end',
-        marginRight: 10,
-      }}>
+    <View style={styles.confirmBtn}>
       <Button status="success" onPress={save}>
         Aceptar
       </Button>
     </View>
   );
 };
+
 const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => {
   const phone = user.mobile?.startsWith('+')
-    ? user.mobile.slice(8)
+    ? user.mobile.slice(4)
     : user.mobile;
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={[styles.inputStyle, styles.phoneRow]}>
-        <Input disabled label="Prefijo" value="+ 54 9" />
-        <Input
-          style={styles.phoneStyle}
-          label="Telefono"
-          placeholder={user.mobile}
-          onChangeText={(text) => setUser({ ...user, mobile: text })}
-          value={phone}
-          accessoryRight={renderBrushIcon}
-          keyboardType="phone-pad"
-          caption="341 1234567"
-        />
-      </View>
-      <CheckBox
-        style={{ marginLeft: 10, marginTop: 10 }}
-        checked={showMobile}
-        onChange={() => setShowMobile(!showMobile)}>
-        Mostrar mi telefono publicamente
-      </CheckBox>
+      <Input
+        style={styles.inputStyle}
+        label="Telefono"
+        placeholder={user.mobile || '341 000 0000'}
+        onChangeText={(text) => setUser({ ...user, mobile: text })}
+        value={phone}
+        accessoryRight={renderBrushIcon}
+        keyboardType="phone-pad"
+        caption="Comparte tu telefono con los demás usuarios"
+      />
     </View>
   );
 };
@@ -393,8 +347,14 @@ const styles = {
     marginRight: 20,
     marginLeft: 10,
   },
-  select: {
-    height: 140,
-    margin: 10,
+  confirmBtn: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginRight: 10,
+  },
+  editPassword: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 };
