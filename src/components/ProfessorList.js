@@ -8,6 +8,6 @@ import { _ } from 'underscore';
 import { SortedList } from './shared/SortedList';
 
 export const ProfessorList = ({ professors }) => (
-  <View/>
+  <View />
   //<SortedList items={professors} />
 );

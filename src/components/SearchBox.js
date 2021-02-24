@@ -5,9 +5,10 @@ import { Input, Icon } from '@ui-kitten/components';
 
 const renderSearchIcon = (props) => <Icon {...props} name={'search-outline'} />;
 
-export const SearchBox = ({ setSearchTerm, placeholder }) => {
+export const SearchBox = ({ setSearchTerm, placeholder, style = {} }) => {
+  const searchStyle = { marginLeft: 20, marginTop: 10, width: '90%', ...style };
   return (
-    <View style={{ marginLeft: 20, marginTop: 10, width: '90%' }}>
+    <View style={searchStyle}>
       <Input
         placeholder={placeholder || 'Place your Text'}
         accessoryLeft={renderSearchIcon}

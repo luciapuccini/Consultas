@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Image } from 'react-native';
-import { Button, Text, Input, Icon, Layout } from '@ui-kitten/components';
+import {
+  Button,
+  Text,
+  Input,
+  Icon,
+  Layout,
+  IndexPath,
+} from '@ui-kitten/components';
 import ImagePicker from 'react-native-image-picker';
 import { isEmpty } from 'underscore';
 
@@ -8,11 +15,14 @@ import { getToken } from '../utils/authHelper';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { SERVER_URL } from '../utils/config';
 import { getEncodedImage } from '../utils/functions';
+import { YearDropdown } from '../components/YearDropdown';
 
 export const SubjectForm = ({ route, navigation }) => {
   const { professors, refresh } = route.params;
 
   const [name, setName] = useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+
   const [image, setImage] = useState('');
   const [disabled, setDisabled] = useState(false);
   const [subjectProfessors, setSubjectProfessors] = useState([]);
@@ -21,9 +31,14 @@ export const SubjectForm = ({ route, navigation }) => {
   const addSubject = async () => {
     setDisabled(true);
 
-    if (!isEmpty(name) && subjectProfessors.length > 0) {
+    if (
+      !isEmpty(name) &&
+      !isEmpty(selectedIndex) &&
+      subjectProfessors.length > 0
+    ) {
       const body = {
         name,
+        year: selectedIndex.row + 1,
         subjectProfessors,
       };
       const formData = new FormData();
@@ -104,6 +119,11 @@ export const SubjectForm = ({ route, navigation }) => {
         />
       )}
       <Input label="Nombre" onChangeText={setName} value={name} />
+      <YearDropdown
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+      />
+      {/* // <Input label="Año" onChangeText={setYear} value={year} /> */}
       <Text style={styles.space} category="h5">
         Habilitar Profesores
       </Text>
@@ -130,7 +150,6 @@ export const SubjectForm = ({ route, navigation }) => {
             </Button>
           ))}
       </ScrollView>
-
       <View
         style={{
           marginTop: 10,
@@ -147,7 +166,6 @@ export const SubjectForm = ({ route, navigation }) => {
           Confirmar
         </Button>
       </View>
-
       {error && <ErrorMessage message={error} />}
     </Layout>
   );

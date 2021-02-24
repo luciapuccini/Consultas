@@ -47,16 +47,7 @@ export const Admin = ({ user }) => {
 
   return (
     <Layout level="1">
-      <TabView
-        style={{ marginTop: 10 }}
-        selectedIndex={selectedIndex}
-        onSelect={(index) => setSelectedIndex(index)}>
-        <Tab title="MATERIAS">
-          <SubjectList subjects={subjects} fetchSubjects={fetchSubjects} />
-        </Tab>
-        <Tab title="CARRERAS">{/* <CarrerList/> */}</Tab>
-      </TabView>
-
+      <SubjectList subjects={subjects} fetchSubjects={fetchSubjects} />
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
       <AddProfessor />
     </Layout>

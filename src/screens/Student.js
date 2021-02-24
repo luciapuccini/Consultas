@@ -1,22 +1,25 @@
 import React from 'react';
 import _ from 'underscore';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SubjectList } from '../components/SubjectList';
 import { SearchBox } from '../components/SearchBox';
-import { Layout, Tab, TabView } from '@ui-kitten/components';
+import { Button, Layout, Tab, TabView } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { ProfessorList } from '../components/ProfessorList';
 import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
+import FilterSubjects from '../components/FilterSubjects';
+// import { SubjectsFilterModal } from '../components/SubjectsFilterModal';
 
 export const StudentHome = ({ user }) => {
   const [subjects, setSubjects] = React.useState([]);
+  const [filteredSubjects, setFilteredSubjects] = React.useState([]);
   const [professors, setProfessors] = React.useState([]);
-
   const [loading, setLoading] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedYear, setSelectedYear] = React.useState(null);
 
   const fetchSubjects = async () => {
     const token = await getToken();
@@ -30,11 +33,13 @@ export const StudentHome = ({ user }) => {
       });
       const json = await response.json();
       setSubjects(json);
+      setFilteredSubjects(json);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
+
   const fetchProffesors = async () => {
     const token = await getToken();
     fetch(`${SERVER_URL}/users/getAllProfessors`, {
@@ -48,26 +53,59 @@ export const StudentHome = ({ user }) => {
         setProfessors(json);
       });
   };
+
   React.useEffect(() => {
     fetchProffesors();
     fetchSubjects();
-  }, [searchTerm]);
+  }, []);
+
+  React.useEffect(() => {
+    console.log('year effect', selectedYear);
+    if (selectedYear) {
+      console.log(
+        '🚀 ~ file: Student.js ~ line 64 ~ React.useEffect ~ selectedYear',
+        selectedYear,
+      );
+      setLoading(true);
+      const filteredByYear = subjects.filter(
+        (subject) => subject.year === selectedYear,
+      );
+      console.log(
+        '🚀 ~ file: Student.js ~ line 69 ~ React.useEffect ~ filteredByYear',
+        filteredByYear,
+      );
+      setFilteredSubjects(filteredByYear);
+      setLoading(false);
+    } else {
+      fetchSubjects();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedYear]);
 
   const resultSubjects = !searchTerm
-    ? subjects
-    : subjects.filter((subject) =>
+    ? filteredSubjects
+    : filteredSubjects.filter((subject) =>
         subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
       );
+
   const resultProfessors = !searchTerm
     ? professors
     : professors.filter((profe) => {
         const nombre = profe.name.toLowerCase() + profe.surname.toLowerCase();
         return nombre.toLowerCase().includes(searchTerm.toLocaleLowerCase());
       });
+
   return (
     <Layout level="1">
-      <SearchBox setSearchTerm={setSearchTerm} placeholder="Busqueda" />
-
+      <View style={styles.row}>
+        <SearchBox
+          style={{ width: '70%', marginRight: 20 }}
+          setSearchTerm={setSearchTerm}
+          placeholder="Busqueda"
+        />
+        <FilterSubjects setSelectedYear={setSelectedYear} />
+      </View>
       <TabView
         style={{ marginTop: 10 }}
         selectedIndex={selectedIndex}
@@ -95,4 +133,9 @@ export const StudentHome = ({ user }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+});
