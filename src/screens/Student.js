@@ -95,7 +95,10 @@ export const StudentHome = ({ user }) => {
           setSearchTerm={setSearchTerm}
           placeholder="Busqueda"
         />
-        <FilterSubjects setSelectedYear={setSelectedYear} />
+        <FilterSubjects
+          setSelectedYear={setSelectedYear}
+          setSelectedCareer={() => console.log('select career in student')}
+        />
       </View>
       <TabView
         style={{ marginTop: 10 }}

@@ -19,7 +19,6 @@ import { YearDropdown } from '../components/YearDropdown';
 
 export const SubjectForm = ({ route, navigation }) => {
   const { professors, refresh } = route.params;
-
   const [name, setName] = useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 

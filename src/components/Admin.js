@@ -13,6 +13,7 @@ export const Admin = ({ user }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
+
   const fetchSubjects = async () => {
     const token = await getToken();
     fetch(`${SERVER_URL}/subjects/findAll`, {
@@ -27,29 +28,31 @@ export const Admin = ({ user }) => {
       })
       .catch((error) => console.log(error));
   };
+
+  const fetchProfessors = async () => {
+    const token = await getToken();
+    fetch(`${SERVER_URL}/users/getAllProfessors`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setProfessors(json);
+      });
+  };
+
   useEffect(() => {
     fetchSubjects();
-    const fetchProffesors = async () => {
-      const token = await getToken();
-      fetch(`${SERVER_URL}/users/getAllProfessors`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          setProfessors(json);
-        });
-    };
-    fetchProffesors();
+    fetchProfessors();
   }, [user]);
 
   return (
     <Layout level="1">
       <SubjectList subjects={subjects} fetchSubjects={fetchSubjects} />
       <AddSubject professors={professors} fetchSubjects={fetchSubjects} />
-      <AddProfessor />
+      <AddProfessor fetchProfessors={fetchProfessors} />
     </Layout>
   );
 };
@@ -98,11 +101,13 @@ const AddSubject = ({ professors, fetchSubjects }) => {
   );
 };
 
-const AddProfessor = () => {
+const AddProfessor = ({ fetchProfessors }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Add Professor')}
+      onPress={() =>
+        navigation.navigate('Add Professor', { refresh: fetchProfessors })
+      }
       style={style.touchable2Style}>
       <Icon
         name="person-add-outline"

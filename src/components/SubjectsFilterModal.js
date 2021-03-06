@@ -19,16 +19,21 @@ export const SubjectsFilterModal = ({
   setSelectedCareer,
   multi,
 }) => {
-  const [year, setYear] = useState(''); //check if array
+  const [year, setYear] = useState([]); //check if array
+  // console.log(
+  //   '🚀 ~ file: SubjectsFilterModal.js ~ line 23 ~ year',
+  //   year.row + 1 || year.map((y) => y.row),
+  // );
   const [career, setCareer] = useState([]);
 
   const handleSubmit = async () => {
-    setSelectedYear(year.row + 1);
+    //TODO: handle all as array
+    setSelectedYear(year.row + 1 || year.map((y) => y.row + 1));
     setSelectedCareer(career);
     setVisible(false);
   };
   const handleReset = async () => {
-    setSelectedYear(null);
+    setSelectedYear([]);
     setSelectedCareer([]);
     setVisible(false);
   };
@@ -57,14 +62,17 @@ export const SubjectsFilterModal = ({
         <Divider style={{ margin: 10 }} />
         <CareerDropdown selectedIndex={career} setSelectedIndex={setCareer} />
         <Divider style={{ margin: 10 }} />
-        <View style={styles.row}>
+        <Button status="success" onPress={handleSubmit}>
+          OK
+        </Button>
+        {/* <View style={styles.row}>
           <Button status="success" onPress={handleSubmit}>
             OK
           </Button>
-          <Button appearance="outline" onPress={handleReset}>
+           <Button appearance="outline" onPress={handleReset}>
             Reset
-          </Button>
-        </View>
+          </Button> 
+        </View> */}
       </Card>
     </Modal>
   );

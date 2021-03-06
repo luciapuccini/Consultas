@@ -5,7 +5,9 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
 
-export const AddProfessor = ({ navigation }) => {
+export const AddProfessor = ({ navigation, route }) => {
+  const { refresh } = route.params;
+
   const [legajo, setLegajo] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -26,6 +28,7 @@ export const AddProfessor = ({ navigation }) => {
     });
     const json = await response.json();
     if (json.message) {
+      refresh();
       navigation.goBack();
     }
     if (json.error) {

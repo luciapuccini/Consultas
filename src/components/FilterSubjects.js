@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Icon, Text } from '@ui-kitten/components';
 import { SubjectsFilterModal } from './/SubjectsFilterModal';
 
-const FilterSubjects = ({ setSelectedYear, multi }) => {
+const FilterSubjects = ({ setSelectedYear, setSelectedCareer, multi }) => {
   const [showFilter, setShowFilter] = React.useState(false);
 
   return (
@@ -19,6 +19,7 @@ const FilterSubjects = ({ setSelectedYear, multi }) => {
         visible={showFilter}
         setVisible={setShowFilter}
         setSelectedYear={setSelectedYear}
+        setSelectedCareer={setSelectedCareer}
         multi={multi}
       />
     </View>

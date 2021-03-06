@@ -10,6 +10,11 @@ import FilterSubjects from '../components/FilterSubjects';
 export const ProfessorHome = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
   const [selectedYear, setSelectedYear] = React.useState([]);
+  const [filteredSubjects, setFilteredSubjects] = React.useState(subjects);
+  console.log(
+    '🚀 ~ file: ProfessorHome.js ~ line 14 ~ ProfessorHome ~ filteredSubjects',
+    filteredSubjects,
+  );
 
   const fetchProfessorSubjects = async () => {
     const token = await getToken();
@@ -24,6 +29,7 @@ export const ProfessorHome = ({ user }) => {
       .then((res) => res.json())
       .then((data) => {
         setSubjects(data);
+        setFilteredSubjects(data);
       })
       .catch((error) => console.log(error));
   };
@@ -35,29 +41,29 @@ export const ProfessorHome = ({ user }) => {
   }, [user]);
 
   React.useEffect(() => {
-    if (selectedYear) {
-      // setLoading(true);
-      const filteredByYear = subjects.filter(
-        (subject) => subject.year === selectedYear,
+    if (selectedYear.length > 0) {
+      const filteredByYear = subjects.filter((subject) =>
+        selectedYear.includes(subject.year),
       );
-
-      setSubjects(filteredByYear);
-      // setLoading(false);
+      setFilteredSubjects(filteredByYear);
     } else {
-      fetchProfessorSubjects();
+      setFilteredSubjects(subjects);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedYear]);
 
   return (
     <Layout level="1">
-      <FilterSubjects setSelectedYear={setSelectedYear} multi />
+      <FilterSubjects
+        setSelectedYear={setSelectedYear}
+        setSelectedCareer={() => console.log('select career in profe')}
+        multi
+      />
       {!subjects ? (
         <CustomSpinner />
       ) : (
         <FlatList
-          data={subjects}
+          data={filteredSubjects}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
           keyExtractor={(item) => item.id}
