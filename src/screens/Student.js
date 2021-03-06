@@ -3,14 +3,13 @@ import _ from 'underscore';
 import { StyleSheet, View } from 'react-native';
 import { SubjectList } from '../components/SubjectList';
 import { SearchBox } from '../components/SearchBox';
-import { Button, Layout, Tab, TabView } from '@ui-kitten/components';
+import { Layout, Tab, TabView } from '@ui-kitten/components';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { ProfessorList } from '../components/ProfessorList';
 import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
 import FilterSubjects from '../components/FilterSubjects';
-// import { SubjectsFilterModal } from '../components/SubjectsFilterModal';
 
 export const StudentHome = ({ user }) => {
   const [subjects, setSubjects] = React.useState([]);
@@ -60,20 +59,12 @@ export const StudentHome = ({ user }) => {
   }, []);
 
   React.useEffect(() => {
-    console.log('year effect', selectedYear);
     if (selectedYear) {
-      console.log(
-        '🚀 ~ file: Student.js ~ line 64 ~ React.useEffect ~ selectedYear',
-        selectedYear,
-      );
       setLoading(true);
       const filteredByYear = subjects.filter(
         (subject) => subject.year === selectedYear,
       );
-      console.log(
-        '🚀 ~ file: Student.js ~ line 69 ~ React.useEffect ~ filteredByYear',
-        filteredByYear,
-      );
+
       setFilteredSubjects(filteredByYear);
       setLoading(false);
     } else {

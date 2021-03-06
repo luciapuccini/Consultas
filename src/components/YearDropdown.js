@@ -10,7 +10,7 @@ const yearsObj = [
   'Quinto año',
 ];
 
-export const YearDropdown = ({ selectedIndex, setSelectedIndex }) => {
+export const YearDropdown = ({ selectedIndex, setSelectedIndex, multi }) => {
   const displayValue = yearsObj[selectedIndex.row];
 
   return (
@@ -18,9 +18,11 @@ export const YearDropdown = ({ selectedIndex, setSelectedIndex }) => {
       label="Año"
       selectedIndex={selectedIndex}
       onSelect={(index) => {
+        //TEST as array sam?
         setSelectedIndex(index);
       }}
-      value={displayValue}>
+      value={displayValue}
+      multiSelect={multi}>
       <ScrollView style={{ height: 200 }}>
         {yearsObj.map((title) => (
           <SelectItem title={title} />

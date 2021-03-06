@@ -3,15 +3,12 @@ import { View, TouchableOpacity } from 'react-native';
 import { Icon, Text } from '@ui-kitten/components';
 import { SubjectsFilterModal } from './/SubjectsFilterModal';
 
-const FilterSubjects = ({ setSelectedYear }) => {
+const FilterSubjects = ({ setSelectedYear, multi }) => {
   const [showFilter, setShowFilter] = React.useState(false);
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => setShowFilter(true)}
-        // style={style.touchableStyle}
-      >
+      <TouchableOpacity onPress={() => setShowFilter(true)}>
         <Icon
           name="funnel-outline"
           fill="#fff"
@@ -22,6 +19,7 @@ const FilterSubjects = ({ setSelectedYear }) => {
         visible={showFilter}
         setVisible={setShowFilter}
         setSelectedYear={setSelectedYear}
+        multi={multi}
       />
     </View>
   );

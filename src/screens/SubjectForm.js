@@ -41,6 +41,7 @@ export const SubjectForm = ({ route, navigation }) => {
         year: selectedIndex.row + 1,
         subjectProfessors,
       };
+
       const formData = new FormData();
       formData.append('subject', JSON.stringify(body));
       formData.append('imageFile', JSON.stringify(image));

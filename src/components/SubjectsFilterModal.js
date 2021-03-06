@@ -1,36 +1,35 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   Button,
   Card,
   Modal,
   Text,
-  Input,
   Icon,
   Divider,
 } from '@ui-kitten/components';
-import { ErrorMessage } from '../components/ErrorMessage';
-import { getToken } from '../utils/authHelper';
-// import { Context } from '../context/AuthContext';
-import { SERVER_URL } from '../utils/config';
+
 import { YearDropdown } from './YearDropdown';
+import { CareerDropdown } from './CareerDropdown';
 
 export const SubjectsFilterModal = ({
   setVisible,
   visible,
   setSelectedYear,
+  setSelectedCareer,
+  multi,
 }) => {
-  const [year, setYear] = useState('');
-  // const [newPassword, setNewPassword] = useState('');
-
-  const [error, setError] = useState(false);
+  const [year, setYear] = useState(''); //check if array
+  const [career, setCareer] = useState([]);
 
   const handleSubmit = async () => {
     setSelectedYear(year.row + 1);
+    setSelectedCareer(career);
     setVisible(false);
   };
   const handleReset = async () => {
     setSelectedYear(null);
+    setSelectedCareer([]);
     setVisible(false);
   };
   return (
@@ -50,14 +49,20 @@ export const SubjectsFilterModal = ({
           />
         </View>
 
-        <YearDropdown selectedIndex={year} setSelectedIndex={setYear} />
+        <YearDropdown
+          selectedIndex={year}
+          setSelectedIndex={setYear}
+          multi={multi}
+        />
+        <Divider style={{ margin: 10 }} />
+        <CareerDropdown selectedIndex={career} setSelectedIndex={setCareer} />
         <Divider style={{ margin: 10 }} />
         <View style={styles.row}>
           <Button status="success" onPress={handleSubmit}>
             OK
           </Button>
           <Button appearance="outline" onPress={handleReset}>
-            reset
+            Reset
           </Button>
         </View>
       </Card>
