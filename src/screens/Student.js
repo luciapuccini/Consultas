@@ -18,7 +18,7 @@ export const StudentHome = ({ user }) => {
   const [loading, setLoading] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [selectedYear, setSelectedYear] = React.useState(null);
+  const [selectedYear, setSelectedYear] = React.useState([]);
 
   const fetchSubjects = async () => {
     const token = await getToken();
@@ -59,16 +59,17 @@ export const StudentHome = ({ user }) => {
   }, []);
 
   React.useEffect(() => {
-    if (selectedYear) {
+    if (selectedYear.length > 0) {
       setLoading(true);
-      const filteredByYear = subjects.filter(
-        (subject) => subject.year === selectedYear,
+      const filteredByYear = subjects.filter((subject) =>
+        selectedYear.includes(subject.year),
       );
 
       setFilteredSubjects(filteredByYear);
       setLoading(false);
     } else {
       fetchSubjects();
+      // setFilteredSubjects(subjects);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

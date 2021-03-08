@@ -51,6 +51,11 @@ export const asArray = (obj) => {
   return turnitos;
 };
 
+export const filterByCareer = (subjectsToFilter, searchTerms) =>
+  subjectsToFilter.filter((subject) =>
+    searchTerms.every((elem) => subject.careers.indexOf(elem) > -1),
+  );
+
 const PROFESSOR_ROLE = 'ROLE_PROFESSOR';
 const STUDENT_ROLE = 'ROLE_STUDENT';
 const ADMIN_ROLE = 'ROLE_ADMIN';

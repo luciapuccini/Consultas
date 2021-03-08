@@ -6,15 +6,17 @@ import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
 import { SERVER_URL } from '../utils/config';
 import FilterSubjects from '../components/FilterSubjects';
+import { filterByCareer } from '../utils/functions';
 
 export const ProfessorHome = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
-  const [selectedYear, setSelectedYear] = React.useState([]);
-  const [filteredSubjects, setFilteredSubjects] = React.useState(subjects);
   console.log(
-    '🚀 ~ file: ProfessorHome.js ~ line 14 ~ ProfessorHome ~ filteredSubjects',
-    filteredSubjects,
+    '🚀 ~ file: ProfessorHome.js ~ line 12 ~ ProfessorHome ~ subjects',
+    subjects,
   );
+  const [selectedCareer, setSelectedCareer] = useState([]);
+  const [selectedYear, setSelectedYear] = useState([]);
+  const [filteredSubjects, setFilteredSubjects] = useState(subjects);
 
   const fetchProfessorSubjects = async () => {
     const token = await getToken();
@@ -40,23 +42,40 @@ export const ProfessorHome = ({ user }) => {
     }
   }, [user]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (selectedCareer.length > 0 && selectedYear.length > 0) {
+      const filteredByCareer = subjects.filter((subject) =>
+        selectedCareer.every((elem) => subject.careers.indexOf(elem) > -1),
+      );
+      const filtered = filteredByCareer.filter((subject) =>
+        selectedYear.includes(subject.year),
+      );
+      setFilteredSubjects(filtered);
+    }
     if (selectedYear.length > 0) {
       const filteredByYear = subjects.filter((subject) =>
         selectedYear.includes(subject.year),
       );
       setFilteredSubjects(filteredByYear);
-    } else {
-      setFilteredSubjects(subjects);
     }
+    if (selectedCareer.length > 0) {
+      const filteredByCareer = subjects.filter((subject) =>
+        selectedCareer.every((elem) => subject.careers.indexOf(elem) > -1),
+      );
+
+      setFilteredSubjects(filteredByCareer);
+    }
+
+    setFilteredSubjects(subjects);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedYear]);
+  }, [selectedYear, selectedCareer]);
 
   return (
     <Layout level="1">
       <FilterSubjects
         setSelectedYear={setSelectedYear}
-        setSelectedCareer={() => console.log('select career in profe')}
+        setSelectedCareer={setSelectedCareer}
         multi
       />
       {!subjects ? (

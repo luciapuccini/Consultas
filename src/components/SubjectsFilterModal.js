@@ -20,10 +20,6 @@ export const SubjectsFilterModal = ({
   multi,
 }) => {
   const [year, setYear] = useState([]); //check if array
-  // console.log(
-  //   '🚀 ~ file: SubjectsFilterModal.js ~ line 23 ~ year',
-  //   year.row + 1 || year.map((y) => y.row),
-  // );
   const [career, setCareer] = useState([]);
 
   const handleSubmit = async () => {
