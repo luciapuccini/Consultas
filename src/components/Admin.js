@@ -10,10 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { SERVER_URL } from '../utils/config';
 
 export const Admin = ({ user }) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  console.log('🚀 ~ file: Admin.js ~ line 16 ~ Admin ~ subjects', subjects);
 
   const fetchSubjects = async () => {
     const token = await getToken();

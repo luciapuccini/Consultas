@@ -6,14 +6,11 @@ import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
 import { SERVER_URL } from '../utils/config';
 import FilterSubjects from '../components/FilterSubjects';
-import { filterByCareer } from '../utils/functions';
+import { ErrorMessage } from '../components/ErrorMessage';
 
 export const ProfessorHome = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
-  console.log(
-    '🚀 ~ file: ProfessorHome.js ~ line 12 ~ ProfessorHome ~ subjects',
-    subjects,
-  );
+
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedYear, setSelectedYear] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
@@ -42,16 +39,10 @@ export const ProfessorHome = ({ user }) => {
     }
   }, [user]);
 
+  //FIXME: mejorar ?
   useEffect(() => {
-    if (selectedCareer.length > 0 && selectedYear.length > 0) {
-      const filteredByCareer = subjects.filter((subject) =>
-        selectedCareer.every((elem) => subject.careers.indexOf(elem) > -1),
-      );
-      const filtered = filteredByCareer.filter((subject) =>
-        selectedYear.includes(subject.year),
-      );
-      setFilteredSubjects(filtered);
-    }
+    const searchVals = selectedCareer.map(({ row }) => row + 1);
+
     if (selectedYear.length > 0) {
       const filteredByYear = subjects.filter((subject) =>
         selectedYear.includes(subject.year),
@@ -59,15 +50,28 @@ export const ProfessorHome = ({ user }) => {
       setFilteredSubjects(filteredByYear);
     }
     if (selectedCareer.length > 0) {
-      const filteredByCareer = subjects.filter((subject) =>
-        selectedCareer.every((elem) => subject.careers.indexOf(elem) > -1),
-      );
-
+      const filteredByCareer = subjects.filter((subject) => {
+        const careerIds = subject.careers.map(({ id }) => id);
+        return searchVals.every((elem) => {
+          return careerIds.indexOf(elem) > -1;
+        });
+      });
       setFilteredSubjects(filteredByCareer);
     }
 
-    setFilteredSubjects(subjects);
-
+    if (selectedCareer.length > 0 && selectedYear.length > 0) {
+      const filteredByCareer = subjects.filter((subject) => {
+        const careerIds = subject.careers.map(({ id }) => id);
+        return searchVals.every((elem) => careerIds.indexOf(elem) > -1);
+      });
+      const filtered = filteredByCareer.filter((subject) =>
+        selectedYear.includes(subject.year),
+      );
+      setFilteredSubjects(filtered);
+    }
+    if (selectedCareer.length === 0 && selectedYear.length == 0) {
+      setFilteredSubjects(subjects);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedYear, selectedCareer]);
 
@@ -76,8 +80,8 @@ export const ProfessorHome = ({ user }) => {
       <FilterSubjects
         setSelectedYear={setSelectedYear}
         setSelectedCareer={setSelectedCareer}
-        multi
       />
+      {filteredSubjects.length === 0 && <ErrorMessage message="No data" />}
       {!subjects ? (
         <CustomSpinner />
       ) : (

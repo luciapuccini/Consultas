@@ -17,7 +17,7 @@ export const SubjectsFilterModal = ({
   visible,
   setSelectedYear,
   setSelectedCareer,
-  multi,
+  // multi,
 }) => {
   const [year, setYear] = useState([]); //check if array
   const [career, setCareer] = useState([]);
@@ -50,11 +50,7 @@ export const SubjectsFilterModal = ({
           />
         </View>
 
-        <YearDropdown
-          selectedIndex={year}
-          setSelectedIndex={setYear}
-          multi={multi}
-        />
+        <YearDropdown selectedIndex={year} setSelectedIndex={setYear} multi />
         <Divider style={{ margin: 10 }} />
         <CareerDropdown selectedIndex={career} setSelectedIndex={setCareer} />
         <Divider style={{ margin: 10 }} />

@@ -10,14 +10,21 @@ const yearsObj = [
   'Quinto año',
 ];
 
-export const YearDropdown = ({ selectedIndex, setSelectedIndex, multi }) => {
+export const YearDropdown = ({
+  selectedIndex,
+  setSelectedIndex,
+  multi = true,
+}) => {
   const displayValue = () => {
+    let display = null;
     if (multi) {
-      return selectedIndex.map((index) => {
-        return yearsObj[index.row].slice(0, -3);
+      display = selectedIndex.map((index) => {
+        return yearsObj[index.row];
       });
+    } else {
+      display = yearsObj[selectedIndex.row];
     }
-    return yearsObj[selectedIndex.row];
+    return display || null;
   };
 
   return (

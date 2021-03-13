@@ -48,8 +48,9 @@ const style = {
 
   FloatingButtonStyle: {
     resizeMode: 'contain',
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
+    margin: 8,
     backgroundColor: '#8FD4F2',
     borderRadius: 25,
   },

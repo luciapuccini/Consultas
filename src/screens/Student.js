@@ -13,6 +13,7 @@ import FilterSubjects from '../components/FilterSubjects';
 
 export const StudentHome = ({ user }) => {
   const [subjects, setSubjects] = React.useState([]);
+  console.log('🚀 ~StudentHome ~ subjects', subjects);
   const [filteredSubjects, setFilteredSubjects] = React.useState([]);
   const [professors, setProfessors] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
