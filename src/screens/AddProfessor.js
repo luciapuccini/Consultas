@@ -27,12 +27,11 @@ export const AddProfessor = ({ navigation, route }) => {
       body: JSON.stringify(body),
     });
     const json = await response.json();
-    if (json.message) {
-      refresh();
-      navigation.goBack();
-    }
     if (json.error) {
       setError(json.error);
+    } else {
+      refresh();
+      navigation.goBack();
     }
   };
   return (

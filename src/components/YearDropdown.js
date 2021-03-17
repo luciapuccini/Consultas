@@ -17,6 +17,9 @@ export const YearDropdown = ({
 }) => {
   const displayValue = () => {
     let display = null;
+    if (selectedIndex.length === 0) {
+      return null;
+    }
     if (multi) {
       display = selectedIndex.map((index) => {
         return yearsObj[index.row];
@@ -30,10 +33,9 @@ export const YearDropdown = ({
   return (
     <Select
       label="Año"
+      placeholder="Elija Año"
       selectedIndex={selectedIndex}
-      onSelect={(index) => {
-        setSelectedIndex(index);
-      }}
+      onSelect={setSelectedIndex}
       value={displayValue()}
       multiSelect={multi}>
       <ScrollView style={{ height: 200 }}>

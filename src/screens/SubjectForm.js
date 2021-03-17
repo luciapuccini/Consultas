@@ -122,6 +122,7 @@ export const SubjectForm = ({ route, navigation }) => {
       <YearDropdown
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
+        multi={false}
       />
       {/* // <Input label="Año" onChangeText={setYear} value={year} /> */}
       <Text style={styles.space} category="h5">

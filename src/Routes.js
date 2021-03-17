@@ -18,6 +18,7 @@ import { EditSubject } from './screens/EditSubject';
 import { AddProfessor } from './screens/AddProfessor';
 import { TutorialStack } from './screens/Tutorial';
 import InscriptionsList from './screens/InscriptionsList';
+import Splash from './components/Splash';
 
 export const navigationRef = React.createRef();
 
@@ -27,7 +28,16 @@ export function navigate(name, params) {
 
 export const RootStack = () => {
   const { Navigator, Screen } = createStackNavigator();
+  const [loading, setLoading] = React.useState(true);
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+  }, []);
+  if (loading) {
+    return <Splash />;
+  }
   return (
     <Navigator mode="modal">
       <Screen
@@ -55,6 +65,7 @@ const MainStack = () => {
         headerTintColor: '#fff',
       }
     : null;
+
   return (
     <Navigator initialRouteName={'Home'}>
       <Screen

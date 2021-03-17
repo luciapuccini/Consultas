@@ -11,6 +11,8 @@ import _ from 'underscore';
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+
 const { loginFlowContainer } = Styles;
 
 export const SignUpScreen = ({ navigation }) => {
@@ -41,80 +43,86 @@ export const SignUpScreen = ({ navigation }) => {
   };
   return (
     <ImageBackground source={Background} style={{ flex: 1, width: '100%' }}>
-      <ScrollView
-        contentContainerStyle={{ alignItems: 'center', height: '100%' }}>
-        <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
-          Crear una Cuenta
-        </Text>
+      <KeyboardAwareScrollView contentContainerStyle={{ alignItems: 'center' }}>
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: 'center',
+            height: '100%',
+            flex: 1,
+          }}>
+          <Text style={{ color: 'white', fontSize: 30, marginBottom: 20 }}>
+            Crear una Cuenta
+          </Text>
 
-        <View style={[inputView]}>
-          <TextInput
-            style={inputText}
-            placeholder="Legajo..."
-            placeholderTextColor="#003f5c"
-            onChangeText={setLegajo}
-            keyboardType="numeric"
-          />
-        </View>
+          <View style={[inputView]}>
+            <TextInput
+              style={inputText}
+              placeholder="Legajo..."
+              placeholderTextColor="#003f5c"
+              onChangeText={setLegajo}
+              keyboardType="numeric"
+            />
+          </View>
 
-        <View style={[inputView]}>
-          <TextInput
-            style={inputText}
-            placeholder="Nombre..."
-            placeholderTextColor="#003f5c"
-            onChangeText={setName}
-          />
-        </View>
-        <View style={[inputView]}>
-          <TextInput
-            style={inputText}
-            placeholder="Apellido..."
-            placeholderTextColor="#003f5c"
-            onChangeText={setSurname}
-          />
-        </View>
-        <View style={[inputView]}>
-          <TextInput
-            style={inputText}
-            placeholder="Mail..."
-            placeholderTextColor="#003f5c"
-            onChangeText={setEmail}
-          />
-        </View>
-        {/* TODO: passwords match */}
-        <View style={inputView}>
-          <TextInput
-            secureTextEntry
-            style={inputText}
-            placeholder="Contraseña..."
-            placeholderTextColor="#003f5c"
-            onChangeText={setPassword}
-          />
-        </View>
-        <View style={inputView}>
-          <TextInput
-            secureTextEntry
-            style={inputText}
-            placeholder="Confirme Contraseña..."
-            placeholderTextColor="#003f5c"
-            onChangeText={setPassword}
-          />
-        </View>
+          <View style={[inputView]}>
+            <TextInput
+              style={inputText}
+              placeholder="Nombre..."
+              placeholderTextColor="#003f5c"
+              onChangeText={setName}
+            />
+          </View>
+          <View style={[inputView]}>
+            <TextInput
+              style={inputText}
+              placeholder="Apellido..."
+              placeholderTextColor="#003f5c"
+              onChangeText={setSurname}
+            />
+          </View>
+          <View style={[inputView]}>
+            <TextInput
+              style={inputText}
+              placeholder="Mail..."
+              placeholderTextColor="#003f5c"
+              onChangeText={setEmail}
+            />
+          </View>
+          {/* TODO: passwords match */}
+          <View style={inputView}>
+            <TextInput
+              secureTextEntry
+              style={inputText}
+              placeholder="Contraseña..."
+              placeholderTextColor="#003f5c"
+              onChangeText={setPassword}
+            />
+          </View>
+          <View style={inputView}>
+            <TextInput
+              secureTextEntry
+              style={inputText}
+              placeholder="Confirme Contraseña..."
+              placeholderTextColor="#003f5c"
+              onChangeText={setPassword}
+            />
+          </View>
 
-        {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
+          {!_.isEmpty(error) ? <ErrorMessage message={error} /> : null}
 
-        <View style={styles.rowBox}>
-          <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
-            <Text style={loginText}>Registrarse</Text>
-          </TouchableOpacity>
+          <View style={styles.rowBox}>
+            <TouchableOpacity style={loginBtn} onPress={handleSingUp}>
+              <Text style={loginText}>Registrarse</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.signInBtn}
-            onPress={() => navigation.navigate('SignIn')}>
-            <Text style={loginText}>Ingresar</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <TouchableOpacity
+              style={styles.signInBtn}
+              onPress={() => navigation.navigate('SignIn')}>
+              <Text style={loginText}>Ingresar</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAwareScrollView>
     </ImageBackground>
   );
 };

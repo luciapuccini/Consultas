@@ -13,7 +13,8 @@ export const CareerDropdown = ({ selectedIndex, setSelectedIndex }) => {
 
   return (
     <Select
-      label="Career"
+      label="Carrera"
+      placeholder="Elija Carrera"
       selectedIndex={selectedIndex}
       value={groupDisplayValues.join(', ')}
       onSelect={setSelectedIndex}
