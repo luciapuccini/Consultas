@@ -228,14 +228,14 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                   Ver Inscriptos
                 </Button>
               )}
-              {link && link !== '' && (
+              {/* {link !== '' && (
                 <Button
                   status="info"
                   appearance="outline"
                   onPress={openVirtualClass}>
                   Ir a la clase Virtual
                 </Button>
-              )}
+              )} */}
             </View>
           </ScrollView>
 
