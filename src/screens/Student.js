@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'underscore';
 import { StyleSheet, View } from 'react-native';
 import { SubjectList } from '../components/SubjectList';
@@ -19,6 +19,7 @@ export const StudentHome = ({ user }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [selectedYear, setSelectedYear] = React.useState([]);
+  const [selectedCareer, setSelectedCareer] = React.useState([]);
 
   const fetchSubjects = async () => {
     const token = await getToken();
@@ -58,22 +59,42 @@ export const StudentHome = ({ user }) => {
     fetchSubjects();
   }, []);
 
-  React.useEffect(() => {
+  //FIXME: mejorar ?
+  useEffect(() => {
+    const searchVals = selectedCareer.map(({ row }) => row + 1);
+
     if (selectedYear.length > 0) {
-      setLoading(true);
       const filteredByYear = subjects.filter((subject) =>
         selectedYear.includes(subject.year),
       );
-
       setFilteredSubjects(filteredByYear);
-      setLoading(false);
-    } else {
-      fetchSubjects();
-      // setFilteredSubjects(subjects);
+    }
+    if (selectedCareer.length > 0) {
+      const filteredByCareer = subjects.filter((subject) => {
+        const careerIds = subject.careers.map(({ id }) => id);
+        return searchVals.every((elem) => {
+          return careerIds.indexOf(elem) > -1;
+        });
+      });
+      setFilteredSubjects(filteredByCareer);
     }
 
+    if (selectedCareer.length > 0 && selectedYear.length > 0) {
+      const filteredByCareer = subjects.filter((subject) => {
+        const careerIds = subject.careers.map(({ id }) => id);
+        return searchVals.every((elem) => careerIds.indexOf(elem) > -1);
+      });
+      const filtered = filteredByCareer.filter((subject) =>
+        selectedYear.includes(subject.year),
+      );
+      setFilteredSubjects(filtered);
+    }
+    if (selectedCareer.length === 0 && selectedYear.length == 0) {
+      setFilteredSubjects(subjects);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedYear]);
+  }, [selectedYear, selectedCareer]);
+
 
   const resultSubjects = !searchTerm
     ? filteredSubjects
@@ -98,8 +119,9 @@ export const StudentHome = ({ user }) => {
         />
         <FilterSubjects
           setSelectedYear={setSelectedYear}
-          setSelectedCareer={() => console.log('select career in student')}
+          setSelectedCareer={setSelectedCareer}
         />
+        {filteredSubjects.length === 0 && <ErrorMessage message="No data" />}
       </View>
       <TabView
         style={{ marginTop: 10 }}
