@@ -34,6 +34,7 @@ export const AddProfessor = ({ navigation, route }) => {
       navigation.goBack();
     }
   };
+  
   return (
     <Layout level="1" style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>

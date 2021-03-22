@@ -43,7 +43,7 @@ export const SignUpScreen = ({ navigation }) => {
   };
   return (
     <ImageBackground source={Background} style={{ flex: 1, width: '100%' }}>
-      <KeyboardAwareScrollView contentContainerStyle={{ alignItems: 'center' }}>
+      <KeyboardAwareScrollView contentContainerStyle={{ alignItems: 'center', marginTop:30 }}>
         <ScrollView
           contentContainerStyle={{
             alignItems: 'center',
@@ -159,6 +159,7 @@ const styles = {
   },
   rowBox: {
     width: '100%',
+    height:80,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'baseline',

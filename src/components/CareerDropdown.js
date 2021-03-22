@@ -3,7 +3,7 @@ import { Select, SelectItem } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
 
 //WARNING: as a hack make this match with the database IDs until I can pass a selected  career name
-const yearsObj = ['ISI', 'IM', 'IQ', 'IE'];
+const yearsObj = ['ISI', 'IM', 'IQ', 'IE',"IC"];
 
 export const CareerDropdown = ({ selectedIndex, setSelectedIndex }) => {
   const groupDisplayValues = selectedIndex.map((index) => {

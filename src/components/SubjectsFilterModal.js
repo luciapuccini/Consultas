@@ -57,14 +57,7 @@ export const SubjectsFilterModal = ({
         <Button status="success" onPress={handleSubmit}>
           OK
         </Button>
-        {/* <View style={styles.row}>
-          <Button status="success" onPress={handleSubmit}>
-            OK
-          </Button>
-           <Button appearance="outline" onPress={handleReset}>
-            Reset
-          </Button> 
-        </View> */}
+      
       </Card>
     </Modal>
   );

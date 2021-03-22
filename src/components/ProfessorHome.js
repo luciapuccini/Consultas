@@ -10,7 +10,6 @@ import { ErrorMessage } from '../components/ErrorMessage';
 
 export const ProfessorHome = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
-
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedYear, setSelectedYear] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);

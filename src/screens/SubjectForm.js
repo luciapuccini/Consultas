@@ -16,11 +16,13 @@ import { ErrorMessage } from '../components/ErrorMessage';
 import { SERVER_URL } from '../utils/config';
 import { getEncodedImage } from '../utils/functions';
 import { YearDropdown } from '../components/YearDropdown';
+import { CareerDropdown } from '../components/CareerDropdown';
 
 export const SubjectForm = ({ route, navigation }) => {
   const { professors, refresh } = route.params;
   const [name, setName] = useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState([]);
+  const [selectedYear, setSelectedYear] = useState([]);
+  const [selectedCareer, setSelectedCareer] = useState([]);
 
   const [image, setImage] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -29,17 +31,22 @@ export const SubjectForm = ({ route, navigation }) => {
 
   const addSubject = async () => {
     setDisabled(true);
+    console.log("🚀 ~ file: SubjectForm.js ~ line 25 ~ SubjectForm ~ selectedCareer", selectedCareer)
 
     if (
       !isEmpty(name) &&
-      !isEmpty(selectedIndex) &&
+      !isEmpty(selectedYear) &&
+      !isEmpty(selectedCareer) &&
       subjectProfessors.length > 0
     ) {
       const body = {
         name,
-        year: selectedIndex.row + 1,
+        year: selectedYear.row + 1,
+        subjectCareers: selectedCareer.map(({row})=>row+1),
         subjectProfessors,
       };
+      console.log("🚀 ~ file: SubjectForm.js ~ line 43 ~ addSubject ~ body", body)
+
 
       const formData = new FormData();
       formData.append('subject', JSON.stringify(body));
@@ -120,11 +127,11 @@ export const SubjectForm = ({ route, navigation }) => {
       )}
       <Input label="Nombre" onChangeText={setName} value={name} />
       <YearDropdown
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
+        selectedIndex={selectedYear}
+        setSelectedIndex={setSelectedYear}
         multi={false}
       />
-      {/* // <Input label="Año" onChangeText={setYear} value={year} /> */}
+       <CareerDropdown selectedIndex={selectedCareer} setSelectedIndex={setSelectedCareer} />
       <Text style={styles.space} category="h5">
         Habilitar Profesores
       </Text>
