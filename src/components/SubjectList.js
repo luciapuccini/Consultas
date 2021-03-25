@@ -33,7 +33,12 @@ export const SubjectList = ({ allSubjects, followed, refresh }) => {
   };
   return (
     <FlatList
-      data={subjects}
+      data={subjects.sort((a,b)=>{
+        //FIXME: mas lindo
+          if(a.name < b.name) {return -1}
+          if(a.name > b.name) {return 1}
+          return 0
+      })}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.name}
       contentContainerStyle={{ paddingBottom: 360 }}

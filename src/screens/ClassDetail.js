@@ -168,7 +168,6 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   const openVirtualClass = () => {
     console.log('link', link);
     const formattedLink = link.substr(1, link.length - 1);
-    console.log("🚀 ~ file: ClassDetail.js ~ line 171 ~ openVirtualClass ~ formattedLink", formattedLink)
 
     Linking.canOpenURL(formattedLink).then((res) => {
       if (res) {

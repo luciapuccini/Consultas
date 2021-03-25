@@ -53,7 +53,6 @@ export const TurnosTable = ({
           navigation.goBack();
         }
 
-        console.log(json.message);
       })
       .catch((error) => {
         console.log(error);

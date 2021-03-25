@@ -26,9 +26,7 @@ export const Home = ({ navigation }) => {
         .then((userData) => {
           setUser(userData);
           storeUser(userData);
-          if (userData.firstLogin === true) {
-            navigation.navigate('TutorialStack');
-          }
+
         });
     };
     fetchUser();

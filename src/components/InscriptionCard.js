@@ -34,10 +34,6 @@ export const InscriptionCard = ({ student }) => {
 
   const openMail = () => {
     const { email } = student;
-    console.log(
-      '🚀 ~ file: InscriptionCard.js ~ line 46 ~ openMail ~ email',
-      email,
-    );
     if (email) {
       Linking.openURL(
         `mailto:${email}?subject=[ UTN-Consultas ] Seguimiento de tu inscripción`,
@@ -55,7 +51,7 @@ export const InscriptionCard = ({ student }) => {
             <Text appearance="hint" style={{ fontSize: 14 }}>
               {student.email}
             </Text>
-            {student.mobile && (
+            {student.mobile && student.showMobile && (
               <View style={styles.row}>
                 <Text appearance="hint" style={{ fontSize: 14 }}>
                   {student.mobile}
@@ -65,7 +61,7 @@ export const InscriptionCard = ({ student }) => {
           </View>
         </View>
         <View style={styles.column}>
-          {student.mobile && (
+          {student.mobile && student.showMobile  &&(
             <TouchableOpacity onPress={openPhone}>
               <Icon
                 name="message-circle-outline"

@@ -62,7 +62,6 @@ export const ClassForm = ({ route, navigation }) => {
       ...duracion,
       ...turnos,
     };
-    console.log('addClase -> body', body);
     const token = await getToken();
     fetch(`${SERVER_URL}/clases/add`, {
       method: 'POST',

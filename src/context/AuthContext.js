@@ -16,7 +16,8 @@ const authReducer = (state, action) => {
       return {
         ...state,
         isSignout: false,
-        userToken: action.payload,
+        userToken: action.payload.token,
+        isFirstLogin: action.payload.firstLogin,
       };
     case 'SIGN_OUT':
       return {
@@ -33,7 +34,7 @@ const restore = (dispatch) => async () => {
   const token = await AsyncStorage.getItem('TOKEN');
   //valida que se autologee si existe token en asyncStorage
   if (token !== null && token !== undefined) {
-    dispatch({ type: 'SIGN_IN', payload: token });
+    dispatch({ type: 'SIGN_IN', payload: {token} });
   } else {
   }
 };
@@ -59,10 +60,10 @@ const signin = (dispatch) => async ({ legajo, password, deviceToken }) => {
     if (data.error) {
       return data.message;
     }
-    const { jwt } = data;
+    const { jwt, firstLogin } = data;
     storeData(jwt);
     token = jwt;
-    dispatch({ type: 'SIGN_IN', payload: token });
+    dispatch({ type: 'SIGN_IN', payload: {token,firstLogin} });
   } catch (error) {
     console.log(error);
     Alert.alert(
@@ -102,7 +103,7 @@ const signup = (dispatch) => async (user) => {
     if (data.error) {
       return data.message;
     }
-    dispatch({ type: 'SIGN_IN', payload: token });
+    dispatch({ type: 'SIGN_IN', payload: {token} });
   } catch (err) {
     console.log(err);
   }
@@ -115,5 +116,6 @@ export const { Provider, Context } = createDataContext(
     isLoading: true,
     isSignout: false,
     userToken: null,
+    isFirstLogin: false,
   },
 );

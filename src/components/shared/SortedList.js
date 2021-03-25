@@ -61,7 +61,6 @@ export const SortedList = ({ items }) => {
         }
       } else {
         // is subject
-        console.log(element.name);
         list.push({ text: element.name });
       }
     });

@@ -25,13 +25,13 @@ const InscriptionsList = ({ route: { params } }) => {
     }
   }, [inscriptions]);
 
-  if (error) {
-    return (
-      <Layout level="1" style={{ flex: 1 }}>
-        <ErrorMessage message={error} />
-      </Layout>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <Layout level="1" style={{ flex: 1 }}>
+  //       <ErrorMessage message={error} />
+  //     </Layout>
+  //   );
+  // }
 
   return (
     <Layout level="1" style={{ flex: 1 }}>

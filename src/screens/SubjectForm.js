@@ -31,7 +31,6 @@ export const SubjectForm = ({ route, navigation }) => {
 
   const addSubject = async () => {
     setDisabled(true);
-    console.log("🚀 ~ file: SubjectForm.js ~ line 25 ~ SubjectForm ~ selectedCareer", selectedCareer)
 
     if (
       !isEmpty(name) &&
@@ -45,7 +44,6 @@ export const SubjectForm = ({ route, navigation }) => {
         subjectCareers: selectedCareer.map(({row})=>row+1),
         subjectProfessors,
       };
-      console.log("🚀 ~ file: SubjectForm.js ~ line 43 ~ addSubject ~ body", body)
 
 
       const formData = new FormData();

@@ -34,9 +34,6 @@ export const Classes = ({ navigation, route }) => {
           if (json.error) {
             console.log(json.message);
           }
-          if (isEmpty(json)) {
-            setError('No hay clases para esta materia');
-          }
           setClasses(json);
           setloading(false);
         });
@@ -51,7 +48,6 @@ export const Classes = ({ navigation, route }) => {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log('🚀 ~ file: Classes.js ~ line 54 ~ .then ~ json', json);
           if (isEmpty(json)) {
             setError('No hay clases para esta materia');
           } else if (json.error) {
@@ -92,9 +88,7 @@ export const Classes = ({ navigation, route }) => {
         <SearchBox setSearchTerm={setSearchTerm} placeholder="Profesor" />
       )}
 
-      {error ? (
-        <ErrorMessage message={error} />
-      ) : loading ? (
+      {loading ? (
         <CustomSpinner />
       ) : (
         <TabView

@@ -7,12 +7,16 @@ import { SubjectCard } from './SubjectCard';
 import { SERVER_URL } from '../utils/config';
 import FilterSubjects from '../components/FilterSubjects';
 import { ErrorMessage } from '../components/ErrorMessage';
+import {SearchBox} from '../components/SearchBox'
+import { View } from 'native-base';
 
 export const ProfessorHome = ({ user }) => {
   const [subjects, setSubjects] = useState([]);
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedYear, setSelectedYear] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
+  const [searchTerm, setSearchTerm] = React.useState('');
+
 
   const fetchProfessorSubjects = async () => {
     const token = await getToken();
@@ -74,18 +78,31 @@ export const ProfessorHome = ({ user }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedYear, selectedCareer]);
 
+  const resultSubjects = !searchTerm
+  ? filteredSubjects
+  : filteredSubjects.filter((subject) =>
+      subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
+    );
+
   return (
     <Layout level="1">
+        <View style={{display:'flex',flexDirection:'row' }}>
+          <SearchBox
+          style={{ width: '70%', marginRight: 20 }}
+          setSearchTerm={setSearchTerm}
+          placeholder="Busqueda"
+        />
       <FilterSubjects
         setSelectedYear={setSelectedYear}
         setSelectedCareer={setSelectedCareer}
       />
+      </View>
       {filteredSubjects.length === 0 && <ErrorMessage message="No data" />}
       {!subjects ? (
         <CustomSpinner />
       ) : (
         <FlatList
-          data={filteredSubjects}
+          data={resultSubjects}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
           keyExtractor={(item) => item.id}

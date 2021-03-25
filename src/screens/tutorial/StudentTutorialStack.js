@@ -29,7 +29,8 @@ export const StudentTutorialStack = () => {
   };
 
   const handleEndTutorial = () => {
-    navigator.navigate('Home');
+    // console.log('no nvega')
+    navigator.navigate('Routes',{screen:"Main"});
   };
   return (
     <ImageBackground

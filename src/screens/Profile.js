@@ -29,7 +29,7 @@ const profileBack = require('../assets/background-profile.png');
 const profilePlaceholder = require('../assets/profile_placeholder.png');
 
 export const Profile = ({ navigation }) => {
-  // const [showMobile, setShowMobile] = useState(false);
+  const [showMobile, setShowMobile] = useState(false);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -57,7 +57,7 @@ export const Profile = ({ navigation }) => {
           id,
           surname,
           mobile,
-          // showMobile,
+          showMobile,
           role,
           profileImagePath,
         } = json;
@@ -71,7 +71,7 @@ export const Profile = ({ navigation }) => {
           role,
           profileImagePath,
         });
-        // setShowMobile(showMobile);
+        setShowMobile(showMobile);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -96,12 +96,12 @@ export const Profile = ({ navigation }) => {
   const save = () => {
     const handleSave = async () => {
       const token = await getToken();
-      const prefix = '+549';
+      // const prefix = '+549';
 
       const userBody = {
         ...user,
-        mobile: prefix.concat(user.mobile),
-        // showMobile,
+        mobile: (user.mobile),
+        showMobile,
       };
       try {
         const response = await fetch(`${SERVER_URL}/users/modify`, {
@@ -120,20 +120,11 @@ export const Profile = ({ navigation }) => {
         console.log(error);
       }
     };
+    handleSave();
 
     if (user.mobile) {
-      const isValid = validatePhone(user.mobile);
-      if (!isValid) {
-        setError('Error de formato de telefono');
-        setTimeout(() => {
-          setError(false);
-        }, 3000);
-      } else {
-        handleSave();
         navigation.navigate('Home');
-      }
     } else {
-      handleSave();
       navigation.goBack();
     }
   };
@@ -179,12 +170,8 @@ export const Profile = ({ navigation }) => {
   };
 
   const validatePhone = (num) => {
-    console.log('🚀 ~ file: Profile.js ~ line 182 ~ validatePhone ~ num', num);
     const enable = parseInt(num) && num.length >= 7;
-    console.log(
-      '🚀 ~ file: Profile.js ~ line 184 ~ validatePhone ~ enable',
-      enable,
-    );
+    
     return enable;
   };
 
@@ -264,10 +251,17 @@ export const Profile = ({ navigation }) => {
             <PhoneRow
               user={user}
               setUser={setUser}
-              // showMobile={showMobile}
-              // setShowMobile={setShowMobile}
+              showMobile={showMobile}
+              setShowMobile={setShowMobile}
             />
             {error && error !== 'Succed' && <ErrorMessage message={error} />}
+            <CheckBox
+                  style={{ marginLeft: 10, marginTop: 10 }}
+                  checked={showMobile}
+                  onChange={() => setShowMobile(!showMobile)}>
+                  Mostar mi telefono publicamente
+                </CheckBox>
+                
             <ConfirmButton save={save} />
             <View style={styles.editPassword}>
               <Button
@@ -308,16 +302,14 @@ const ConfirmButton = ({ save }) => {
 };
 
 const PhoneRow = ({ user, setUser, showMobile, setShowMobile }) => {
-  const phone = user.mobile?.startsWith('+')
-    ? user.mobile.slice(4)
-    : user.mobile;
+  const phone =  user.mobile;
 
   return (
     <View style={{ flex: 1 }}>
       <Input
         style={styles.inputStyle}
         label="Telefono"
-        placeholder={user.mobile || '341 000 0000'}
+        placeholder={user.mobile || '+ 54 9 341 000 0000'}
         onChangeText={(text) => setUser({ ...user, mobile: text })}
         value={phone}
         accessoryRight={renderBrushIcon}

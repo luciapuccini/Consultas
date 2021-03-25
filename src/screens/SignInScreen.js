@@ -25,7 +25,9 @@ async function registerAppWithFCM(setDeviceToken) {
 }
 
 export const SignInScreen = ({ navigation }) => {
-  const { signin } = useContext(Context);
+console.log("🚀 ~ file: SignInScreen.js ~ line 28 ~ SignInScreen ~ navigation", navigation)
+  const {signin, state} = useContext(Context);
+  console.log("🚀 ~ file: SignInScreen.js ~ line 29 ~ SignInScreen ~ state", state.isFirstLogin)
   const [legajo, setLegajo] = useState(0);
   const [password, setPassword] = useState('');
   const [loading, setloading] = useState(false);
@@ -40,6 +42,12 @@ export const SignInScreen = ({ navigation }) => {
     setloading(true);
     if (!_.isEmpty(legajo) && !_.isEmpty(password)) {
       const data = await signin({ legajo, password, deviceToken });
+
+      if (state.isFirstLogin === false) {
+        console.log('try to navigate----- tutuo')
+        navigation.navigate('Routes', { screen: 'TutorialStack' });
+
+      }
       if (data !== '') {
         setError(data);
         setloading(false);

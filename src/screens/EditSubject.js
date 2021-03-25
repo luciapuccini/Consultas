@@ -24,11 +24,6 @@ export const EditSubject = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log('fetchProfessors -> json', json.subjectProfessors);
-        console.log(
-          'fetchProfessors -> json.allProfessors',
-          json.allProfessors,
-        );
 
         console.log(loading);
         //SET LIST OF PROFES
@@ -71,7 +66,6 @@ export const EditSubject = ({ route, navigation }) => {
       subjectProfessors: getIds(subjectProfessors), //solo IDS
       subjectProfessorsToRemove: getIds(subjectProfessorsToRemove), //solo IDS
     };
-    console.log('handleConfirm -> body', body);
 
     fetch(`${SERVER_URL}/subjects/modify`, {
       method: 'POST',
