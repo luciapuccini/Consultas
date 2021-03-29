@@ -8,9 +8,11 @@ import { StudentHome } from './Student';
 import { storeUser } from '../utils/functions';
 import { Admin } from '../components/Admin';
 import { SERVER_URL } from '../utils/config';
+import { CustomSpinner } from '../components/CustomSpinner';
 
 export const Home = ({ navigation }) => {
   const [user, setUser] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -26,12 +28,19 @@ export const Home = ({ navigation }) => {
         .then((userData) => {
           setUser(userData);
           storeUser(userData);
-
+          setLoading(false)
         });
     };
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if(loading){
+    return (
+          <Layout level="1" style={{ flex: 1 }}>
+            <CustomSpinner/>
+          </Layout>)
+  }
 
   return (
     <Layout level="1" style={{ flex: 1 }}>

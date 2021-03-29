@@ -262,11 +262,10 @@ export const Profile = ({ navigation }) => {
                   Mostar mi telefono publicamente
                 </CheckBox>
                 
-            <ConfirmButton save={save} />
             <View style={styles.editPassword}>
               <Button
                 style={styles.button}
-                appearance="ghost"
+                appearance="outline"
                 status="primary"
                 onPress={() => setOnPasswordEdit(true)}>
                 Editar Contraseña
@@ -275,6 +274,8 @@ export const Profile = ({ navigation }) => {
                 visible={onPasswordEdit}
                 setVisible={setOnPasswordEdit}
               />
+            <ConfirmButton save={save} />
+
             </View>
           </ScrollView>
         </>
@@ -342,9 +343,10 @@ const styles = {
   confirmBtn: {
     flex: 1,
     alignItems: 'flex-end',
-    marginRight: 10,
   },
   editPassword: {
+    margin: 10,
+    paddingTop:10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, Button, Input } from '@ui-kitten/components';
-import { View } from 'react-native';
+import { Text, Button, Input,Icon } from '@ui-kitten/components';
+import { View, TouchableOpacity } from 'react-native';
 import { getHora } from '../utils/functions';
 import { getToken } from '../utils/authHelper';
 import { useNavigation } from '@react-navigation/native';
 import { SERVER_URL } from '../utils/config';
+
 export const SimpleBookClass = ({
   hora,
   onSubmit,
@@ -18,6 +19,7 @@ export const SimpleBookClass = ({
   const [comment, setComment] = React.useState('');
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
   const navigation = useNavigation();
+
   const addNote = async () => {
     const body = { id, comment };
     const token = await getToken();
@@ -64,6 +66,7 @@ export const SimpleBookClass = ({
           </Button>
         </>
       ) : (
+        <>
           <View
             style={{
               display: 'flex',
@@ -73,21 +76,22 @@ export const SimpleBookClass = ({
             }}>
             <Input
               label="Notas"
-              placeholder={comment}
+              placeholder={"Notas para la clase..."}
               onChangeText={setComment}
               value={comment}
               size="large"
               multiline={true}
               textStyle={{ minHeight: 64 }}
             />
-            <Button
-              appearance="outline"
-              status="primary"
-              style={styles.inscriptionBtn}
-              onPress={addNote}>
-              Agregar nota
-          </Button>
+            
           </View>
+          <TouchableOpacity onPress={addNote} style={{height:10, width: 30, height: 30, top:65, right:30 }}>
+          <Icon
+            fill='#5c5c5c'
+            name="plus-square-outline"
+          />
+          </TouchableOpacity>
+        </>
         )}
     </View>
   );

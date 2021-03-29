@@ -5,9 +5,10 @@ import {
   MenuItem,
   Button,
   ScrollView,
+  Icon,
   Input,
 } from '@ui-kitten/components';
-import { View } from 'react-native';
+import { View,TouchableOpacity } from 'react-native';
 import { getHora } from '../utils/functions';
 import { getToken } from '../utils/authHelper';
 import { useNavigation } from '@react-navigation/native';
@@ -116,18 +117,18 @@ export const TurnosTable = ({
             <Input
               textStyle={{ minHeight: 64 }}
               label="Notas"
-              placeholder={comment}
+              placeholder={"Notas para la clase..."}
               onChangeText={setComment}
               value={comment}
               multiline={true}
             />
-            <Button
-              appearance="outline"
-              status="primary"
-              style={styles.inscriptionBtn}
-              onPress={addNote}>
-              Agregar nota
-            </Button>
+            <TouchableOpacity onPress={addNote}>
+            <Icon
+              fill='#5c5c5c'
+              name="plus-square-outline"
+              style ={{ width: 25, height: 25, left:310, bottom:30  }}
+            />
+            </TouchableOpacity>
           </View>
         )}
       </View>

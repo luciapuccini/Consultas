@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Layout } from '@ui-kitten/components';
+import { View } from 'native-base';
+
 import { CustomSpinner } from './CustomSpinner';
 import { getToken } from '../utils/authHelper';
 import { SubjectCard } from './SubjectCard';
@@ -8,9 +10,10 @@ import { SERVER_URL } from '../utils/config';
 import FilterSubjects from '../components/FilterSubjects';
 import { ErrorMessage } from '../components/ErrorMessage';
 import {SearchBox} from '../components/SearchBox'
-import { View } from 'native-base';
 
 export const ProfessorHome = ({ user }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [subjects, setSubjects] = useState([]);
   const [selectedCareer, setSelectedCareer] = useState([]);
   const [selectedYear, setSelectedYear] = useState([]);
@@ -30,6 +33,7 @@ export const ProfessorHome = ({ user }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.length ===0) {setError(true)}
         setSubjects(data);
         setFilteredSubjects(data);
       })
@@ -37,9 +41,11 @@ export const ProfessorHome = ({ user }) => {
   };
 
   useEffect(() => {
+    setLoading(true)
     if (user.id) {
       fetchProfessorSubjects();
     }
+    setLoading(false)
   }, [user]);
 
   //FIXME: mejorar ?
@@ -78,11 +84,12 @@ export const ProfessorHome = ({ user }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedYear, selectedCareer]);
 
-  const resultSubjects = !searchTerm
-  ? filteredSubjects
-  : filteredSubjects.filter((subject) =>
-      subject.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
-    );
+  if(error) {
+    return (
+          <Layout level="1">
+             <ErrorMessage message="No data" />
+          </Layout>)
+  }
 
   return (
     <Layout level="1">
@@ -97,12 +104,12 @@ export const ProfessorHome = ({ user }) => {
         setSelectedCareer={setSelectedCareer}
       />
       </View>
-      {filteredSubjects.length === 0 && <ErrorMessage message="No data" />}
-      {!subjects ? (
+      
+      {loading ? (
         <CustomSpinner />
       ) : (
         <FlatList
-          data={resultSubjects}
+          data={filteredSubjects}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
           keyExtractor={(item) => item.id}

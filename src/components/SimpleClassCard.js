@@ -27,16 +27,6 @@ export const SimpleClassCard = ({
             <Text category="h6">{subject.name}</Text>
             <Text style={{ fontSize: 14 }}>{getFechaHora(clase.initTime)}</Text>
           </View>
-          {!cancel && (
-            <CheckBox
-              checked={!!toDelete.includes(clase.id)}
-              onChange={() =>
-                toDelete.includes(clase.id)
-                  ? setToDelete(toDelete.filter((cl) => cl !== clase.id))
-                  : setToDelete([...toDelete, clase.id])
-              }
-            />
-          )}
         </View>
 
         <View style={styles.textRowStyle}>
@@ -48,6 +38,17 @@ export const SimpleClassCard = ({
           />
         </View>
       </TouchableOpacity>
+      {!cancel && (
+            <CheckBox
+              style={styles.floatCheckbox}
+              checked={!!toDelete.includes(clase.id)}
+              onChange={() =>
+              toDelete.includes(clase.id)
+                  ? setToDelete(toDelete.filter((cl) => cl !== clase.id))
+                  : setToDelete([...toDelete, clase.id])
+              }
+            />
+          )}
     </Card>
   );
 };
@@ -65,4 +66,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   checkStyle: { width: 15, height: 15, marginTop: 2 },
+  floatCheckbox: {position:"relative", bottom:100, left:250}
 });

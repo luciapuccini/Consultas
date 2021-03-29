@@ -8,6 +8,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import _ from 'underscore';
+
 import { Styles } from '../style/styles';
 import { Context } from '../context/AuthContext';
 import messaging from '@react-native-firebase/messaging';
@@ -25,9 +26,7 @@ async function registerAppWithFCM(setDeviceToken) {
 }
 
 export const SignInScreen = ({ navigation }) => {
-console.log("🚀 ~ file: SignInScreen.js ~ line 28 ~ SignInScreen ~ navigation", navigation)
   const {signin, state} = useContext(Context);
-  console.log("🚀 ~ file: SignInScreen.js ~ line 29 ~ SignInScreen ~ state", state.isFirstLogin)
   const [legajo, setLegajo] = useState(0);
   const [password, setPassword] = useState('');
   const [loading, setloading] = useState(false);
@@ -44,7 +43,6 @@ console.log("🚀 ~ file: SignInScreen.js ~ line 28 ~ SignInScreen ~ navigation"
       const data = await signin({ legajo, password, deviceToken });
 
       if (state.isFirstLogin === false) {
-        console.log('try to navigate----- tutuo')
         navigation.navigate('Routes', { screen: 'TutorialStack' });
 
       }

@@ -97,13 +97,16 @@ export const red1 = '#E53935';
 export const blue1 = '#64B5F6';
 
 export const getClassColor = (status) => {
-  const color =
-    status === 'En Curso'
-      ? green1
-      : status === 'Cancelada' || status === 'Finalizada'
-      ? red1
-      : blue1;
-  return color;
+  switch (status) {
+    case 'En Curso':
+      return green1;
+    case 'Cancelada':
+      return red1;
+    case "Finalizada":
+      return "#5c5c5c";
+    default:
+      return blue1
+  }
 };
 
 export const windowWidth = Dimensions.get('window').width;

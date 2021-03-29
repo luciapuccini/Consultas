@@ -11,19 +11,21 @@ import { SERVER_URL } from '../utils/config';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
   const [loading, setLoading] = useState(true);
+  console.log("🚀 ~ file: SimpleClasessList.js ~ line 14 ~ SimpleClasessList ~ loading", loading)
   const [error, setError] = useState(false);
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
     if (simpleClasses.length > 0) {
-      setLoading(false);
       setError(false);
     }
     if (simpleClasses.length === 0) {
-      setLoading(false);
       setError('No hay clases');
     }
+    setTimeout(() => {
+      setLoading(false)      
+    }, 300);
+
   }, [simpleClasses]);
 
   const deleteClasses = async (refresh) => {
@@ -56,10 +58,14 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
     );
   };
 
+  if(error){
+    <Layout level="1" style={{ flex: 1 }}>
+      <ErrorMessage message={error} />
+    </Layout>
+  }
+
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {error && <ErrorMessage message={error} />}
-
       {loading ? (
         <CustomSpinner />
       ) : (

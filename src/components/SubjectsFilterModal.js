@@ -41,7 +41,7 @@ export const SubjectsFilterModal = ({
       style={styles.modal}>
       <Card disabled={true}>
         <View style={styles.row}>
-          <Text category="s1">Filtrar materias</Text>
+          <Text category="h6">Filtrar materias</Text>
           <Icon
             onPress={() => setVisible(false)}
             name="close"
