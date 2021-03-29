@@ -10,10 +10,8 @@ import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
-console.log("🚀 ~ file: SimpleClasessList.js ~ line 13 ~ SimpleClasessList ~ simpleClasses", simpleClasses.length)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  console.log("🚀 ~ file: SimpleClasessList.js ~ line 16 ~ SimpleClasessList ~ error", error)
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
@@ -21,7 +19,7 @@ console.log("🚀 ~ file: SimpleClasessList.js ~ line 13 ~ SimpleClasessList ~ s
       setError(false);
     }
     if (simpleClasses.length === 0) {
-      setError('No hay clases');
+      setError('No Hay clases para mostrar');
     }
     setTimeout(() => {
       setLoading(false)      

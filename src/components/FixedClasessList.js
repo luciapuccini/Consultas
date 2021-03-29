@@ -9,15 +9,21 @@ import { useNavigation } from '@react-navigation/native';
 
 const FixedClasessList = ({ regularClasses, manager, subject }) => {
   const navigation = useNavigation();
-  const [loading, setloading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  console.log("🚀 ~ file: FixedClasessList.js ~ line 14 ~ FixedClasessList ~ error", error)
   const [open, setOpen] = useState([]);
+
   useEffect(() => {
-    setloading(false);
-    if (regularClasses.leght > 0) {
-      setError('No Hay clases para mostrar');
-      setloading(false);
+    if (regularClasses.length > 0) {
+      setError(false);
     }
+    if (regularClasses.length === 0) {
+      setError('No Hay clases para mostrar');
+    }
+    setTimeout(() => {
+      setLoading(false)      
+    }, 300);
   }, [regularClasses]);
   const handleOpen = (id) => {
     if (open.includes(id)) {
@@ -32,12 +38,16 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
       setOpen([...open, id]);
     }
   };
+  if(error){
+    return(
+    <Layout level="1" style={{ flex: 1}}>
+      <ErrorMessage message={error} />
+    </Layout>)
+  }
   return (
     <Layout level="1" style={{ flex: 1 }}>
       {loading ? (
         <CustomSpinner />
-      ) : error ? (
-        <ErrorMessage message={error} />
       ) : (
             regularClasses.map((c, id) => (
               <>
