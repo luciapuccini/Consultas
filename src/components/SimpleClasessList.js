@@ -10,9 +10,10 @@ import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
+console.log("🚀 ~ file: SimpleClasessList.js ~ line 13 ~ SimpleClasessList ~ simpleClasses", simpleClasses.length)
   const [loading, setLoading] = useState(true);
-  console.log("🚀 ~ file: SimpleClasessList.js ~ line 14 ~ SimpleClasessList ~ loading", loading)
   const [error, setError] = useState(false);
+  console.log("🚀 ~ file: SimpleClasessList.js ~ line 16 ~ SimpleClasessList ~ error", error)
   const [toDelete, setToDelete] = useState([]);
 
   useEffect(() => {
@@ -59,9 +60,10 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
   };
 
   if(error){
-    <Layout level="1" style={{ flex: 1 }}>
+    return(
+    <Layout level="1" style={{ flex: 1}}>
       <ErrorMessage message={error} />
-    </Layout>
+    </Layout>)
   }
 
   return (
