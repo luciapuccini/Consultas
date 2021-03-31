@@ -51,7 +51,7 @@ export const ClassForm = ({ route, navigation }) => {
       initTime: moment(date),
       hasSingleTurnos,
       isRegular,
-      link: `\"${link}\"`,
+      meetingLink: link,
     };
     const duracion = hasSingleTurnos
       ? { durationInMinutes: duration }
@@ -145,7 +145,7 @@ export const ClassForm = ({ route, navigation }) => {
           onChange={() => setIsRegular(!isRegular)}>
           Clase Regular
         </CheckBox>
-        {/* <CheckBox
+        <CheckBox
           style={styles.space}
           checked={isVirtual}
           onChange={(nextChecked) => setIsVirtual(nextChecked)}>
@@ -158,7 +158,7 @@ export const ClassForm = ({ route, navigation }) => {
             onChangeText={setLink}
             style={styles.space}
           />
-        )} */}
+        )}
         {show && (
           <ModalPicker
             mode={mode}

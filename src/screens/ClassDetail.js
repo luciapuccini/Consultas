@@ -68,7 +68,8 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
         setComments(json.comments);
         setLoading(false);
         checkUserPresent(json.turnos);
-        setLink(json.link);
+        setLink(json.meetingLink);
+        console.log("🚀 ~ file: ClassDetail.js ~ line 86 ~ .then ~ json.meetingLink", json.meetingLink)
       })
       .catch((error) => {
         console.log('[ FAILED ]', error);
@@ -83,6 +84,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
     const legajo = await getUserLegajo();
     turnitos.forEach((turnito) => {
       turnito.students.forEach((student) => {
+
         if (student.legajo == legajo) {
           setBookingFlag(true);
         }
@@ -166,12 +168,9 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
       });
   };
   const openVirtualClass = () => {
-    console.log('link', link);
-    const formattedLink = link.substr(1, link.length - 1);
-
-    Linking.canOpenURL(formattedLink).then((res) => {
+    Linking.canOpenURL(link).then((res) => {
       if (res) {
-        Linking.openURL(formattedLink);
+        Linking.openURL(link);
       } else {
         Alert.alert(
           'Algo salio mal, revise si tiene la aplicacion correcta instalada',
@@ -227,14 +226,14 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                   Ver Inscriptos
                 </Button>
               )}
-              {/* {link && link !== '' && (
+              {link !== '' && (
                 <Button
                   status="info"
                   appearance="outline"
                   onPress={openVirtualClass}>
                   Abrir Reunion
                 </Button>
-              )} */}
+              )}
             </View>
           </ScrollView>
 
