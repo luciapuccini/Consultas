@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { mapObject } from 'underscore';
 import { Layout, Tab, TabView } from '@ui-kitten/components';
+
 import SimpleClassesList from '../components/SimpleClasessList';
 import FixedClassesList from '../components/FixedClasessList';
 import { getToken } from '../utils/authHelper';
-import moment from 'moment';
+import {ErrorMessage} from '../components/ErrorMessage'
 import { SERVER_URL } from '../utils/config';
+import { sortClases } from '../utils/functions';
+import { CustomSpinner } from '../components/CustomSpinner';
 
 export const ClassesManager = ({ route }) => {
   const { subject, manager } = route.params;
 
+  const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [simpleClasses, setSimpleClasses] = useState([]);
   const [regularClasses, setRegularClasses] = useState([]);
@@ -26,6 +30,7 @@ export const ClassesManager = ({ route }) => {
       .then((response) => response.json())
       .then((json) => {
         filterClasses(json);
+        setLoading(false)
       });
   };
 
@@ -44,9 +49,7 @@ export const ClassesManager = ({ route }) => {
       }
     });
     setRegularClasses(reg);
-    setSimpleClasses(
-      simp.sort((objA, objB) => moment(objA.initTime) - moment(objB.initTime)),
-    );
+    setSimpleClasses(sortClases(simp));
   };
 
   return (
@@ -56,12 +59,15 @@ export const ClassesManager = ({ route }) => {
         selectedIndex={selectedIndex}
         onSelect={(index) => setSelectedIndex(index)}>
         <Tab title="Simples">
-          <SimpleClassesList
+          { loading ?
+          <CustomSpinner/>
+          :
+            <SimpleClassesList
             simpleClasses={simpleClasses}
             subject={subject}
             manager={manager}
             refresh={fetchClasses}
-          />
+          /> }
         </Tab>
         <Tab title="Regulares">
           <FixedClassesList

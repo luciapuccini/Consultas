@@ -11,7 +11,6 @@ const FixedClasessList = ({ regularClasses, manager, subject }) => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  console.log("🚀 ~ file: FixedClasessList.js ~ line 14 ~ FixedClasessList ~ error", error)
   const [open, setOpen] = useState([]);
 
   useEffect(() => {

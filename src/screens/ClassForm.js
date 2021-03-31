@@ -46,9 +46,12 @@ export const ClassForm = ({ route, navigation }) => {
   };
 
   const addClase = async () => {
+    const newDate = new Date(date)
+    newDate.setHours(newDate.getHours()-3) 
+
     const basicClass = {
       subjectId,
-      initTime: moment(date),
+      initTime: newDate,
       hasSingleTurnos,
       isRegular,
       meetingLink: link,

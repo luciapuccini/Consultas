@@ -108,28 +108,33 @@ export const TurnosTable = ({
             </Button>
           </View>
         ) : (
+          <>
           <View
             style={{
-              flex: 1,
+              display: 'flex',
               flexDirection: 'column',
               width: '100%',
+              justifyContent: 'space-between',
             }}>
             <Input
-              textStyle={{ minHeight: 64 }}
               label="Notas"
               placeholder={"Notas para la clase..."}
               onChangeText={setComment}
               value={comment}
+              size="large"
               multiline={true}
+              textStyle={{ minHeight: 64 }}
             />
-            <TouchableOpacity onPress={addNote}>
-            <Icon
-              fill='#5c5c5c'
-              name="plus-square-outline"
-              style ={{ width: 25, height: 25, left:310, bottom:30  }}
-            />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={addNote} style={{height:10, width: 30, height: 30, top:65, right:30 }}>
+          <Icon
+            fill='#5c5c5c'
+            name="plus-square-outline"
+            style ={{ width: 25, height: 25, left:350, bottom:60  }}
+          />
+          </TouchableOpacity>  
           </View>
+          
+        </>
         )}
       </View>
     </>

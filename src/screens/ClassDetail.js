@@ -69,7 +69,6 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
         setLoading(false);
         checkUserPresent(json.turnos);
         setLink(json.meetingLink);
-        console.log("🚀 ~ file: ClassDetail.js ~ line 86 ~ .then ~ json.meetingLink", json.meetingLink)
       })
       .catch((error) => {
         console.log('[ FAILED ]', error);
@@ -226,7 +225,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
                   Ver Inscriptos
                 </Button>
               )}
-              {link !== '' && (
+              {link !== '' && link !== null && (
                 <Button
                   status="info"
                   appearance="outline"
@@ -363,6 +362,7 @@ const style = {
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     margin: 10,
+    marginTop:25
   },
   startBtn: {
     alignSelf: 'flex-end',

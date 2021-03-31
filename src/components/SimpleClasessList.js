@@ -10,7 +10,6 @@ import { getToken } from '../utils/authHelper';
 import { SERVER_URL } from '../utils/config';
 
 const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [toDelete, setToDelete] = useState([]);
 
@@ -21,11 +20,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
     if (simpleClasses.length === 0) {
       setError('No Hay clases para mostrar');
     }
-    setTimeout(() => {
-      setLoading(false)      
-    }, 300);
-
-  }, [simpleClasses]);
+  }, []);
 
   const deleteClasses = async (refresh) => {
     const token = await getToken();
@@ -57,17 +52,10 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
     );
   };
 
-  if(error){
-    return(
-    <Layout level="1" style={{ flex: 1}}>
-      <ErrorMessage message={error} />
-    </Layout>)
-  }
-
   return (
     <Layout level="1" style={{ flex: 1 }}>
-      {loading ? (
-        <CustomSpinner />
+      {error? (
+      <ErrorMessage message={error} />
       ) : (
         <ScrollView>
           {simpleClasses.map((clase) => {

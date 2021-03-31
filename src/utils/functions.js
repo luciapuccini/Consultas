@@ -115,3 +115,7 @@ export const windowHeight = Dimensions.get('window').height;
 export const getEncodedImage = (base64Img) => ({
   uri: 'data:image/png;base64,' + base64Img,
 });
+
+export const sortClases = (clases)=> {
+ return clases.sort((objA, objB) => moment(objB.initTime) - moment(objA.initTime))
+}
