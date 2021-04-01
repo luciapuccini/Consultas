@@ -26,7 +26,7 @@ export const ProfessorTutorialStack = () => {
   };
 
   const handleEndTutorial = () => {
-    navigator.navigate('Home');
+    navigator.navigate('Routes',{screen:"Main"});
   };
   return (
     <ImageBackground
