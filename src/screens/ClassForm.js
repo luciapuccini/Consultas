@@ -136,6 +136,13 @@ export const ClassForm = ({ route, navigation }) => {
             style={styles.space}
           />
         )}
+           {isVirtual && (
+          <Input
+            label="Link a la clase"
+            onChangeText={setLink}
+            style={styles.space}
+          />
+        )}
         <CheckBox
           style={styles.space}
           checked={hasSingleTurnos}
@@ -154,14 +161,7 @@ export const ClassForm = ({ route, navigation }) => {
           onChange={(nextChecked) => setIsVirtual(nextChecked)}>
           Clase Virtual
         </CheckBox>
-        {isVirtual && (
-          <Input
-            label="Link a la clase"
-            caption="Link de zoom o hangouts"
-            onChangeText={setLink}
-            style={styles.space}
-          />
-        )}
+     
         {show && (
           <ModalPicker
             mode={mode}
