@@ -16,25 +16,28 @@ import { SERVER_URL } from '../utils/config';
 
 export const TurnosTable = ({
   turnos,
-  handleConfirm,
   bookingFlag,
   onSubmit,
   disabled,
   manager,
   id,
   expired,
+  turnoSelected,
+  setTurnoSelected
 }) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [comment, setComment] = React.useState('');
   const navigation = useNavigation();
 
   const btnText = bookingFlag ? 'Desinscribirme' : 'Inscribirme';
+
   const getSelectedTurno = () => {
-    return turnos[selectedIndex].turnoTime;
+    return turnoSelected.turnoTime;
   };
+
   const handleSelection = ({ index }) => {
-    setSelectedIndex(index.row);
-    handleConfirm(selectedIndex);
+    setTurnoSelected(turnos[index.row]);
+    console.log('selectione:',turnos[index.row])
+
   };
   const addNote = async () => {
     const body = { id, comment };
@@ -125,15 +128,13 @@ export const TurnosTable = ({
               multiline={true}
               textStyle={{ minHeight: 64 }}
             />
-          <TouchableOpacity onPress={addNote} style={{height:10, width: 30, height: 30, top:65, right:30 }}>
+          <TouchableOpacity onPress={addNote} style={{height:30, width: 30}}>
           <Icon
             fill='#5c5c5c'
             name="plus-square-outline"
-            style ={{ width: 25, height: 25, left:350, bottom:60  }}
           />
-          </TouchableOpacity>  
+          </TouchableOpacity>           
           </View>
-          
         </>
         )}
       </View>

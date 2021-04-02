@@ -11,7 +11,6 @@ import {
 } from '@ui-kitten/components';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getToken } from '../utils/authHelper';
-import { ErrorMessage } from '../components/ErrorMessage';
 import moment from 'moment-timezone';
 import { SERVER_URL } from '../utils/config';
 
@@ -28,7 +27,6 @@ export const ClassForm = ({ route, navigation }) => {
   const [isVirtual, setIsVirtual] = useState(false);
   const [link, setLink] = useState('');
 
-  // const [failed, setFailed] = React.useState(null);
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -41,14 +39,13 @@ export const ClassForm = ({ route, navigation }) => {
     showMode('time');
   };
   const onGoBack = () => {
-    navigation.goBack();
     route.params.refresh();
+    navigation.goBack();
   };
 
   const addClase = async () => {
     const newDate = new Date(date)
     newDate.setHours(newDate.getHours()-3) 
-
     const basicClass = {
       subjectId,
       initTime: newDate,
@@ -56,6 +53,7 @@ export const ClassForm = ({ route, navigation }) => {
       isRegular,
       meetingLink: link,
     };
+
     const duracion = hasSingleTurnos
       ? { durationInMinutes: duration }
       : { turnoDuration: duration };
@@ -65,6 +63,7 @@ export const ClassForm = ({ route, navigation }) => {
       ...duracion,
       ...turnos,
     };
+
     const token = await getToken();
     fetch(`${SERVER_URL}/clases/add`, {
       method: 'POST',

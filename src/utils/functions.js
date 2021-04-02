@@ -6,28 +6,25 @@ import { Dimensions } from 'react-native';
 import { SERVER_URL } from './config';
 
 // Time related helpers
-const ARG = 'America/Argentina/Buenos_Aires';
 
 export const getTime = (fecha) => {
-  return moment.utc(fecha);
+  return moment(fecha);
 };
+
 export const getHora = (fecha) => {
-  const fixFecha = fecha.concat('Z');
-  return moment
-    .tz(fixFecha, 'America/Argentina/Buenos_Aires')
-    .format('HH:mm a');
+    return moment(fecha).format('HH:mm a');
 };
+
 export const getFecha = (fecha) => {
-  const fixFecha = fecha.concat('Z');
-  return moment(fixFecha).tz(ARG).locale('es').format('ll');
+  return moment(fecha).format('ll');
 };
+
 export const getDia = (fecha) => {
-  const fixFecha = fecha.concat('Z');
-  return moment(fixFecha).tz(ARG).locale('es').format('dddd');
+  return moment(fecha).format('dddd');
 };
+
 export const getFechaHora = (fecha) => {
-  const fixFecha = fecha.concat('Z');
-  return moment(fixFecha).tz(ARG).locale('es').format('lll a');
+  return  moment(fecha).format('lll a')
 };
 
 export const asMinutes = (text) => {
@@ -37,7 +34,7 @@ export const asMinutes = (text) => {
 };
 export const timeToStart = (initTime) => {
   const now = moment();
-  const future = moment(initTime).tz(ARG);
+  const future = moment(initTime);
 
   return now.diff(future, 'minute');
 };

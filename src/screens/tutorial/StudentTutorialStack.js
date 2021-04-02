@@ -29,7 +29,6 @@ export const StudentTutorialStack = () => {
   };
 
   const handleEndTutorial = () => {
-    // console.log('no nvega')
     navigator.navigate('Routes',{screen:"Main"});
   };
   return (

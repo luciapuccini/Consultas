@@ -42,7 +42,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
 
   const [comments, setComments] = React.useState([]);
   const [turnos, setTurnos] = React.useState([]);
-  const [index, setIndex] = React.useState(null);
+  const [turnoSelected, setTurnoSelected] = React.useState({});
   const [inscriptions, setInscriptions] = React.useState([]);
   const [bookingFlag, setBookingFlag] = React.useState(false); // default no esta inscripto
   const [loading, setLoading] = React.useState(true);
@@ -50,6 +50,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
 
   React.useEffect(() => {
     fetchClassData();
+
   }, []);
 
   const fetchClassData = async () => {
@@ -69,6 +70,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
         setLoading(false);
         checkUserPresent(json.turnos);
         setLink(json.meetingLink);
+        setTurnoSelected(json.turnos[0])
       })
       .catch((error) => {
         console.log('[ FAILED ]', error);
@@ -91,10 +93,6 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
     });
   };
 
-  const handleConfirm = (index) => {
-    setIndex(index);
-  };
-
   const mapInscriptions = (turnosArg) => {
     let inscriptionsArr = [];
     turnosArg.map((turno) => {
@@ -105,9 +103,9 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   };
 
   const onSubmit = async () => {
-    let sendTurno = hasSingleTurnos ? turnos[0] : turnos[index];
+    let sendTurno = hasSingleTurnos ? turnos[0] : turnoSelected;
+
     const userLegajo = await getUserLegajo();
-    if (sendTurno === undefined) {
       turnos.forEach((turno) => {
         if (turno.students) {
           turno.students.forEach((student) => {
@@ -117,7 +115,6 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
           });
         }
       });
-    }
 
     if (bookingFlag) {
       unsubscribeTurno(id, sendTurno.turnoTime);
@@ -195,19 +192,19 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
               <TurnosTable
                 turnos={turnos}
                 bookingFlag={bookingFlag}
-                handleConfirm={handleConfirm}
                 onSubmit={onSubmit}
                 disabled={isLive || expired}
                 manager={manager}
                 id={id}
                 expired={expired}
+                turnoSelected={turnoSelected}
+                setTurnoSelected={setTurnoSelected}
               />
             ) : (
               <SimpleBookClass
                 bookingFlag={bookingFlag}
                 onSubmit={onSubmit}
                 hora={initTime}
-                handleConfirm={handleConfirm}
                 disabled={isLive || expired}
                 manager={manager}
                 id={id}

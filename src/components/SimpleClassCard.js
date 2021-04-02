@@ -18,6 +18,17 @@ export const SimpleClassCard = ({
 
   return (
     <Card style={styles.space}>
+      {!cancel && (
+            <CheckBox
+              style={styles.floatCheckbox}
+              checked={!!toDelete.includes(clase.id)}
+              onChange={() =>
+              toDelete.includes(clase.id)
+                  ? setToDelete(toDelete.filter((cl) => cl !== clase.id))
+                  : setToDelete([...toDelete, clase.id])
+              }
+            />
+          )}
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('Class Detail', { clase, manager, subject })
@@ -38,17 +49,7 @@ export const SimpleClassCard = ({
           />
         </View>
       </TouchableOpacity>
-      {!cancel && (
-            <CheckBox
-              style={styles.floatCheckbox}
-              checked={!!toDelete.includes(clase.id)}
-              onChange={() =>
-              toDelete.includes(clase.id)
-                  ? setToDelete(toDelete.filter((cl) => cl !== clase.id))
-                  : setToDelete([...toDelete, clase.id])
-              }
-            />
-          )}
+
     </Card>
   );
 };
@@ -66,5 +67,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   checkStyle: { width: 15, height: 15, marginTop: 2 },
-  floatCheckbox: {position:"relative", bottom:100, left:250}
+  floatCheckbox: {display:"flex", alignSelf:'flex-end'}
 });

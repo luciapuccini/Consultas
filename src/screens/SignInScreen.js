@@ -41,7 +41,8 @@ export const SignInScreen = ({ navigation }) => {
     setloading(true);
     if (!_.isEmpty(legajo) && !_.isEmpty(password)) {
       const data = await signin({ legajo, password, deviceToken });
-      if (state.isFirstLogin === true) {
+      console.log("🚀 ~ file: SignInScreen.js ~ line 45 ~ handleSingIn ~ state.isFirstLogin === true", state.isFirstLogin)
+      if (state.isFirstLogin) {
         navigation.navigate('Routes', { screen: 'TutorialStack' });
 
       }
