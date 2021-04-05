@@ -24,6 +24,7 @@ const authReducer = (state, action) => {
         ...state,
         isSignout: true,
         userToken: null,
+        isFirstLogin: false,
       };
     default:
       return state;

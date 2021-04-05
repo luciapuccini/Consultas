@@ -37,15 +37,18 @@ export const SignInScreen = ({ navigation }) => {
     registerAppWithFCM(setDeviceToken);
   }, []);
 
+React.useEffect(() => {
+  console.log('effect------')
+  if (state.isFirstLogin) {
+    navigation.navigate('Routes', { screen: 'TutorialStack' });
+  }
+
+}, [state.isFirstLogin])
+
   const handleSingIn = async () => {
     setloading(true);
     if (!_.isEmpty(legajo) && !_.isEmpty(password)) {
       const data = await signin({ legajo, password, deviceToken });
-      console.log("🚀 ~ file: SignInScreen.js ~ line 45 ~ handleSingIn ~ state.isFirstLogin === true", state.isFirstLogin)
-      if (state.isFirstLogin) {
-        navigation.navigate('Routes', { screen: 'TutorialStack' });
-
-      }
       if (data !== '') {
         setError(data);
         setloading(false);
