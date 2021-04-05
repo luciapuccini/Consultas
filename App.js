@@ -35,6 +35,7 @@ const App = () => {
         },
       );
       const res = await response.json();
+      console.log("🚀 ~ file: App.js ~ line 38 ~ messaging ~ res", res)
       if (res) {
         navigate('Class Detail', {
           clase: { ...res, id: classId },

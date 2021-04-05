@@ -38,8 +38,9 @@ export const ClassForm = ({ route, navigation }) => {
   const openTimePicker = () => {
     showMode('time');
   };
-  const onGoBack = () => {
-    route.params.refresh();
+  const onGoBack = async () => {
+    await route.params.refresh();
+    console.log("🚀 ~ file: ClassForm.js ~ line 50 ~ onGoBack ~ route.params.refresh()", route.params.refresh)
     navigation.goBack();
   };
 
@@ -65,36 +66,37 @@ export const ClassForm = ({ route, navigation }) => {
     };
 
     const token = await getToken();
-    fetch(`${SERVER_URL}/clases/add`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.error || json.lenght > 0) {
-          const alertMessage = json.message ? json.message : json;
-          Alert.alert(
-            'No pudimos crear las clases',
-            `${JSON.stringify(alertMessage)}`,
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  onGoBack();
-                },
+    try {
+      const res = await fetch(`${SERVER_URL}/clases/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (json.error || json.lenght > 0) {
+        const alertMessage = json.message ? json.message : json;
+        Alert.alert(
+          'No pudimos crear las clases',
+          `${JSON.stringify(alertMessage)}`,
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                onGoBack();
               },
-            ],
-            { cancelable: false },
-          );
-        } else {
-          onGoBack();
-        }
-      })
-      .catch((error) => console.log(error));
+            },
+          ],
+          { cancelable: false },
+        );
+      } else {
+       await onGoBack();
+      }
+    } catch(e) {
+      console.log("Error");
+    }
   };
   return (
     <ScrollView>

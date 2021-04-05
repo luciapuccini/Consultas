@@ -20,7 +20,7 @@ const SimpleClasessList = ({ simpleClasses, subject, manager, refresh }) => {
     if (simpleClasses.length === 0) {
       setError('No Hay clases para mostrar');
     }
-  }, []);
+  }, [simpleClasses]);
 
   const deleteClasses = async (refresh) => {
     const token = await getToken();

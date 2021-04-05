@@ -38,7 +38,6 @@ export const SignInScreen = ({ navigation }) => {
   }, []);
 
 React.useEffect(() => {
-  console.log('effect------')
   if (state.isFirstLogin) {
     navigation.navigate('Routes', { screen: 'TutorialStack' });
   }
