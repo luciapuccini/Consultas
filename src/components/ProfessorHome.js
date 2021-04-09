@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import { View } from 'native-base';
+import { showMessage } from "react-native-flash-message";
 
 import { CustomSpinner } from './CustomSpinner';
 import { getToken } from '../utils/authHelper';
@@ -10,8 +11,9 @@ import { SERVER_URL } from '../utils/config';
 import FilterSubjects from '../components/FilterSubjects';
 import { ErrorMessage } from '../components/ErrorMessage';
 import {SearchBox} from '../components/SearchBox'
+import { Context } from '../context/AuthContext';
 
-export const ProfessorHome = ({ user }) => {
+export const ProfessorHome = ({ user}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [subjects, setSubjects] = useState([]);
@@ -19,7 +21,20 @@ export const ProfessorHome = ({ user }) => {
   const [selectedYear, setSelectedYear] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const {state} = useContext(Context);
 
+useEffect(() => {
+  if(state.isFirstLogin){
+    showMessage({
+      message: "Recomedamos cambiar la contraseña",
+      description: "Puedes cambiar la contraseña auto genereada desde tu perfil",
+      type: "default",
+      backgroundColor: "#0a236e", 
+      color: "white",
+    });
+  }
+ 
+}, [])
 
   const fetchProfessorSubjects = async () => {
     const token = await getToken();
@@ -90,6 +105,8 @@ export const ProfessorHome = ({ user }) => {
              <ErrorMessage message="No data" />
           </Layout>)
   }
+
+  
 
   return (
     <Layout level="1">

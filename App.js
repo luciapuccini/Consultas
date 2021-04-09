@@ -6,6 +6,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import messaging from '@react-native-firebase/messaging';
 import _ from 'underscore';
+import FlashMessage from "react-native-flash-message";
 
 import { RootStack, AuthStack } from './src/Routes';
 import { navigationRef, navigate } from './src/Routes';
@@ -35,7 +36,6 @@ const App = () => {
         },
       );
       const res = await response.json();
-      console.log("🚀 ~ file: App.js ~ line 38 ~ messaging ~ res", res)
       if (res) {
         navigate('Class Detail', {
           clase: { ...res, id: classId },
@@ -114,6 +114,7 @@ const AppWrapper = () => {
           </ApplicationProvider>
         </Provider>
       </ThemeContext.Provider>
+      <FlashMessage position="top" hideStatusBar floating icon='info' autoHide={false}/> 
     </>
   );
 };
