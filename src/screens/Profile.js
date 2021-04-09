@@ -133,7 +133,7 @@ export const Profile = ({ navigation }) => {
     const token = await getToken();
     const options = {
       title: 'Subir Foto',
-      takePhotoButtonTitle: 'Usar camara...',
+      takePhotoButtonTitle: "Abrir Camara.",
       chooseFromLibraryButtonTitle: 'Elegir foto de galeria...',
       storageOptions: {
         skipBackup: true,

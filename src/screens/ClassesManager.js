@@ -5,7 +5,6 @@ import { Layout, Tab, TabView } from '@ui-kitten/components';
 import SimpleClassesList from '../components/SimpleClasessList';
 import FixedClassesList from '../components/FixedClasessList';
 import { getToken } from '../utils/authHelper';
-import {ErrorMessage} from '../components/ErrorMessage'
 import { SERVER_URL } from '../utils/config';
 import { sortClases } from '../utils/functions';
 import { CustomSpinner } from '../components/CustomSpinner';
@@ -19,7 +18,6 @@ export const ClassesManager = ({ route }) => {
   const [regularClasses, setRegularClasses] = useState([]);
 
   const fetchClasses = async () => {
-    console.log('entre al fetch');
     const { subjectId } = subject;
     const token = await getToken();
     fetch(`${SERVER_URL}/subjects/professorClasses/${subjectId}`, {
@@ -30,7 +28,6 @@ export const ClassesManager = ({ route }) => {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log("🚀 ~ file: ClassesManager.js ~ line 32 ~ .then ~ json", json)
         filterClasses(json);
         setLoading(false)
       });
@@ -50,7 +47,6 @@ export const ClassesManager = ({ route }) => {
         simp.push(val[0]);
       }
     });
-    console.log('dsadsads', reg, sortClases(simp));
     setRegularClasses(reg);
     setSimpleClasses(sortClases(simp));
   };

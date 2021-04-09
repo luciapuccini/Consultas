@@ -112,6 +112,7 @@ export const SubjectForm = ({ route, navigation }) => {
         const { type, data, fileName } = response;
         const imageResp = { imageType: type, base64Image: data, fileName };
         setImage(imageResp);
+        console.log("🚀 ~ file: SubjectForm.js ~ line 115 ~ ImagePicker.showImagePicker ~ imageResp", imageResp)
       }
     });
   };
