@@ -1,8 +1,8 @@
 import React from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { isEmpty } from 'underscore';
 import { ClassCard } from '../components/ClassCard';
-import { Layout, TabView, Tab } from '@ui-kitten/components';
+import { Layout, TabView, Tab,Text } from '@ui-kitten/components';
 import { SearchBox } from '../components/SearchBox';
 import { CustomSpinner } from '../components/CustomSpinner';
 import { getToken } from '../utils/authHelper';
@@ -78,6 +78,7 @@ export const Classes = ({ navigation, route }) => {
     : inscriptions.filter((i) =>
         i.professor.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
       );
+
   const renderItem = ({ item }) => {
     return <ClassCard clase={item} manager={manager} subject={subject} />;
   };
@@ -98,23 +99,35 @@ export const Classes = ({ navigation, route }) => {
           selectedIndex={selectedIndex}
           onSelect={(index) => setSelectedIndex(index)}>
           <Tab title="CLASES">
+           {results && results.length === 0?
+           <ClassesError/>
+           :
             <FlatList
               data={results}
               renderItem={renderItem}
               contentContainerStyle={{ paddingBottom: 80 }}
               keyExtractor={(item) => item.id}
-            />
+            />}
           </Tab>
           <Tab title="INSCRIPCIONES">
+           {inscriptionsResults && inscriptionsResults.length === 0? 
+            <ClassesError/>
+           :
             <FlatList
               data={inscriptionsResults}
               renderItem={renderItem}
               contentContainerStyle={{ paddingBottom: 80 }}
               keyExtractor={(item) => item.id}
-            />
+            />}
           </Tab>
         </TabView>
       )}
     </Layout>
   );
 };
+
+
+const ClassesError =()=>(
+  <View style={{flex:1, alignSelf:'center'}}>
+  <Text style={{color:"red"}}>No hay clases</Text>
+  </View>);

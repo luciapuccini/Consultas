@@ -65,11 +65,13 @@ const App = () => {
             },
           );
           const res = await response.json();
-          navigate('Class Detail', {
-            clase: { ...res, id: classId },
-            manager: role === 'ROLE_PROFESSOR',
-            subject: res.subject,
-          });
+          setTimeout(() => {
+            navigate('Class Detail', {
+              clase: { ...res, id: classId },
+              manager: role === 'ROLE_PROFESSOR',
+              subject: res.subject,
+            });   
+          }, 500);
         }
       });
     restore();

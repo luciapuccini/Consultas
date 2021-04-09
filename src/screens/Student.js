@@ -121,7 +121,6 @@ export const StudentHome = ({ user }) => {
           setSelectedYear={setSelectedYear}
           setSelectedCareer={setSelectedCareer}
         />
-        {filteredSubjects.length === 0 && <ErrorMessage message="No data" />}
       </View>
       <TabView
         style={{ marginTop: 10 }}

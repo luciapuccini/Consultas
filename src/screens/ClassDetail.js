@@ -48,6 +48,8 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
   const [loading, setLoading] = React.useState(true);
   const [link, setLink] = React.useState('');
 
+  const  hasFinished = status === "Finalizada" || status === "Cancelada"
+
   React.useEffect(() => {
     fetchClassData();
 
@@ -234,7 +236,7 @@ export const ClassDetail = ({ route: { params }, navigation }) => {
           </ScrollView>
 
           <View style={{ alignItems: 'flex-start' }}>
-            {canStart && manager && <StartClass id={id} />}
+            {canStart && manager && <StartClass id={id} hasFinished={hasFinished}/>}
           </View>
         </>
       ) : (
@@ -308,10 +310,10 @@ const onstartClass = async (id) => {
   }
 };
 
-const StartClass = ({ id }) => {
-  return (
+const StartClass = ({ id, hasFinished }) =>  (
     <View style={style.startBtn}>
       <Button
+      disabled={hasFinished}
         status="success"
         onPress={() => onstartClass(id)}
         accessoryRight={StartIcon}>
@@ -319,7 +321,7 @@ const StartClass = ({ id }) => {
       </Button>
     </View>
   );
-};
+
 const StartIcon = (props) => {
   const shakeIconRef = React.useRef();
 

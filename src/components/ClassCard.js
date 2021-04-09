@@ -11,7 +11,7 @@ const placeHolder = require('../assets/placeholder.png');
 export const ClassCard = ({ clase, manager, subject }) => {
   const { professor } = clase;
   const navigation = useNavigation();
-  const statusColor = getClassColor(clase.status);
+  // const statusColor = getClassColor(clase.status);
 
   const classCardImg =
     professor && professor.profileImagePath
@@ -41,7 +41,7 @@ export const ClassCard = ({ clase, manager, subject }) => {
           <View>
             <View style={styles.cardStyle}>
               <Text category="h6">
-                {professor.name + ' ' + professor.surname}
+                {professor.name + ' ' + professor.surname} 
               </Text>
 
               <Text appearance="hint" style={{ fontSize: 14 }}>
@@ -51,11 +51,11 @@ export const ClassCard = ({ clase, manager, subject }) => {
           </View>
         </View>
         <View style={styles.textRowStyle}>
-          <Text style={{ color: statusColor }}>{status} </Text>
+          <Text style={{ color: getClassColor(status) }}>{status} </Text>
           <Icon
             name="checkmark-circle-outline"
             style={styles.checkStyle}
-            fill={statusColor}
+            fill={getClassColor(status)}
           />
         </View>
       </TouchableOpacity>

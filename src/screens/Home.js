@@ -11,7 +11,6 @@ import { SERVER_URL } from '../utils/config';
 import { CustomSpinner } from '../components/CustomSpinner';
 
 export const Home = ({ navigation, ...props }) => {
-console.log("🚀 ~ file: Home.js ~ line 14 ~ Home ~ props", props)
   const [user, setUser] = React.useState({});
   const [loading, setLoading] = React.useState(true);
 
