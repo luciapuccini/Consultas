@@ -11,9 +11,11 @@ This is the UI repository for the consultapp. Our app helps students and profess
 
 - Sign in and sign up flows, keeping the session alive
 - Tutorial flows for new users
+
   <figure class="video_container">
   <iframe src="https://drive.google.com/file/d/1KXD2uLNrUe_0pIGMvP0OpnkZexNTrmpS/view?usp=sharing" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
+
 - Multiple class types
 - Integrations with external services (gmail and whatsapp)
 - Private profile configurations, including dark mode!
